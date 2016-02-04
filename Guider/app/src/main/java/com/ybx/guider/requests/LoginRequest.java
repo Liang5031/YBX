@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
  * Created by chenlia1 on 2016/2/4.
  */
 public class LoginRequest extends Request<LoginResponse> {
-
+    private String mUrl;
     private final Response.Listener<LoginResponse> mListener;
 
     public LoginRequest(int method, String url, Response.Listener<LoginResponse> listener,
@@ -34,16 +34,10 @@ public class LoginRequest extends Request<LoginResponse> {
     @Override
     protected Response<LoginResponse> parseNetworkResponse(NetworkResponse response) {
         try {
-//            String xmlString = new String(response.data,
-//                    HttpHeaderParser.parseCharset(response.headers));
-//            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-//            XmlPullParser xmlPullParser = factory.newPullParser();
-//            xmlPullParser.setInput(new StringReader(xmlString));
-//            return Response.success(xmlPullParser, HttpHeaderParser.parseCacheHeaders(response));
-
             LoginResponse res = new LoginResponse(response);
             return Response.success(res, HttpHeaderParser.parseCacheHeaders(response));
-
+        } catch (UnsupportedEncodingException e) {
+            return Response.error(new ParseError(e));
         } catch (XmlPullParserException e) {
             return Response.error(new ParseError(e));
         }
