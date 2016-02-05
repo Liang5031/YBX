@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Guider assistant</string>
     <string name="remember">Remember</string>
-    <string name="forgot">Forgot</string>
+    <string name="forgot">Forgot password</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
 </resources>

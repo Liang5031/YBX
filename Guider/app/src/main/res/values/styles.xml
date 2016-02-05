@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="loginAppName" >
+        <item name="android:textSize">24sp</item>
+        <!--<item name="android:textColor">#FFFFFF</item>-->
+    </style>
+
+    <style name="loginText">
+        <item name="android:textSize">16sp</item>
+        <!--<item name="android:textColor">#FFFFFF</item>-->
+    </style>
+
 </resources>
