@@ -35,23 +35,18 @@
             android:layout_marginTop="@dimen/login_vertical_margin">
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="@dimen/Login_text_width"
-                android:layout_height="@dimen/Login_text_height"
                 android:layout_alignParentLeft="true"
-                android:gravity="center_vertical"
-                android:text="导游证号 :"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:text="导游证号 :" />
 
             <EditText
                 android:id="@+id/etAccount"
+                style="@style/EditNormal"
                 android:layout_width="@dimen/Login_edit_width"
-                android:layout_height="@dimen/Login_text_height"
                 android:layout_alignParentRight="true"
                 android:hint="导游证号"
-                android:textColor="@color/white"
-                android:inputType="number"
-                android:textSize="16sp" />
+                android:inputType="number" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -60,50 +55,19 @@
             android:layout_marginTop="@dimen/login_vertical_margin">
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="@dimen/Login_text_width"
-                android:layout_height="@dimen/Login_text_height"
-                android:gravity="center_vertical"
-                android:text="密码 :"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:layout_alignParentLeft="true"
+                android:text="密码 :" />
 
 
             <EditText
                 android:id="@+id/etPassword"
+                style="@style/EditNormal"
                 android:layout_width="@dimen/Login_edit_width"
-                android:layout_height="@dimen/Login_text_height"
                 android:layout_alignParentRight="true"
                 android:hint="密码"
-                android:inputType="textPassword"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/Login_text_height"
-                android:layout_alignParentLeft="true"
-                android:gravity="center_vertical"
-                android:text="记住密码"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/Login_text_height"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="5dp"
-                android:gravity="center_vertical"
-                android:text="忘记密码"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:inputType="textPassword" />
 
         </RelativeLayout>
 
@@ -114,41 +78,57 @@
             android:layout_marginTop="@dimen/login_vertical_margin"
             android:orientation="horizontal">
 
-            <Button
-                android:layout_width="@dimen/login_button_width"
-                android:layout_height="@dimen/login_button_height"
+            <CheckBox
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:gravity="center"
-                android:text="注册"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:text="记住密码" />
+
+            <TextView
+                android:id="@+id/tvFogotPassword"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:onClick="onClickForgot"
+                android:text="忘记密码？" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/login_vertical_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btnSignUp"
+                style="@style/BottonNormal"
                 android:layout_width="@dimen/login_button_width"
-                android:layout_height="@dimen/login_button_height"
+                android:layout_alignParentLeft="true"
+                android:text="注册" />
+
+            <Button
+                android:id="@+id/btnLogin"
+                style="@style/BottonNormal"
+                android:layout_width="@dimen/login_button_width"
                 android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:text="登录"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:text="登录" />
 
         </RelativeLayout>
 
         <TextView
+            style="@style/TextSmall"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/logo_vertical_margin"
-            android:text="长沙蕾欧娜信息科技有限公司"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:text="长沙蕾欧娜信息科技有限公司" />
 
         <TextView
+            style="@style/TextSmall"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="保留所有权利"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:text="保留所有权利" />
     </LinearLayout>
 </LinearLayout>
