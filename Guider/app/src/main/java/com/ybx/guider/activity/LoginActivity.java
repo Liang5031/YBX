@@ -19,7 +19,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        tv = (TextView)this.findViewById(R.id.response);
+//        tv = (TextView)this.findViewById(R.id.response);
         String url ="http://www.baidu.com";
 
         // Request a string response from the provided URL.
@@ -27,7 +27,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,this,this);
         // Add the request to the RequestQueue.
         VolleyRequestQueue.getInstance(this).add(stringRequest);
-
     }
 
     @Override
@@ -38,6 +37,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     @Override
     public void onResponse(String response) {
         // Display the first 500 characters of the response string.
-        tv.setText("Response is: "+ response.substring(0,500));
+//        tv.setText("Response is: "+ response.substring(0,500));
     }
 }
