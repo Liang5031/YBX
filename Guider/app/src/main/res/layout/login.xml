@@ -74,14 +74,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:layout_marginTop="@dimen/login_vertical_margin"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <CheckBox
                 style="@style/TextSmall"
                 android:layout_width="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:onClick="onClickRemember"
                 android:text="记住密码" />
 
             <TextView
@@ -107,6 +108,7 @@
                 style="@style/BottonNormal"
                 android:layout_width="@dimen/login_button_width"
                 android:layout_alignParentLeft="true"
+                android:onClick="onClickSignUp"
                 android:text="注册" />
 
             <Button
@@ -114,6 +116,7 @@
                 style="@style/BottonNormal"
                 android:layout_width="@dimen/login_button_width"
                 android:layout_alignParentRight="true"
+                android:onClick="onClickLogin"
                 android:text="登录" />
 
         </RelativeLayout>

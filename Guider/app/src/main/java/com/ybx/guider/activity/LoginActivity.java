@@ -45,4 +45,19 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
+    public void onClickSignUp(View view) {
+//        Intent intent = new Intent(this, ResetPasswordActivity.class);
+//        startActivity(intent);
+    }
+
+    public void onClickLogin(View view) {
+//        Intent intent = new Intent(this, ResetPasswordActivity.class);
+//        startActivity(intent);
+    }
+
+    public void onClickRemember(View view) {
+//        Intent intent = new Intent(this, ResetPasswordActivity.class);
+//        startActivity(intent);
+    }
 }
