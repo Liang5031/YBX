@@ -1,0 +1,74 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ybx.guider.fragment.PhoneVerifyFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/TextNormal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/verify_description" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="30dp">
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="@dimen/text_width_normal"
+                android:layout_alignParentLeft="true"
+                android:text="@string/phone_number" />
+
+            <EditText
+                android:id="@+id/phoneNumber"
+                style="@style/EditNormal"
+                android:layout_width="@dimen/edit_width_normal"
+                android:layout_alignParentRight="true"
+                android:hint="@string/phone_number_hint"
+                android:inputType="number" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="@dimen/text_width_normal"
+                android:layout_alignParentLeft="true"
+                android:text="@string/verify_code" />
+
+            <EditText
+                android:id="@+id/verifyCode"
+                style="@style/EditNormal"
+                android:layout_width="@dimen/edit_width_normal"
+                android:layout_alignParentRight="true"
+                android:hint="@string/verify_code_hint" />
+        </RelativeLayout>
+
+        <Button
+            style="@style/BottonNormal"
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/send_verify_code" />
+    </LinearLayout>
+
+
+</FrameLayout>

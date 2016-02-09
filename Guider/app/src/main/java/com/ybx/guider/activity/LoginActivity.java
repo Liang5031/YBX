@@ -1,6 +1,7 @@
 package com.ybx.guider.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.ybx.guider.R;
 import com.ybx.guider.VolleyRequestQueue;
+import com.ybx.guider.fragment.PhoneVerifyFragment;
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<String>, Response.ErrorListener {
     private TextView tv;
@@ -47,17 +49,18 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     }
 
     public void onClickSignUp(View view) {
-//        Intent intent = new Intent(this, ResetPasswordActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
     }
 
     public void onClickLogin(View view) {
-//        Intent intent = new Intent(this, ResetPasswordActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void onClickRemember(View view) {
 //        Intent intent = new Intent(this, ResetPasswordActivity.class);
 //        startActivity(intent);
     }
+
 }

@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="white">#FFFFFF</color>
-
     <color name="loginBackground">#2196d6</color>
+    <color name="linkColor">#0000FF</color>
 
 </resources>

@@ -17,7 +17,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/logo_vertical_margin"
         android:layout_marginTop="@dimen/logo_vertical_margin"
-        android:text="导游团队行程管理助手"
+        android:text="@string/app_name"
         android:textColor="@color/white"
         android:textSize="24sp" />
 
@@ -36,16 +36,16 @@
 
             <TextView
                 style="@style/TextNormal"
-                android:layout_width="@dimen/Login_text_width"
+                android:layout_width="@dimen/text_width_normal"
                 android:layout_alignParentLeft="true"
-                android:text="导游证号 :" />
+                android:text="@string/guider_number" />
 
             <EditText
                 android:id="@+id/etAccount"
                 style="@style/EditNormal"
-                android:layout_width="@dimen/Login_edit_width"
+                android:layout_width="@dimen/edit_width_normal"
                 android:layout_alignParentRight="true"
-                android:hint="导游证号"
+                android:hint="@string/guider_number_hint"
                 android:inputType="number" />
         </RelativeLayout>
 
@@ -56,17 +56,17 @@
 
             <TextView
                 style="@style/TextNormal"
-                android:layout_width="@dimen/Login_text_width"
+                android:layout_width="@dimen/text_width_normal"
                 android:layout_alignParentLeft="true"
-                android:text="密码 :" />
+                android:text="@string/password" />
 
 
             <EditText
                 android:id="@+id/etPassword"
                 style="@style/EditNormal"
-                android:layout_width="@dimen/Login_edit_width"
+                android:layout_width="@dimen/edit_width_normal"
                 android:layout_alignParentRight="true"
-                android:hint="密码"
+                android:hint="@string/password_hint"
                 android:inputType="textPassword" />
 
         </RelativeLayout>
@@ -75,15 +75,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/login_vertical_margin"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:gravity="center_vertical">
 
             <CheckBox
                 style="@style/TextSmall"
                 android:layout_width="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:onClick="onClickRemember"
-                android:text="记住密码" />
+                android:text="@string/remember" />
 
             <TextView
                 android:id="@+id/tvFogotPassword"
@@ -92,7 +91,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="5dp"
                 android:onClick="onClickForgot"
-                android:text="忘记密码？" />
+                android:text="@string/forgot" />
 
         </RelativeLayout>
 
@@ -109,7 +108,7 @@
                 android:layout_width="@dimen/login_button_width"
                 android:layout_alignParentLeft="true"
                 android:onClick="onClickSignUp"
-                android:text="注册" />
+                android:text="@string/sign_up" />
 
             <Button
                 android:id="@+id/btnLogin"
@@ -117,7 +116,7 @@
                 android:layout_width="@dimen/login_button_width"
                 android:layout_alignParentRight="true"
                 android:onClick="onClickLogin"
-                android:text="登录" />
+                android:text="@string/login" />
 
         </RelativeLayout>
 
@@ -126,12 +125,12 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/logo_vertical_margin"
-            android:text="长沙蕾欧娜信息科技有限公司" />
+            android:text="@string/company_name" />
 
         <TextView
             style="@style/TextSmall"
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="保留所有权利" />
+            android:text="@string/copy_right" />
     </LinearLayout>
 </LinearLayout>

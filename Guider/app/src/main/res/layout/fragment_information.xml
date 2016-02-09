@@ -1,0 +1,193 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ybx.guider.fragment.InformationFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="@dimen/text_width_normal"
+                android:layout_alignParentLeft="true"
+                android:text="@string/guider_number" />
+
+            <EditText
+                android:id="@+id/account"
+                style="@style/EditNormal"
+                android:layout_width="@dimen/edit_width_normal"
+                android:layout_alignParentRight="true"
+                android:hint="@string/guider_number_hint"
+                android:inputType="number" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="@dimen/text_width_normal"
+                android:layout_alignParentLeft="true"
+                android:text="@string/user_name" />
+
+            <EditText
+                android:id="@+id/userName"
+                style="@style/EditNormal"
+                android:layout_width="@dimen/edit_width_normal"
+                android:layout_alignParentRight="true"
+                android:hint="@string/user_name_hint"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="@dimen/text_width_normal"
+                android:layout_alignParentLeft="true"
+                android:text="@string/user_id" />
+
+            <EditText
+                android:id="@+id/userId"
+                style="@style/EditNormal"
+                android:layout_width="@dimen/edit_width_normal"
+                android:layout_alignParentRight="true"
+                android:hint="@string/user_id_hint" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="@dimen/text_width_normal"
+                android:layout_alignParentLeft="true"
+                android:text="@string/password" />
+
+            <EditText
+                android:id="@+id/password"
+                style="@style/EditNormal"
+                android:layout_width="@dimen/edit_width_normal"
+                android:layout_alignParentRight="true"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="@dimen/text_width_normal"
+                android:layout_alignParentLeft="true"
+                android:text="@string/confirm_password" />
+
+            <EditText
+                android:id="@+id/confirmPassword"
+                style="@style/EditNormal"
+                android:layout_width="@dimen/edit_width_normal"
+                android:layout_alignParentRight="true"
+                android:hint="@string/confirm_password_hint"
+                android:inputType="textPassword"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="@dimen/text_width_normal"
+                android:layout_alignParentLeft="true"
+                android:text="@string/first_lang" />
+
+            <EditText
+                android:id="@+id/firstLanguage"
+                style="@style/EditNormal"
+                android:layout_width="@dimen/edit_width_normal"
+                android:layout_alignParentRight="true"
+                android:hint="@string/first_lang_hint" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="@dimen/text_width_normal"
+                android:layout_alignParentLeft="true"
+                android:text="@string/second_lang" />
+
+            <EditText
+                android:id="@+id/secondLanguage"
+                style="@style/EditNormal"
+                android:layout_width="@dimen/edit_width_normal"
+                android:layout_alignParentRight="true"
+                android:hint="@string/second_lang_hint" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:text="@string/license_confirm" />
+
+            <TextView
+                android:id="@+id/licenseLink"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:textColor="@color/linkColor"
+                android:autoLink="web"
+                android:text="@string/license_hype_link" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"/>
+    </LinearLayout>
+</FrameLayout>
