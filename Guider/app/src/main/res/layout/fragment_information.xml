@@ -169,6 +169,7 @@
 
             <CheckBox
                 style="@style/TextSmall"
+                android:textColor="@color/textColorSecond"
                 android:layout_width="wrap_content"
                 android:text="@string/license_confirm" />
 
@@ -176,7 +177,7 @@
                 android:id="@+id/licenseLink"
                 style="@style/TextSmall"
                 android:layout_width="wrap_content"
-                android:textColor="@color/linkColor"
+                android:textColor="@color/colorBlue"
                 android:autoLink="web"
                 android:text="@string/license_hype_link" />
 
@@ -188,6 +189,7 @@
             android:layout_marginRight="50dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/selector_blue_button"
             android:text="@string/submit"/>
     </LinearLayout>
 </FrameLayout>

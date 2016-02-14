@@ -17,13 +17,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="12dp"
+        android:layout_margin="15dp"
         android:text="@string/get_verify_code_introduction" />
 
     <Button
         style="@style/BottonNormal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:text="@string/send_verify_code" />
 
     <RelativeLayout
@@ -31,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="15dp">
 
         <TextView
             style="@style/TextNormal"
@@ -119,13 +122,16 @@
         android:layout_marginLeft="50dp"
         android:gravity="center_vertical"
         android:text="@string/remember_new_password"
-        android:textColor="@color/white"
+        android:textColor="@color/textColorSecond"
         android:textSize="12sp" />
 
     <Button
         style="@style/BottonNormal"
-        android:layout_width="@dimen/login_button_width"
+        android:layout_width="match_parent"
         android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
         android:text="@string/reset_password" />
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">导游团队行程管理助手</string>
+    <string name="app_name_short">行程管理助手</string>
 
     <!-- String for login activity -->
     <string name="remember">记住密码</string>
@@ -64,5 +65,9 @@
     <string name="tab_waiting_list">等待的团</string>
     <string name="tab_finished_list">完成的团</string>
     <string name="tab_settings">设置</string>
+    <string name="action_refresh">刷新</string>
+    <!-- String for team list item -->
+    <string name="team_id_lable">编号 :</string>
+
 
 </resources>

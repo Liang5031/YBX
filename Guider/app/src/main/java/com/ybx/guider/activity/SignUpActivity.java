@@ -16,10 +16,14 @@ import com.ybx.guider.fragment.InformationFragment;
 import com.ybx.guider.fragment.PhoneVerifyFragment;
 import com.ybx.guider.fragment.UploadPhotoFragment;
 
+import org.w3c.dom.Text;
+
 public class SignUpActivity extends AppCompatActivity implements UploadPhotoFragment.OnFragmentInteractionListener, PhoneVerifyFragment.OnFragmentInteractionListener, InformationFragment.OnFragmentInteractionListener {
     public static final int STEP_ONE = 1;
     public static final int STEP_TWO = 2;
     public static final int STEP_THREE = 3;
+    private TextView mTVPrev;
+    private TextView mTVNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,8 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
         setContentView(R.layout.activity_sign_up);
         loadFragment(new UploadPhotoFragment(), false);
         this.setTitle(R.string.sign_up_title);
+        mTVPrev = (TextView)findViewById(R.id.Prev);
+        mTVNext = (TextView)findViewById(R.id.Next);
     }
 
     @Override

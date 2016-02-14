@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/loginBackground"
     android:orientation="vertical"
     tools:context=".activity.LoginActivity">
 
@@ -18,7 +17,6 @@
         android:layout_marginBottom="@dimen/logo_vertical_margin"
         android:layout_marginTop="@dimen/logo_vertical_margin"
         android:text="@string/app_name"
-        android:textColor="@color/white"
         android:textSize="24sp" />
 
     <LinearLayout
@@ -81,6 +79,7 @@
                 style="@style/TextSmall"
                 android:layout_width="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:textColor="@color/textColorSecond"
                 android:onClick="onClickRemember"
                 android:text="@string/remember" />
 
@@ -90,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="5dp"
+                android:textColor="@color/textColorSecond"
                 android:onClick="onClickForgot"
                 android:text="@string/forgot" />
 

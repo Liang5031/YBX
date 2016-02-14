@@ -7,19 +7,31 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import com.ybx.guider.R;
 import com.ybx.guider.fragment.PhoneVerifyFragment;
+import com.ybx.guider.fragment.TeamListFragement;
 
 public class MainActivity extends AppCompatActivity implements PhoneVerifyFragment.OnFragmentInteractionListener {
     private final static int NUM_ITEMS = 4;
     private MyAdapter mAdapter;
     private ViewPager mPager;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle(R.string.app_name_short);
 
         mAdapter = new MyAdapter(getSupportFragmentManager());
         mPager = (ViewPager)findViewById(R.id.viewpager);
@@ -50,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements PhoneVerifyFragme
 
         @Override
         public Fragment getItem(int position) {
-            return new PhoneVerifyFragment();
+            return new TeamListFragement();
 //            switch(position){
 //                case 1:
 //                    break;

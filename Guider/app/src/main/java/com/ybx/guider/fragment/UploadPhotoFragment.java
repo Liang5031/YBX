@@ -143,8 +143,8 @@ public class UploadPhotoFragment extends Fragment {
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 400);
-        intent.putExtra("outputY", 400);
+        intent.putExtra("outputX", 200);
+        intent.putExtra("outputY", 200);
         intent.putExtra("return-data", true);
         return intent;
     }
@@ -155,7 +155,7 @@ public class UploadPhotoFragment extends Fragment {
         if (resultCode == getActivity().RESULT_OK) {
             switch(requestCode){
                 case TAKE_PHOTO:
-                    cropImageUri(mImageUri, 400, 400, CROP_PHOTO);
+                    cropImageUri(mImageUri, 300, 300, CROP_PHOTO);
                     break;
                 case PICK_PHOTO:
                     if(mImageView != null) {

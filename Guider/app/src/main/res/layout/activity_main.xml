@@ -15,38 +15,36 @@
         android:layout_width="fill_parent"
         android:layout_height="80dp"
         android:layout_gravity="bottom"
-        android:background="#133575"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingTop="2dp">
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/tabOngoingList"
-            style="@style/main_tab_bottom"
-            android:text="@string/tab_ongoing_list"
+            style="@style/navigate_bottom"
+            android:drawableTop="@mipmap/ic_launcher"
             android:onClick="onClickOngoingTab"
-            android:drawableTop="@mipmap/ic_launcher" />
+            android:text="@string/tab_ongoing_list" />
 
         <RadioButton
             android:id="@+id/tabWaitingList"
-            android:text="@string/tab_waiting_list"
-            style="@style/main_tab_bottom"
+            style="@style/navigate_bottom"
+            android:drawableTop="@mipmap/ic_launcher"
             android:onClick="onClickWaitingTab"
-            android:drawableTop="@mipmap/ic_launcher" />
+            android:text="@string/tab_waiting_list" />
 
         <RadioButton
             android:id="@+id/tabFinishList"
-            style="@style/main_tab_bottom"
+            style="@style/navigate_bottom"
+            android:drawableTop="@mipmap/ic_launcher"
             android:onClick="onClickFinishTab"
-            android:text="@string/tab_finished_list"
-            android:drawableTop="@mipmap/ic_launcher" />
+            android:text="@string/tab_finished_list" />
 
         <RadioButton
             android:id="@+id/tabSetting"
-            style="@style/main_tab_bottom"
-            android:text="@string/tab_settings"
+            style="@style/navigate_bottom"
+            android:drawableTop="@mipmap/ic_launcher"
             android:onClick="onClickSettingsTab"
-            android:drawableTop="@mipmap/ic_launcher" />
+            android:text="@string/tab_settings" />
     </RadioGroup>
 
 </LinearLayout>

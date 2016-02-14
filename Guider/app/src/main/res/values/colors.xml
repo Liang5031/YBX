@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <color name="colorPrimary">#393A3F</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#2FB3FF</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="textColor">#202020</color>
+    <color name="textColorSecond">#737373</color>
+    <!--<color name="textColorPrimary">#737373</color>-->
+    <color name="windowBackground">#EBEBEB</color>
 
     <color name="white">#FFFFFF</color>
-    <color name="loginBackground">#2196d6</color>
+    <!--<color name="loginBackground">#2196d6</color>-->
+    <color name="loginBackground">#FAFAFA</color>
+    <color name="colorBlue">#2FB3FF</color>
+    <color name="colorBlueDark">#007BC6</color>
     <color name="linkColor">#0000FF</color>
+    <color name="radioButtonBG">#F0F0F0</color>
 
 </resources>
