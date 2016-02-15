@@ -5,19 +5,10 @@ package com.ybx.guider.parameters;
  */
 public class LoginParam extends Param {
 
-    public void setSignType(String type){
-        addParam(ParamUtils.LOGIN_SIGN_TYPE, type);
-    }
-
-    public void setServiceVersion(String version){
-        addParam(ParamUtils.LOGIN_SERVICE_VERSION, version);
-    }
-
-    public void setSign(String sign){
-        addParam(ParamUtils.LOGIN_SIGN, sign);
+    public LoginParam(){
     }
 
     public void setUser(String user){
-        addParam(ParamUtils.LOGIN_USER, user);
+        addParam(ParamUtils.KEY_LOGIN_USER, user);
     }
 }

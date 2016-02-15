@@ -7,11 +7,11 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by chenlia1 on 2016/2/4.
+ * Created by chenl on 2016/2/15.
  */
-public class LoginResponse extends Response {
+public class ResetPasswordResponse extends Response {
 
-    public LoginResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
+    public ResetPasswordResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
         super(response);
     }
 }

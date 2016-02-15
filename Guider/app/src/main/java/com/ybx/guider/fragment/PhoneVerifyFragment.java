@@ -4,20 +4,24 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.ybx.guider.R;
+import com.ybx.guider.Utils;
+import com.ybx.guider.VolleyRequestQueue;
+import com.ybx.guider.parameters.GetVerifyCodeParam;
+import com.ybx.guider.parameters.ParamUtils;
+import com.ybx.guider.requests.GetVerifyCodeRequest;
+import com.ybx.guider.responses.GetVerifyCodeResponse;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PhoneVerifyFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PhoneVerifyFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PhoneVerifyFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,11 +31,48 @@ public class PhoneVerifyFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private EditText mPhoneNumber;
 
     private OnFragmentInteractionListener mListener;
 
     public PhoneVerifyFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mPhoneNumber = (EditText)this.getActivity().findViewById(R.id.phoneNumber);
+        EditText et = (EditText)this.getActivity().findViewById(R.id.verifyCode);
+        et.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mListener.onPhoneVerified(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        this.getActivity().findViewById(R.id.btnGetVerifyCode).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( mPhoneNumber.getText()==null || mPhoneNumber.getText().length() == 0){
+                    Toast.makeText(PhoneVerifyFragment.this.getContext(), "手机号不能为空！", Toast.LENGTH_SHORT).show();
+                } else {
+                    GetVerifyCode();
+                }
+            }
+        });
     }
 
     /**
@@ -69,11 +110,11 @@ public class PhoneVerifyFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onPhoneVerified(uri);
-        }
-    }
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {
+//            mListener.onPhoneVerified(uri);
+//        }
+//    }
 
     @Override
     public void onAttach(Context context) {
@@ -104,6 +145,33 @@ public class PhoneVerifyFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onPhoneVerified(Uri uri);
+        void onPhoneVerified(String verifyCode);
+    }
+
+    public void GetVerifyCode() {
+        GetVerifyCodeParam param = new GetVerifyCodeParam();
+        param.setPhoneNumber("123");
+
+        Response.Listener<GetVerifyCodeResponse> listener = new Response.Listener<GetVerifyCodeResponse>(){
+            @Override
+            public void onResponse(GetVerifyCodeResponse response) {
+                if (response.mReturnCode.equals(GetVerifyCodeResponse.RESULT_OK)) {
+                    Toast.makeText(PhoneVerifyFragment.this.getContext(), "获取验证码成功!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(PhoneVerifyFragment.this.getContext(), response.mReturnMSG, Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(PhoneVerifyFragment.this.getContext(),error.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        };
+
+        GetVerifyCodeRequest request = new GetVerifyCodeRequest(Utils.generateURL(ParamUtils.PAGE_GET_VERIFY_CODE, param), listener, errorListener);
+
+        VolleyRequestQueue.getInstance(PhoneVerifyFragment.this.getContext()).add(request);
     }
 }

@@ -1,14 +1,12 @@
 package com.ybx.guider;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.Volley;
 
 /**
@@ -52,6 +50,10 @@ public class VolleyRequestQueue {
     }
 
     public <T> void add(Request<T> req) {
+        if (Utils.isTestMode) {
+            Log.d("chenl", "Method :" + req.getMethod() + " Request URL: " + req.getUrl());
+        }
         getRequestQueue().add(req);
+
     }
 }

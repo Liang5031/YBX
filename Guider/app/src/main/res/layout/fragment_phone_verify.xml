@@ -63,13 +63,14 @@
         </RelativeLayout>
 
         <Button
+            android:id="@+id/btnGetVerifyCode"
             style="@style/BottonNormal"
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
             android:layout_gravity="center_horizontal"
-            android:text="@string/send_verify_code" />
+            android:text="@string/get_verify_code" />
     </LinearLayout>
 
 

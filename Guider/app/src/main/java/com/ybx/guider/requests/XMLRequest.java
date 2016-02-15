@@ -14,7 +14,7 @@ import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by chenlia1 on 2016/2/4.
+ * Created by chenl on 2016/2/4.
  */
 public class XMLRequest extends Request<XmlPullParser> {
 

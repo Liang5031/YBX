@@ -5,33 +5,33 @@ import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.ybx.guider.responses.LoginResponse;
+import com.ybx.guider.responses.GetVerifyCodeResponse;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by chenlia1 on 2016/2/4.
+ * Created by chenl on 2016/2/15.
  */
-public class LoginRequest extends Request<LoginResponse> {
+public class GetVerifyCodeRequest extends Request<GetVerifyCodeResponse> {
     private String mUrl;
-    private final Response.Listener<LoginResponse> mListener;
+    private final Response.Listener<GetVerifyCodeResponse> mListener;
 
-    public LoginRequest(int method, String url, Response.Listener<LoginResponse> listener,
+    public GetVerifyCodeRequest(int method, String url, Response.Listener<GetVerifyCodeResponse> listener,
                         Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         mListener = listener;
     }
 
-    public LoginRequest(String url, Response.Listener<LoginResponse> listener, Response.ErrorListener errorListener) {
+    public GetVerifyCodeRequest(String url, Response.Listener<GetVerifyCodeResponse> listener, Response.ErrorListener errorListener) {
         this(Method.GET, url, listener, errorListener);
     }
 
     @Override
-    protected Response<LoginResponse> parseNetworkResponse(NetworkResponse response) {
+    protected Response<GetVerifyCodeResponse> parseNetworkResponse(NetworkResponse response) {
         try {
-            LoginResponse res = new LoginResponse(response);
+            GetVerifyCodeResponse res = new GetVerifyCodeResponse(response);
             return Response.success(res, HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
@@ -41,7 +41,7 @@ public class LoginRequest extends Request<LoginResponse> {
     }
 
     @Override
-    protected void deliverResponse(LoginResponse response) {
+    protected void deliverResponse(GetVerifyCodeResponse response) {
         mListener.onResponse(response);
     }
 }

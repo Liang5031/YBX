@@ -1,6 +1,5 @@
 package com.ybx.guider.activity;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,10 +11,9 @@ import android.view.MenuInflater;
 import android.view.View;
 
 import com.ybx.guider.R;
-import com.ybx.guider.fragment.PhoneVerifyFragment;
 import com.ybx.guider.fragment.TeamListFragement;
 
-public class MainActivity extends AppCompatActivity implements PhoneVerifyFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
     private final static int NUM_ITEMS = 4;
     private MyAdapter mAdapter;
     private ViewPager mPager;
@@ -43,11 +41,6 @@ public class MainActivity extends AppCompatActivity implements PhoneVerifyFragme
 
                     }
                 });
-    }
-
-    @Override
-    public void onPhoneVerified(Uri uri) {
-
     }
 
     public static class MyAdapter extends FragmentPagerAdapter {

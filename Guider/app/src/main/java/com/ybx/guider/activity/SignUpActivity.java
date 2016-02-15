@@ -1,8 +1,5 @@
 package com.ybx.guider.activity;
 
-//import android.app.FragmentTransaction;
-//import android.app.Fragment;
-//import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
@@ -10,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ybx.guider.R;
 import com.ybx.guider.fragment.InformationFragment;
@@ -24,6 +22,7 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
     public static final int STEP_THREE = 3;
     private TextView mTVPrev;
     private TextView mTVNext;
+    private String mVerifyCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,7 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
     @Override
     protected void onResume() {
         super.onResume();
-        setStep(STEP_ONE);
+//        setStep(STEP_ONE);
     }
 
     void loadFragment(Fragment f, boolean addToBackStack){
@@ -57,8 +56,8 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
     }
 
     @Override
-    public void onPhoneVerified(Uri uri) {
-
+    public void onPhoneVerified(String verifyCode) {
+        mVerifyCode = verifyCode;
     }
 
     @Override
@@ -77,8 +76,12 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
             loadFragment(new PhoneVerifyFragment(), false);
             setStep(STEP_TWO);
         } else if(f instanceof PhoneVerifyFragment){
-            loadFragment(new InformationFragment(), false);
-            setStep(STEP_THREE);
+            if( mVerifyCode==null || mVerifyCode.isEmpty()){
+                Toast.makeText(SignUpActivity.this, "验证码不能为空！", Toast.LENGTH_SHORT).show();
+            } else {
+                loadFragment(new InformationFragment(), false);
+                setStep(STEP_THREE);
+            }
         }
     }
 

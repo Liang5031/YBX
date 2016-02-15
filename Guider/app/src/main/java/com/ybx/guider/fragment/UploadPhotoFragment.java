@@ -18,14 +18,6 @@ import com.ybx.guider.R;
 
 import java.io.FileNotFoundException;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link UploadPhotoFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link UploadPhotoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class UploadPhotoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -177,6 +169,13 @@ public class UploadPhotoFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mImageView = (ImageView)this.getActivity().findViewById(R.id.photo);
+        this.getActivity().findViewById(R.id.upload).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         Button btn = (Button) this.getActivity().findViewById(R.id.pickPhoto);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
