@@ -10,7 +10,6 @@ public class Utils {
     public static String TEST_SERVER_URL = "http://10.0.2.2:8080/YBX/";
     public static boolean isTestMode = true;
 
-
     public static String generateURL(String pageName, Param param) {
         String params = param.getParamString();
         if (isTestMode) {
@@ -22,5 +21,4 @@ public class Utils {
         }
     }
 }
-
 

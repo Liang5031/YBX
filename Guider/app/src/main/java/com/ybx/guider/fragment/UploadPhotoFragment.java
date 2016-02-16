@@ -1,22 +1,26 @@
 package com.ybx.guider.fragment;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.ybx.guider.FileImageUpload;
 import com.ybx.guider.R;
+import com.ybx.guider.Utils;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 
 public class UploadPhotoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -26,8 +30,11 @@ public class UploadPhotoFragment extends Fragment {
     private static final int PICK_PHOTO = 1;
     private static final int TAKE_PHOTO = 2;
     private static final int CROP_PHOTO = 3;
-    private static final String IMAGE_FILE_LOCATION = "file:///sdcard/temp.jpg";//temp file
-    private Uri mImageUri = Uri.parse(IMAGE_FILE_LOCATION);//The Uri to store the big bitmap
+    private static final int CROP_OUTPUT_X = 300;
+    private static final int CROP_OUTPUT_Y = 300;
+    private static final String IMAGE_FILE_LOCATION = "file:////sdcard/test.jpg";//temp file
+    //    private Uri mImageUri = Uri.parse(IMAGE_FILE_LOCATION);//The Uri to store the big bitmap
+    private Uri mImageUri;
     private ImageView mImageView;
 
     // TODO: Rename and change types of parameters
@@ -113,52 +120,27 @@ public class UploadPhotoFragment extends Fragment {
         void onPhotoUploaded(Uri uri);
     }
 
-    private void cropImageUri(Uri uri, int outputX, int outputY, int requestCode){
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", outputX);
-        intent.putExtra("outputY", outputY);
-        intent.putExtra("scale", true);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        intent.putExtra("return-data", false);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        intent.putExtra("noFaceDetection", true);
-        startActivityForResult(intent, requestCode);
-    }
-
-    private Intent getPickPhotoIntent() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-        intent.setType("image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 200);
-        intent.putExtra("return-data", true);
-        return intent;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == getActivity().RESULT_OK) {
-            switch(requestCode){
+            switch (requestCode) {
                 case TAKE_PHOTO:
-                    cropImageUri(mImageUri, 300, 300, CROP_PHOTO);
+                    cropImage(data.getData(), CROP_OUTPUT_X, CROP_OUTPUT_Y);
                     break;
+
                 case PICK_PHOTO:
-                    if(mImageView != null) {
-                        Bitmap bmp = data.getParcelableExtra("data");
-                        mImageView.setImageBitmap(bmp);
+                    if (mImageView != null) {
+                        mImageUri = data.getData();
+                        mImageView.setImageURI(mImageUri);
                     }
                     break;
+
                 case CROP_PHOTO:
-                    if(mImageView != null){
-                        Bitmap bmp = decodeUriAsBitmap(mImageUri);
-                        mImageView.setImageBitmap(bmp);
+                    if (mImageView != null) {
+                        mImageUri = data.getData();
+                        mImageView.setImageURI(mImageUri);
                     }
                     break;
             }
@@ -168,11 +150,23 @@ public class UploadPhotoFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mImageView = (ImageView)this.getActivity().findViewById(R.id.photo);
+        mImageView = (ImageView) this.getActivity().findViewById(R.id.photo);
         this.getActivity().findViewById(R.id.upload).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//
+                new Thread() {
+                    public void run() {
+//                        File file = new File(IMAGE_FILE_LOCATION);
+//                        File file = new File(Environment.getExternalStorageDirectory() + "/test.jpg");
 
+
+//                        File file = new File(getRealPathFromURI(mImageUri));
+//                        if( file.exists() ) {
+                        FileImageUpload.uploadFile(UploadPhotoFragment.this.getActivity().getApplicationContext(), mImageUri, "http://10.0.2.2:8080/", "1234.jpg");
+//                        }
+                    }
+                }.start();
             }
         });
 
@@ -180,7 +174,7 @@ public class UploadPhotoFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(getPickPhotoIntent(), PICK_PHOTO);
+                getImageFromAlbum();
             }
         });
 
@@ -188,21 +182,89 @@ public class UploadPhotoFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-                startActivityForResult(intent, TAKE_PHOTO);
+                getImageFromCamera();
             }
         });
     }
 
-    private Bitmap decodeUriAsBitmap(Uri uri){
-        Bitmap bitmap = null;
-        try {
-            bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
+    private String getFilePath(Uri uri) {
+        String path = "";
+        ContentResolver cr = this.getActivity().getContentResolver();
+        Cursor c = cr.query(uri, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+            path = c.getString(c.getColumnIndex("_data"));
         }
-        return bitmap;
+
+        return path;
+    }
+
+    private String getRealPathFromURI(Uri contentUri) {
+//        String[] proj = { MediaStore.Images.Media.DATA };
+//        CursorLoader loader = new CursorLoader(this.getContext(), contentUri, proj, null, null, null);
+//        Cursor cursor = loader.loadInBackground();
+//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//        cursor.moveToFirst();
+//        return cursor.getString(column_index);
+
+        String path="";
+        Cursor cursor = null;
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
+            cursor.moveToFirst();
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            path =cursor.getString(column_index);
+            return path;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public String getRealPathFromURI1(Uri contentUri) {
+        String filePath = null;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = this.getActivity().getContentResolver().query(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndex("_data");
+        if (cursor.moveToFirst()) {
+            ;
+//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//            filePath = cursor.getString(column_index);
+            filePath = cursor.getString(column_index);
+        }
+        cursor.close();
+        return filePath;
+
+
+    }
+
+    private void getImageFromAlbum() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", CROP_OUTPUT_X);
+        intent.putExtra("outputY", CROP_OUTPUT_Y);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_PHOTO);
+    }
+
+    private void getImageFromCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, TAKE_PHOTO);
+    }
+
+    private void cropImage(Uri uri, int outputX, int outputY) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", outputX);
+        intent.putExtra("outputY", outputY);
+        startActivityForResult(intent, CROP_PHOTO);
     }
 }

@@ -10,6 +10,28 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp">
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="@dimen/text_width_normal"
+                android:layout_alignParentLeft="true"
+                android:text="@string/guider_number" />
+
+            <EditText
+                android:id="@+id/account"
+                style="@style/EditNormal"
+                android:layout_width="@dimen/edit_width_normal"
+                android:layout_alignParentRight="true"
+                android:hint="@string/guider_number_hint"
+                android:inputType="number" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

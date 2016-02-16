@@ -62,6 +62,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         param.setUser("user");
         LoginRequest request = new LoginRequest(Utils.generateURL(ParamUtils.PAGE_LOGIN, param), this, this);
 
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
 //        String url = "http://www.baidu.com";
 //        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, this, this);
         VolleyRequestQueue.getInstance(this).add(request);
