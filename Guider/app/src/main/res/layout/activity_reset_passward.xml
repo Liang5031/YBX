@@ -65,7 +65,7 @@
             android:text="@string/guider_number" />
 
         <EditText
-            android:id="@+id/account"
+            android:id="@+id/guiderNumber"
             style="@style/EditNormal"
             android:layout_width="@dimen/edit_width_normal"
             android:layout_alignParentRight="true"

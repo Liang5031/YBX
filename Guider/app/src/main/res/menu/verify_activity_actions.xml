@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/verify_fragment_refresh"
+        android:title="@string/action_refresh"
+        android:icon="@mipmap/ic_launcher"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/verify_fragment_sign_up"
+        android:title="@string/action_sign_up"
+        android:icon="@mipmap/ic_launcher" />
+
+    <item
+        android:id="@+id/verify_fragment_change_account"
+        android:title="@string/action_change_account"
+        android:icon="@mipmap/ic_launcher" />
+
+</menu>

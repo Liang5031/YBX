@@ -14,6 +14,8 @@
     <!--<color name="loginBackground">#2196d6</color>-->
     <color name="loginBackground">#FAFAFA</color>
     <color name="colorBlue">#2FB3FF</color>
+    <!--<color name="colorOrangeLight">#EC5151</color>-->
+    <!--<color name="colorOrangeDark">#A01515</color>-->
     <color name="colorBlueDark">#007BC6</color>
     <color name="linkColor">#0000FF</color>
     <color name="radioButtonBG">#F0F0F0</color>

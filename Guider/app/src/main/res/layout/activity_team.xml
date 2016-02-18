@@ -19,32 +19,40 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/tabOngoingList"
+            android:id="@+id/tabInfo"
             style="@style/navigate_bottom"
             android:drawableTop="@mipmap/ic_launcher"
-            android:onClick="onClickOngoingTab"
-            android:text="@string/tab_ongoing_list" />
+            android:onClick="onClickTabInfo"
+            android:text="@string/tab_info" />
 
         <RadioButton
-            android:id="@+id/tabWaitingList"
+            android:id="@+id/tabSchedule"
             style="@style/navigate_bottom"
             android:drawableTop="@mipmap/ic_launcher"
-            android:onClick="onClickWaitingTab"
-            android:text="@string/tab_waiting_list" />
+            android:onClick="onClickTabSchedule"
+            android:text="@string/tab_schedule" />
 
         <RadioButton
-            android:id="@+id/tabFinishList"
+            android:id="@+id/tabRealName"
             style="@style/navigate_bottom"
             android:drawableTop="@mipmap/ic_launcher"
-            android:onClick="onClickFinishTab"
-            android:text="@string/tab_finished_list" />
+            android:onClick="onClickTabRealName"
+            android:text="@string/tab_real_name" />
 
         <RadioButton
-            android:id="@+id/tabSetting"
+            android:id="@+id/tabDealRecord"
             style="@style/navigate_bottom"
             android:drawableTop="@mipmap/ic_launcher"
-            android:onClick="onClickSettingsTab"
-            android:text="@string/tab_settings" />
+            android:onClick="onClickTabDealRecord"
+            android:text="@string/tab_deal_record" />
+
+        <RadioButton
+            android:id="@+id/tabLog"
+            style="@style/navigate_bottom"
+            android:drawableTop="@mipmap/ic_launcher"
+            android:onClick="onClickTabLog"
+            android:text="@string/tab_log" />
     </RadioGroup>
 
 </LinearLayout>
+

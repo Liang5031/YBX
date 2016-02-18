@@ -1,45 +1,48 @@
 package com.ybx.guider.fragment;
 
-import android.content.ContentResolver;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.CursorLoader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.ybx.guider.FileImageUpload;
+import com.ybx.guider.utils.FileImageUpload;
 import com.ybx.guider.R;
-import com.ybx.guider.Utils;
-
-import java.io.File;
+import com.ybx.guider.utils.URLUtils;
 
 public class UploadPhotoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_GUIDER_NUMBER = "guider_number";
+//    private static final String ARG_PARAM2 = "param2";
     private static final int PICK_PHOTO = 1;
     private static final int TAKE_PHOTO = 2;
     private static final int CROP_PHOTO = 3;
     private static final int CROP_OUTPUT_X = 300;
-    private static final int CROP_OUTPUT_Y = 300;
+    private static final int CROP_OUTPUT_Y = 240;
     private static final String IMAGE_FILE_LOCATION = "file:////sdcard/test.jpg";//temp file
     //    private Uri mImageUri = Uri.parse(IMAGE_FILE_LOCATION);//The Uri to store the big bitmap
     private Uri mImageUri;
     private ImageView mImageView;
+    private ProgressDialog mProgressDialog;
+    private EditText mETGuiderNumber;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String mGuiderNumber;
+//    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -51,16 +54,12 @@ public class UploadPhotoFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment UploadPhotoFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static UploadPhotoFragment newInstance(String param1, String param2) {
+    public static UploadPhotoFragment newInstance(String number) {
         UploadPhotoFragment fragment = new UploadPhotoFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_GUIDER_NUMBER, number);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,8 +68,7 @@ public class UploadPhotoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mGuiderNumber = getArguments().getString(ARG_GUIDER_NUMBER);
         }
     }
 
@@ -147,26 +145,61 @@ public class UploadPhotoFragment extends Fragment {
         }
     }
 
+    Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            mProgressDialog.dismiss();
+            switch (msg.what) {
+                case 200:
+                    Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传完成！", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传失败！", Toast.LENGTH_LONG).show();
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mETGuiderNumber = (EditText)this.getActivity().findViewById(R.id.guiderNumber);
+        if(mGuiderNumber!=null && !mGuiderNumber.isEmpty()) {
+            mETGuiderNumber.setText(mGuiderNumber);
+        }
         mImageView = (ImageView) this.getActivity().findViewById(R.id.photo);
         this.getActivity().findViewById(R.id.upload).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//
+                final String number = mETGuiderNumber.getText().toString();
+                if(number.isEmpty()){
+                    Toast.makeText(UploadPhotoFragment.this.getContext(), "导游证号不能为空！", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                mProgressDialog = ProgressDialog.show(UploadPhotoFragment.this.getContext(), "上传照片", "请稍等...", true, false);
                 new Thread() {
+                    @Override
                     public void run() {
-//                        File file = new File(IMAGE_FILE_LOCATION);
-//                        File file = new File(Environment.getExternalStorageDirectory() + "/test.jpg");
-
-
-//                        File file = new File(getRealPathFromURI(mImageUri));
-//                        if( file.exists() ) {
-                        FileImageUpload.uploadFile(UploadPhotoFragment.this.getActivity().getApplicationContext(), mImageUri, "http://10.0.2.2:8080/", "1234.jpg");
-//                        }
+                        //需要花时间计算的方法
+                        int res = FileImageUpload.uploadFile(UploadPhotoFragment.this.getActivity().getApplicationContext()
+                                                            , mImageUri
+                                                            , URLUtils.getServerUrl()
+                                                            , number+".jpg");
+                        Message message = new Message();
+                        message.what = res;
+                        mHandler.sendMessage(message);
                     }
                 }.start();
+
+//                UploadFileTask task = new UploadFileTask(UploadPhotoFragment.this.getActivity().getApplicationContext()
+//                        , mImageUri
+//                        , URLUtils.getServerUrl()
+//                        , "1234.jpg");
+//                task.execute();
+
+
+
             }
         });
 
@@ -187,57 +220,21 @@ public class UploadPhotoFragment extends Fragment {
         });
     }
 
-    private String getFilePath(Uri uri) {
-        String path = "";
-        ContentResolver cr = this.getActivity().getContentResolver();
-        Cursor c = cr.query(uri, null, null, null, null);
-        if (c != null) {
-            c.moveToFirst();
-            path = c.getString(c.getColumnIndex("_data"));
-        }
-
-        return path;
-    }
-
     private String getRealPathFromURI(Uri contentUri) {
-//        String[] proj = { MediaStore.Images.Media.DATA };
-//        CursorLoader loader = new CursorLoader(this.getContext(), contentUri, proj, null, null, null);
-//        Cursor cursor = loader.loadInBackground();
-//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//        cursor.moveToFirst();
-//        return cursor.getString(column_index);
-
-        String path="";
+        String path = "";
         Cursor cursor = null;
         try {
             String[] proj = {MediaStore.Images.Media.DATA};
             cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
             cursor.moveToFirst();
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            path =cursor.getString(column_index);
+            path = cursor.getString(column_index);
             return path;
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
         }
-    }
-
-    public String getRealPathFromURI1(Uri contentUri) {
-        String filePath = null;
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = this.getActivity().getContentResolver().query(contentUri, proj, null, null, null);
-        int column_index = cursor.getColumnIndex("_data");
-        if (cursor.moveToFirst()) {
-            ;
-//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//            filePath = cursor.getString(column_index);
-            filePath = cursor.getString(column_index);
-        }
-        cursor.close();
-        return filePath;
-
-
     }
 
     private void getImageFromAlbum() {
@@ -266,5 +263,32 @@ public class UploadPhotoFragment extends Fragment {
         intent.putExtra("outputX", outputX);
         intent.putExtra("outputY", outputY);
         startActivityForResult(intent, CROP_PHOTO);
+    }
+
+    private class UploadFileTask extends AsyncTask<Void, Integer, Integer> {
+        private Context mCtx;
+        private String mRequestURL;
+        private String mFileName;
+        private Uri mUri;
+
+        public UploadFileTask(Context ctx, Uri uri, String requestURL, String fileName) {
+            mCtx = ctx;
+            mRequestURL = requestURL;
+            mFileName = fileName;
+            mUri = uri;
+        }
+
+        protected Integer doInBackground(Void... params) {
+            int res = FileImageUpload.uploadFile(mCtx, mUri, mRequestURL, mFileName);
+            return res;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+//            setProgressPercent(progress[0]);
+        }
+
+        protected void onPostExecute(Integer result) {
+//            showDialog("Downloaded " + result + " bytes");
+        }
     }
 }

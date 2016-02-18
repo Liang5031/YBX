@@ -3,13 +3,15 @@ package com.ybx.guider.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
-import com.ybx.guider.Utils;
-import com.ybx.guider.VolleyRequestQueue;
+import com.ybx.guider.utils.PreferencesUtils;
+import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.VolleyRequestQueue;
 import com.ybx.guider.parameters.GetVerifyCodeParam;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.parameters.ResetPasswordParam;
@@ -27,6 +29,8 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
         setContentView(R.layout.activity_reset_passward);
         this.setTitle(R.string.reset_password);
 
+        EditText et = (EditText)findViewById(R.id.guiderNumber);
+        et.setText(PreferencesUtils.getGuiderNumber(this));
         /* Enable up button */
 //        ActionBar actionBar = getSupportActionBar();
 //        actionBar.setDisplayHomeAsUpEnabled(true);
@@ -37,7 +41,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
         ResetPasswordParam param = new ResetPasswordParam();
         param.setUser("user");
         param.setNewPassword("123456");
-        ResetPasswordRequest request = new ResetPasswordRequest(Utils.generateURL(ParamUtils.PAGE_RESET_PASSWORD, param), this, this);
+        ResetPasswordRequest request = new ResetPasswordRequest(URLUtils.generateURL(ParamUtils.PAGE_RESET_PASSWORD, param), this, this);
         VolleyRequestQueue.getInstance(this).add(request);
     }
 
@@ -63,7 +67,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
             }
         };
 
-        GetVerifyCodeRequest request = new GetVerifyCodeRequest(Utils.generateURL(ParamUtils.PAGE_GET_VERIFY_CODE, param), listener, errorListener);
+        GetVerifyCodeRequest request = new GetVerifyCodeRequest(URLUtils.generateURL(ParamUtils.PAGE_GET_VERIFY_CODE, param), listener, errorListener);
 
         VolleyRequestQueue.getInstance(this).add(request);
     }

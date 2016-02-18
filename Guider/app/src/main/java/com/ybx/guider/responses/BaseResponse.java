@@ -14,17 +14,19 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by chenl on 2016/2/5.
  */
-public abstract class Response {
+public class BaseResponse {
     public static String RESPONSE_RETURN_CODE = "retcode";
     public static String RESPONSE_RETURN_MSG = "retmsg";
     public static String RESPONSE_SIGN = "sign";
+
     public static String RESULT_OK = "0";
+    public static String RESULT_FAIL = "1";
 
     public String mReturnCode;
     public String mReturnMSG;
     public String mSign;
 
-    public Response(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
+    public BaseResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
         String xmlString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
         XmlPullParser xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
         ;

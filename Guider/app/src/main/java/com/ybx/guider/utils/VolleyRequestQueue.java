@@ -1,4 +1,4 @@
-package com.ybx.guider;
+package com.ybx.guider.utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -50,7 +50,7 @@ public class VolleyRequestQueue {
     }
 
     public <T> void add(Request<T> req) {
-        if (Utils.isTestMode) {
+        if (URLUtils.isTestMode) {
             Log.d("chenl", "Method :" + req.getMethod() + " Request URL: " + req.getUrl());
         }
         getRequestQueue().add(req);

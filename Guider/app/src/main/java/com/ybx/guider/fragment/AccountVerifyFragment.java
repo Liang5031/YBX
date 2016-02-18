@@ -1,18 +1,28 @@
 package com.ybx.guider.fragment;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ybx.guider.R;
 
-public class InformationFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link AccountVerifyFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link AccountVerifyFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class AccountVerifyFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -24,7 +34,7 @@ public class InformationFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public InformationFragment() {
+    public AccountVerifyFragment() {
         // Required empty public constructor
     }
 
@@ -32,17 +42,15 @@ public class InformationFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment InformationFragment.
+     * @return A new instance of fragment AccountVerifyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static InformationFragment newInstance(String param1, String param2) {
-        InformationFragment fragment = new InformationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+    public static AccountVerifyFragment newInstance() {
+        AccountVerifyFragment fragment = new AccountVerifyFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -53,19 +61,20 @@ public class InformationFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_information, container, false);
+        return inflater.inflate(R.layout.fragment_account_verify, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onSubmit(uri);
+            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -78,13 +87,6 @@ public class InformationFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        TextView tv =(TextView)this.getActivity().findViewById(R.id.licenseLink);
-        tv.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     }
 
     @Override
@@ -105,6 +107,31 @@ public class InformationFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onSubmit(Uri uri);
+        void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.verify_activity_actions, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id){
+            case R.id.verify_fragment_refresh:
+                Toast.makeText(this.getContext(),"verify_fragment_refresh pressed", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.verify_fragment_sign_up:
+                Toast.makeText(this.getContext(),"verify_fragment_sign_up pressed", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.verify_fragment_change_account:
+                Toast.makeText(this.getContext(),"verify_fragment_change_account pressed", Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

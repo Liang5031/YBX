@@ -10,13 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ybx.guider.R;
-import com.ybx.guider.fragment.InformationFragment;
+import com.ybx.guider.fragment.SignUpInfoFragment;
 import com.ybx.guider.fragment.PhoneVerifyFragment;
 import com.ybx.guider.fragment.UploadPhotoFragment;
+import com.ybx.guider.utils.PreferencesUtils;
 
-import org.w3c.dom.Text;
-
-public class SignUpActivity extends AppCompatActivity implements UploadPhotoFragment.OnFragmentInteractionListener, PhoneVerifyFragment.OnFragmentInteractionListener, InformationFragment.OnFragmentInteractionListener {
+public class SignUpActivity extends AppCompatActivity implements UploadPhotoFragment.OnFragmentInteractionListener, PhoneVerifyFragment.OnFragmentInteractionListener, SignUpInfoFragment.OnFragmentInteractionListener {
     public static final int STEP_ONE = 1;
     public static final int STEP_TWO = 2;
     public static final int STEP_THREE = 3;
@@ -28,7 +27,7 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        loadFragment(new UploadPhotoFragment(), false);
+        loadFragment(UploadPhotoFragment.newInstance(PreferencesUtils.getGuiderNumber(this)), false);
         this.setTitle(R.string.sign_up_title);
         mTVPrev = (TextView)findViewById(R.id.Prev);
         mTVNext = (TextView)findViewById(R.id.Next);
@@ -73,25 +72,25 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
     public void onClickNext(View view){
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if( f instanceof UploadPhotoFragment){
-            loadFragment(new PhoneVerifyFragment(), false);
+            loadFragment(PhoneVerifyFragment.newInstance(), false);
             setStep(STEP_TWO);
         } else if(f instanceof PhoneVerifyFragment){
-//            if( mVerifyCode==null || mVerifyCode.isEmpty()){
-//                Toast.makeText(SignUpActivity.this, "验证码不能为空！", Toast.LENGTH_SHORT).show();
-//            } else {
-                loadFragment(new InformationFragment(), false);
+            if( mVerifyCode==null || mVerifyCode.isEmpty()){
+                Toast.makeText(SignUpActivity.this, "验证码不能为空！", Toast.LENGTH_SHORT).show();
+            } else {
+                loadFragment(SignUpInfoFragment.newInstance(), false);
                 setStep(STEP_THREE);
-//            }
+            }
         }
     }
 
     public void onClickPrev(View view){
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if( f instanceof InformationFragment){
-            loadFragment(new PhoneVerifyFragment(), false);
+        if( f instanceof SignUpInfoFragment){
+            loadFragment(PhoneVerifyFragment.newInstance(), false);
             setStep(STEP_TWO);
         } else if(f instanceof PhoneVerifyFragment){
-            loadFragment(new UploadPhotoFragment(), false);
+            loadFragment(UploadPhotoFragment.newInstance(PreferencesUtils.getGuiderNumber(this)), false);
             setStep(STEP_ONE);
         }
     }

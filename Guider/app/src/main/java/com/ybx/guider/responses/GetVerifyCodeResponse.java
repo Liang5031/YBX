@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by chenl on 2016/2/15.
  */
-public class GetVerifyCodeResponse extends Response {
+public class GetVerifyCodeResponse extends BaseResponse {
 
     public GetVerifyCodeResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
         super(response);

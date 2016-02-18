@@ -1,5 +1,6 @@
 package com.ybx.guider.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -9,6 +10,9 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.ybx.guider.R;
+import com.ybx.guider.activity.MainActivity;
+import com.ybx.guider.activity.TeamActivity;
+import com.ybx.guider.responses.BaseResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +46,9 @@ public class TeamListFragement extends ListFragment {
 
     public void onListItemClick(ListView parent, View v,
                                 int position, long id) {
-
+        Intent intent = new Intent(this.getContext(), TeamActivity.class);
+        intent.putExtra(TeamActivity.EXTRA_TEAM_ID, 1);
+        startActivity(intent);
     }
 
     private List<Map<String, Object>> getSimpleData() {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="20dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/TextNormal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请在下方文本框内输入‘OK’表示您真的确认结束当前团队的带团工作，此操作是不可逆的，确认后团队将转入“待结算”状态" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:id="@+id/lable"
+            style="@style/TextNormal"
+            android:layout_width="@dimen/text_width_normal"
+            android:layout_alignParentLeft="true"
+            android:text="请输入OK:" />
+
+        <EditText
+            android:id="@+id/userName"
+            android:layout_marginLeft="5dp"
+            style="@style/EditNormal"
+            android:layout_width="@dimen/edit_width_normal"
+            android:layout_toRightOf="@+id/lable" />
+    </RelativeLayout>
+</LinearLayout>

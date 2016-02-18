@@ -1,9 +1,12 @@
-package com.ybx.guider;
+package com.ybx.guider.utils;
 
 
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -16,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
 
+
 /**
  * * 实现文件上传的工具类
  */
@@ -23,13 +27,12 @@ public class FileImageUpload {
     private static final String TAG = "uploadFile";
     private static final int TIME_OUT = 10 * 10000000; //超时时间
     private static final String CHARSET = "utf-8"; //设置编码
-    public static final String SUCCESS = "1";
-    public static final String FAILURE = "0";
 
     /**
      * android上传文件到服务器
      */
-    public static String uploadFile(Context ctx, Uri srcUri, String RequestURL, String fileName) {
+    public static int uploadFile(Context ctx, Uri srcUri, String RequestURL, String fileName) {
+        int res = 0;
         String BOUNDARY = UUID.randomUUID().toString(); //边界标识 随机生成
         String PREFIX = "--";
         String LINE_END = "\r\n";
@@ -82,11 +85,8 @@ public class FileImageUpload {
              * 获取响应码 200=成功
              * 当响应成功，获取响应的流
              */
-            int res = conn.getResponseCode();
-            Log.e(TAG, "response code:" + res);
-            if (res == 200) {
-                return SUCCESS;
-            }
+            res = conn.getResponseCode();
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -94,6 +94,54 @@ public class FileImageUpload {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return FAILURE;
+        return res;
+    }
+
+    /**
+     * 通过ftp上传文件
+     * @param url ftp服务器地址 如： 192.168.1.110
+     * @param port 端口如 ： 21
+     * @param username  登录名
+     * @param password   密码
+     * @param remotePath  上到ftp服务器的磁盘路径
+     * @param fileNamePath  要上传的文件路径
+     * @param fileName      要上传的文件名
+     * @return
+     */
+    public String ftpUpload(String url, String port, String username,String password, String remotePath, String fileNamePath,String fileName) {
+        FTPClient ftpClient = new FTPClient();
+        FileInputStream fis = null;
+        String returnMessage = "0";
+        try {
+            ftpClient.connect(url, Integer.parseInt(port));
+            boolean loginResult = ftpClient.login(username, password);
+            int returnCode = ftpClient.getReplyCode();
+            if (loginResult && FTPReply.isPositiveCompletion(returnCode)) {// 如果登录成功
+                ftpClient.makeDirectory(remotePath);
+                // 设置上传目录
+                ftpClient.changeWorkingDirectory(remotePath);
+                ftpClient.setBufferSize(1024);
+                ftpClient.setControlEncoding("UTF-8");
+                ftpClient.enterLocalPassiveMode();
+                fis = new FileInputStream(fileNamePath + fileName);
+                ftpClient.storeFile(fileName, fis);
+
+                returnMessage = "1";   //上传成功
+            } else {// 如果登录失败
+                returnMessage = "0";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("FTP客户端出错！", e);
+        } finally {
+            //IOUtils.closeQuietly(fis);
+            try {
+                ftpClient.disconnect();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("关闭FTP连接发生异常！", e);
+            }
+        }
+        return returnMessage;
     }
 }

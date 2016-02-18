@@ -1,7 +1,6 @@
 package com.ybx.guider.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -15,8 +14,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
-import com.ybx.guider.Utils;
-import com.ybx.guider.VolleyRequestQueue;
+import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.VolleyRequestQueue;
 import com.ybx.guider.parameters.GetVerifyCodeParam;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.GetVerifyCodeRequest;
@@ -84,12 +83,12 @@ public class PhoneVerifyFragment extends Fragment {
      * @return A new instance of fragment PhoneVerifyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PhoneVerifyFragment newInstance(String param1, String param2) {
+    public static PhoneVerifyFragment newInstance() {
         PhoneVerifyFragment fragment = new PhoneVerifyFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -170,7 +169,7 @@ public class PhoneVerifyFragment extends Fragment {
             }
         };
 
-        GetVerifyCodeRequest request = new GetVerifyCodeRequest(Utils.generateURL(ParamUtils.PAGE_GET_VERIFY_CODE, param), listener, errorListener);
+        GetVerifyCodeRequest request = new GetVerifyCodeRequest(URLUtils.generateURL(ParamUtils.PAGE_GET_VERIFY_CODE, param), listener, errorListener);
 
         VolleyRequestQueue.getInstance(PhoneVerifyFragment.this.getContext()).add(request);
     }

@@ -1,20 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- Settings, should always be in the overflow -->
     <item
-    android:id="@+id/action_settings"
-    android:title="@string/action_refresh"
-    android:icon="@mipmap/ic_launcher"
-    app:showAsAction="ifRoom" />
+        android:id="@+id/main_refresh"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/action_refresh"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_logout"
-        android:title="@string/action_logout"
-        android:icon="@mipmap/ic_launcher" />
+        android:id="@+id/main_logout"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/action_logout" />
 
     <item
-        android:id="@+id/action_change_account"
-        android:title="@string/action_change_account"
-        android:icon="@mipmap/ic_launcher" />
+        android:id="@+id/main_change_account"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/action_change_account" />
 </menu>
