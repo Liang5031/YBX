@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_activity_actions, menu);
+        inflater.inflate(R.menu.main_activity_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -54,12 +53,14 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
             case R.id.main_change_account:
                 intent = new Intent(this, LoginActivity.class);
                 intent.putExtra(LoginActivity.EXTRA_START_TYPE, LoginActivity.START_TYPE_CHANGE_ACCOUNT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 this.finish();
                 return true;
             case R.id.main_logout:
                 intent = new Intent(this, LoginActivity.class);
                 intent.putExtra(LoginActivity.EXTRA_START_TYPE, LoginActivity.START_TYPE_LOGOUT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 this.finish();
                 return true;

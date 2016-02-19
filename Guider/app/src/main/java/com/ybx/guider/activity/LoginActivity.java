@@ -39,14 +39,13 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-
         Intent intent = getIntent();
         String loginType = intent.getStringExtra(EXTRA_START_TYPE);
         if (loginType != null && loginType.equals(START_TYPE_LOGOUT)) {
             PreferencesUtils.clearLoginInfo(this);
         } else if (PreferencesUtils.getIsAutoLogin(this) && (loginType == null || !loginType.equals(START_TYPE_CHANGE_ACCOUNT))) {
             reqeustLogin(PreferencesUtils.getGuiderNumber(this), PreferencesUtils.getPassword(this));
-            this.finish();
+//            this.finish();
             return;
         }
 
@@ -61,13 +60,19 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        mProgressDialog.dismiss();
+        if(mProgressDialog!=null&& mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
         Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void onResponse(LoginResponse response) {
-        mProgressDialog.dismiss();
+        if(mProgressDialog!=null&& mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
 
         if (response.mReturnCode.equals(BaseResponse.RESULT_OK)) {
             Intent intent = new Intent(this, MainActivity.class);

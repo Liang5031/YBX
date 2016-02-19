@@ -50,8 +50,6 @@ public class TeamInfoFragment extends ListFragment{
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment TeamInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -66,7 +64,7 @@ public class TeamInfoFragment extends ListFragment{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.team_info_fragment_actions, menu);
+        inflater.inflate(R.menu.team_info_fragment_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

@@ -16,8 +16,10 @@ import com.ybx.guider.R;
 import com.ybx.guider.dialog.AcceptTeamDialog;
 import com.ybx.guider.dialog.FinishTeamDialog;
 import com.ybx.guider.fragment.TeamInfoFragment;
+import com.ybx.guider.fragment.TeamScheduleFragment;
 
-public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.OnFragmentInteractionListener, AcceptTeamDialog.AcceptTeamDialogListener, FinishTeamDialog.FinishTeamDialogListener {
+public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.OnFragmentInteractionListener,
+        AcceptTeamDialog.AcceptTeamDialogListener, FinishTeamDialog.FinishTeamDialogListener, TeamScheduleFragment.OnScheduleFragmentListener {
     public static String EXTRA_TEAM_ID = "TEAM_ID";
     private final static int NUM_ITEMS = 5;
     private PageAdapter mPageAdapter;
@@ -46,7 +48,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onScheduleFragmentInteraction(Uri uri) {
 
     }
 
@@ -70,6 +72,11 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         Toast.makeText(this, "Cancel pressed", Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
     public static class PageAdapter extends FragmentPagerAdapter {
         public PageAdapter(FragmentManager fm) {
             super(fm);
@@ -82,38 +89,48 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
 
         @Override
         public Fragment getItem(int position) {
-            return TeamInfoFragment.newInstance();
-//            switch(position){
-//                case 1:
-//                    break;
-//                case 2:
-//                    break;
-//                case 3:
-//                    break;
-//                case 4:
-//                    break;
-//            }
-//            return null;
+//            return TeamInfoFragment.newInstance();
+
+            switch(position){
+                case 0:
+                    return TeamInfoFragment.newInstance();
+                case 1:
+                    return TeamScheduleFragment.newInstance();
+                case 2:
+                    return TeamInfoFragment.newInstance();
+//                    return TeamScheduleFragment.newInstance();
+                case 3:
+                    return TeamInfoFragment.newInstance();
+                case 4:
+                    return TeamInfoFragment.newInstance();
+                default:
+                    return null;
+            }
         }
     }
 
     public void onClickTabInfo(View view) {
         mPager.setCurrentItem(0);
+        setTitle(R.string.title_info);
     }
 
     public void onClickTabSchedule(View view) {
         mPager.setCurrentItem(1);
+        setTitle(R.string.title_schedule);
     }
 
     public void onClickTabRealName(View view) {
         mPager.setCurrentItem(2);
+        setTitle(R.string.title_real_name);
     }
 
     public void onClickTabDealRecord(View view) {
         mPager.setCurrentItem(3);
+        setTitle(R.string.title_deal_record);
     }
 
     public void onClickTabLog(View view) {
         mPager.setCurrentItem(4);
+        setTitle(R.string.title_log);
     }
 }
