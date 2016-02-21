@@ -12,4 +12,8 @@ public class GetVerifyCodeParam extends Param {
     public void setPhoneNumber(String phoneNumber){
         addParam(ParamUtils.KEY_PHONE_NUMBER, phoneNumber);
     }
+
+    public void setGuiderNumber(String guiderNumber){
+        addParam(ParamUtils.KEY_GUIDER_NUMBER, guiderNumber);
+    }
 }

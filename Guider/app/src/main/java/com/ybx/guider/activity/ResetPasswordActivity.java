@@ -9,9 +9,6 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
-import com.ybx.guider.utils.PreferencesUtils;
-import com.ybx.guider.utils.URLUtils;
-import com.ybx.guider.utils.VolleyRequestQueue;
 import com.ybx.guider.parameters.GetVerifyCodeParam;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.parameters.ResetPasswordParam;
@@ -19,27 +16,27 @@ import com.ybx.guider.requests.GetVerifyCodeRequest;
 import com.ybx.guider.requests.ResetPasswordRequest;
 import com.ybx.guider.responses.GetVerifyCodeResponse;
 import com.ybx.guider.responses.ResetPasswordResponse;
+import com.ybx.guider.utils.PreferencesUtils;
+import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.VolleyRequestQueue;
 
 
 public class ResetPasswordActivity extends AppCompatActivity implements Response.Listener<ResetPasswordResponse>, Response.ErrorListener {
-
+    private EditText mGuiderNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_passward);
         this.setTitle(R.string.reset_password);
 
-        EditText et = (EditText)findViewById(R.id.guiderNumber);
-        et.setText(PreferencesUtils.getGuiderNumber(this));
-        /* Enable up button */
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setDisplayHomeAsUpEnabled(true);
+        mGuiderNumber = (EditText)findViewById(R.id.guiderNumber);
+        mGuiderNumber.setText(PreferencesUtils.getGuiderNumber(this));
     }
 
 
     public void onClickResetPassword(View view) {
         ResetPasswordParam param = new ResetPasswordParam();
-        param.setUser("user");
+        param.setGuiderNumber("user");
         param.setNewPassword("123456");
         ResetPasswordRequest request = new ResetPasswordRequest(URLUtils.generateURL(ParamUtils.PAGE_RESET_PASSWORD, param), this, this);
         VolleyRequestQueue.getInstance(this).add(request);
@@ -47,7 +44,11 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
 
     public void onClickGetVerifyCode(View view) {
         GetVerifyCodeParam param = new GetVerifyCodeParam();
-        param.setPhoneNumber("123");
+        if(mGuiderNumber.getText().toString().isEmpty()){
+            Toast.makeText(this,"导游证号不能为空！", Toast.LENGTH_LONG).show();
+        }
+
+        param.setGuiderNumber(mGuiderNumber.getText().toString());
 
         Response.Listener<GetVerifyCodeResponse> listener = new Response.Listener<GetVerifyCodeResponse>(){
             @Override
@@ -63,7 +64,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
         Response.ErrorListener errorListener = new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ResetPasswordActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(ResetPasswordActivity.this,error.toString(),Toast.LENGTH_LONG).show();
             }
         };
 

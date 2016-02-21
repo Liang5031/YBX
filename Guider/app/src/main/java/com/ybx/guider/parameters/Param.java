@@ -12,11 +12,16 @@ public class Param {
     public Map<String, String> mParams = new HashMap();
 
     public Param(){
-        addParam(ParamUtils.KEY_SIGN_TYPE,ParamUtils.VALUE_SIGN_TYPE_MD5);
-        addParam(ParamUtils.KEY_INPUT_CHARSET,ParamUtils.VALUE_DEFAULT_CHAR_SET);
-        addParam(ParamUtils.KEY_SERVICE_VERSION,ParamUtils.VALUE_DEFAULT_SERVICE_VERSION);
-        addParam(ParamUtils.KEY_SIGN,ParamUtils.generateSign() );
+        setSignType(ParamUtils.VALUE_SIGN_TYPE_MD5);
+        setCharSet(ParamUtils.VALUE_DEFAULT_CHAR_SET);
+        setServiceVersion(ParamUtils.VALUE_DEFAULT_SERVICE_VERSION);
+
+//        addParam(ParamUtils.KEY_SIGN_TYPE,ParamUtils.VALUE_SIGN_TYPE_MD5);
+//        addParam(ParamUtils.KEY_INPUT_CHARSET,ParamUtils.VALUE_DEFAULT_CHAR_SET);
+//        addParam(ParamUtils.KEY_SERVICE_VERSION,ParamUtils.VALUE_DEFAULT_SERVICE_VERSION);
+//        addParam(ParamUtils.KEY_SIGN,ParamUtils.generateSign() );
     }
+
     public String getParamString(){
         StringBuilder encodedParams = new StringBuilder();
         try {
@@ -76,4 +81,14 @@ public class Param {
     public void setCharSet(String charSet){
         addParam(ParamUtils.KEY_INPUT_CHARSET, charSet);
     }
+
+    public void setUser(String guiderNumber){
+        addParam(ParamUtils.KEY_USER, guiderNumber);
+    }
+
+    public void setProviderId(Integer providerId){
+        addParam(ParamUtils.KEY_PROVIDER_ID, providerId.toString());
+    }
+
+
 }

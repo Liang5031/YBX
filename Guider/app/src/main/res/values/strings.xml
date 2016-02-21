@@ -66,12 +66,9 @@
     <string name="tab_waiting_list">等待的团</string>
     <string name="tab_finished_list">完成的团</string>
     <string name="tab_settings">设置</string>
-    <string name="action_refresh">刷新</string>
-    <string name="action_logout">登出</string>
-    <string name="action_change_account">切换账号</string>
+
 
     <!-- String for verify activity -->
-    <string name="action_sign_up">重新申请</string>
     <string name="account_verifing">尊敬的导游，您的账户正在审核中，请耐心等待</string>
     <string name="login_retry">秒后重新尝试</string>
 
@@ -90,12 +87,6 @@
     <string name="tab_log">日志信息</string>
     <string name="title_log">团队日志信息</string>
 
-
-    <!-- String for team info fragment -->
-    <string name="action_accept">接团</string>
-    <string name="action_finish">完成带团</string>
-
-
     <!-- String for team schedule fragment -->
     <string name="team_id">编号:</string>
     <string name="schedule_id">行程编号:</string>
@@ -110,8 +101,18 @@
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <!-- String for menu actions -->
+    <string name="menu_refresh">刷新</string>
+    <string name="menu_logout">登出</string>
+    <string name="menu_change_account">切换账号</string>
+    <string name="menu_accept">接团</string>
+    <string name="menu_finish">完成带团</string>
+    <string name="menu_sign_up">重新申请</string>
+    <string name="menu_sync">同步</string>
+    <string name="menu_cancel_schedule">取消行程</string>
+    <string name="menu_finish_schedule">标识为完成</string>
+    <string name="menu_change_reservation">改签预约</string>
+    <string name="menu_make_reservation">发起预约</string>
+    <string name="menu_cancel_reservation">取消预约</string>
 
 </resources>

@@ -4,16 +4,16 @@
     <item
         android:id="@+id/main_refresh"
         android:icon="@mipmap/ic_launcher"
-        android:title="@string/action_refresh"
+        android:title="@string/menu_refresh"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/main_logout"
         android:icon="@mipmap/ic_launcher"
-        android:title="@string/action_logout" />
+        android:title="@string/menu_logout" />
 
     <item
         android:id="@+id/main_change_account"
         android:icon="@mipmap/ic_launcher"
-        android:title="@string/action_change_account" />
+        android:title="@string/menu_change_account" />
 </menu>

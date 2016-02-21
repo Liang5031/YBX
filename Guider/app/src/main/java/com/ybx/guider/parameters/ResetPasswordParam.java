@@ -5,8 +5,8 @@ package com.ybx.guider.parameters;
  */
 public class ResetPasswordParam extends Param{
 
-    public void setUser(String user){
-        addParam(ParamUtils.KEY_LOGIN_USER, user);
+    public void setGuiderNumber(String user){
+        addParam(ParamUtils.KEY_GUIDER_NUMBER, user);
     }
 
     public void setNewPassword(String password){

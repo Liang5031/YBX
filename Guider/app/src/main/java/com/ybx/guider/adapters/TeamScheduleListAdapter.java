@@ -25,7 +25,7 @@ public class TeamScheduleListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 30;
     }
 
     @Override
@@ -45,9 +45,6 @@ public class TeamScheduleListAdapter extends BaseAdapter {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(R.layout.team_schedule_list_item, null);
             holder = new Holder();
-//            holder.textView = (TextView) convertView.findViewById(R.id.textView);
-//            holder.UEFAView = (ImageView) convertView.findViewById(R.id.image_uefa);
-//            holder.mascotView = (ImageView) convertView.findViewById(R.id.image_mascot);
             holder.hideItems = convertView.findViewById(R.id.hideItems);
             convertView.setTag(holder);
         } else {
@@ -64,9 +61,6 @@ public class TeamScheduleListAdapter extends BaseAdapter {
     }
 
     class Holder {
-//        TextView textView;
-//        ImageView UEFAView;
-//        ImageView mascotView;
         View hideItems;
     }
 

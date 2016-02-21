@@ -9,6 +9,6 @@ public class LoginParam extends Param {
     }
 
     public void setUser(String user){
-        addParam(ParamUtils.KEY_LOGIN_USER, user);
+        addParam(ParamUtils.KEY_GUIDER_NUMBER, user);
     }
 }
