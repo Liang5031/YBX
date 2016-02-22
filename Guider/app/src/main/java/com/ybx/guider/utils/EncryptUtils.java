@@ -4,6 +4,12 @@ package com.ybx.guider.utils;
 
 import android.util.Base64;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -38,7 +44,7 @@ public class EncryptUtils {
         if (null == strKey || strKey.length() < 1)
             throw new Exception("key is null or empty!");
 
-        java.security.MessageDigest alg = java.security.MessageDigest.getInstance("MD5");
+        MessageDigest alg = MessageDigest.getInstance("MD5");
         alg.update(strKey.getBytes());
         byte[] bkey = alg.digest();
 
@@ -131,5 +137,55 @@ public class EncryptUtils {
         }
 
         return hs.toUpperCase();
+    }
+
+    public static String md5(String string) {
+        byte[] hash;
+        try {
+            hash = MessageDigest.getInstance("MD5").digest(string.getBytes("UTF-8"));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Huh, MD5 should be supported?", e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Huh, UTF-8 should be supported?", e);
+        }
+
+        StringBuilder hex = new StringBuilder(hash.length * 2);
+        for (byte b : hash) {
+            if ((b & 0xFF) < 0x10) hex.append("0");
+            hex.append(Integer.toHexString(b & 0xFF));
+        }
+        return hex.toString();
+    }
+
+    public static String generateSign(String paramsInOrder, String password){
+//        System.date.now.tostring();
+        SimpleDateFormat s = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
+        String timestamp = s.format(new Date());
+
+        String d1 = md5(paramsInOrder);
+        String p1 = md5(password);
+        String d2 = md5(p1);
+        String d3 = d1 + timestamp + d2;
+
+        String d4 = null;
+        try {
+            d4 = Encrypt3DES(d3, p1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return d4;
+    }
+
+    private String getTimeStamp(){
+        long SECOND = 1000;
+        long MINUTE = 60*SECOND;
+        long HOUR = 60*MINUTE;
+//        long
+
+        long timestamp = System.currentTimeMillis();
+        StringBuilder sTimeStamp = new StringBuilder();
+//        sTimeStamp.append()
+        return null;
     }
 }

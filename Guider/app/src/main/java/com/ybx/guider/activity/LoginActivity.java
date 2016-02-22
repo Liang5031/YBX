@@ -18,6 +18,7 @@ import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.LoginRequest;
 import com.ybx.guider.responses.BaseResponse;
 import com.ybx.guider.responses.LoginResponse;
+import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
 import com.ybx.guider.utils.VolleyRequestQueue;
@@ -132,9 +133,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         mProgressDialog = ProgressDialog.show(this, "正在登录", "请稍等...", true, false);
 
         LoginParam param = new LoginParam();
-        //Todo sign the password
-        param.setSign(password);
         param.setUser(guiderNumber);
+        param.setSign(EncryptUtils.generateSign(param.getParamStringInOrder(), password));
         LoginRequest request = new LoginRequest(URLUtils.generateURL(ParamUtils.PAGE_LOGIN, param), this, this);
 
         VolleyRequestQueue.getInstance(this).add(request);

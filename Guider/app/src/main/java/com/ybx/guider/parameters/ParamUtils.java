@@ -101,7 +101,7 @@ public class ParamUtils {
     public static String VALUE_DEFAULT_SERVICE_VERSION = "1.0";
     public static String VALUE_DEFAULT_CHAR_SET = "UTF-8";
 
-    public static String generateSign(){
-        return "sign";
-    }
+//    public static String generateSign(String params){
+//        return "sign";
+//    }
 }
