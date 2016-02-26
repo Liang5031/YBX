@@ -99,10 +99,12 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     }
 
     public void onClickLogin(View view) {
-        if (inputCheck()) {
-            PreferencesUtils.saveLoginInfo(this, mGuiderNumber.getText().toString(), mPassword.getText().toString(), mIsAutoLogin.isChecked());
-            reqeustLogin(mGuiderNumber.getText().toString(), mPassword.getText().toString());
-        }
+//        if (inputCheck()) {
+//            PreferencesUtils.saveLoginInfo(this, mGuiderNumber.getText().toString(), mPassword.getText().toString(), mIsAutoLogin.isChecked());
+//            reqeustLogin(mGuiderNumber.getText().toString(), mPassword.getText().toString());
+//        }
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void onClickAutoLogin(View view) {

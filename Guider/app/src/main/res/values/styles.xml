@@ -62,4 +62,10 @@
         <item name="android:drawablePadding">2.0dip</item>
         <item name="android:layout_weight">1.0</item>
     </style>
+
+    <style name="ver_line">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">#dadada</item>
+    </style>
 </resources>

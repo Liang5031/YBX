@@ -184,7 +184,7 @@ public class UploadPhotoFragment extends Fragment {
                         //需要花时间计算的方法
                         int res = FileImageUpload.uploadFile(UploadPhotoFragment.this.getActivity().getApplicationContext()
                                                             , mImageUri
-                                                            , URLUtils.getServerUrl()
+                                                            ,"http://10.0.2.2:8080/TomcatPro/MyFirstServlet"
                                                             , number+".jpg");
                         Message message = new Message();
                         message.what = res;

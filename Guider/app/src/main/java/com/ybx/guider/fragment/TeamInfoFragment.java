@@ -93,8 +93,8 @@ public class TeamInfoFragment extends ListFragment{
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        final String[] from = new String[] {"lable", "value"};
-        final int[]  to = new int[] {R.id.lable, R.id.value};
+        final String[] from = new String[] {"label", "value"};
+        final int[]  to = new int[] {R.id.label, R.id.value};
 
         SimpleAdapter adapter = new SimpleAdapter(
                 this.getActivity(), getSimpleData(),
@@ -154,83 +154,83 @@ public class TeamInfoFragment extends ListFragment{
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("lable", "团队编号");
+        map.put("label", "团队编号:");
         map.put("value", "249572345720");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "行程单编号（自编号）");
+        map.put("label", "行程单编号:");
         map.put("value", "1234234134134134");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "总人数");
+        map.put("label", "总人数:");
         map.put("value", "7");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "成年人数");
+        map.put("label", "成年人数:");
         map.put("value", "5");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "未成年人数");
+        map.put("label", "未成年人数:");
         map.put("value", "2");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "成员描述");
+        map.put("label", "成员描述:");
         map.put("value", "5大2小，含两个老年人");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "行程日期");
+        map.put("label", "行程日期:");
         map.put("value", "2016-01-01至2016-01-07");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "行程简述");
+        map.put("label", "行程简述:");
         map.put("value", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "说明");
+        map.put("label", "说明:");
         map.put("value", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "旅行社");
+        map.put("label", "旅行社:");
         map.put("value", "天门山5日游天门山5日游天门山5日游");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "部门");
+        map.put("label", "部门:");
         map.put("value", "天门山5日游天门山");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "计调");
+        map.put("label", "计调:");
         map.put("value", "张三");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "客源地");
+        map.put("label", "客源地:");
         map.put("value", "长沙");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "团队来源");
+        map.put("label", "团队来源:");
         map.put("value", "长沙");
         list.add(map);
 
 
         map = new HashMap<String, Object>();
-        map.put("lable", "团队来源说明");
+        map.put("label", "来源说明:");
         map.put("value", "未知");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("lable", "状态");
+        map.put("label", "状态:");
         map.put("value", "未知");
         list.add(map);
         return list;

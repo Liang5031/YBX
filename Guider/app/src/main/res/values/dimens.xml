@@ -19,4 +19,7 @@
     <dimen name="text_height_small">25dp</dimen>
     <dimen name="button_height_normal">50dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="list_view_header_height">30dp</dimen>
+    <dimen name="list_view_item_height">25dp</dimen>
 </resources>

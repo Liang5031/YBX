@@ -93,7 +93,7 @@
     <string name="schedule_number">本团队共有%1$d个行程安排</string>
     <string name="schedule_type">事务类型:</string>
     <string name="schedule_state">状态:</string>
-
+    <string name="real_name_number">共有%1$d个实名信息</string>
 
     <!-- String for dialog -->
     <string name="finish_team_confirmation">您真的确认“接团”吗？</string>
@@ -114,5 +114,7 @@
     <string name="menu_change_reservation">改签预约</string>
     <string name="menu_make_reservation">发起预约</string>
     <string name="menu_cancel_reservation">取消预约</string>
+
+    <string name="name_label">姓名</string>
 
 </resources>

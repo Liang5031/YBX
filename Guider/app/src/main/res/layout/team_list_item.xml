@@ -6,13 +6,13 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="8dp">
 
         <TextView
+            android:id="@+id/team_id_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/team_id_lable" />
@@ -21,21 +21,25 @@
             android:id="@+id/team_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/team_id_label"
             android:text="001" />
-    </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/team_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="2016-01-01" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/team_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="5dp"
         android:text="团队基本情况描述" />
 
-    <TextView
-        android:id="@+id/hideItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="hide item"/>
 </LinearLayout>

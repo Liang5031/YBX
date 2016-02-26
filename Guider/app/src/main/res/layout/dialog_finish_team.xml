@@ -23,7 +23,7 @@
         android:layout_marginTop="15dp">
 
         <TextView
-            android:id="@+id/lable"
+            android:id="@+id/label"
             style="@style/TextNormal"
             android:layout_width="@dimen/text_width_normal"
             android:layout_alignParentLeft="true"
@@ -34,6 +34,6 @@
             android:layout_marginLeft="5dp"
             style="@style/EditNormal"
             android:layout_width="@dimen/edit_width_normal"
-            android:layout_toRightOf="@+id/lable" />
+            android:layout_toRightOf="@+id/label" />
     </RelativeLayout>
 </LinearLayout>

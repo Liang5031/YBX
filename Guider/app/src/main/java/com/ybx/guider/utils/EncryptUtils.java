@@ -158,7 +158,6 @@ public class EncryptUtils {
     }
 
     public static String generateSign(String paramsInOrder, String password){
-//        System.date.now.tostring();
         SimpleDateFormat s = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
         String timestamp = s.format(new Date());
 
@@ -175,17 +174,5 @@ public class EncryptUtils {
         }
 
         return d4;
-    }
-
-    private String getTimeStamp(){
-        long SECOND = 1000;
-        long MINUTE = 60*SECOND;
-        long HOUR = 60*MINUTE;
-//        long
-
-        long timestamp = System.currentTimeMillis();
-        StringBuilder sTimeStamp = new StringBuilder();
-//        sTimeStamp.append()
-        return null;
     }
 }

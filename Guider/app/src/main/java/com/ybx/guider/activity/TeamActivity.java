@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.ybx.guider.R;
 import com.ybx.guider.dialog.AcceptTeamDialog;
 import com.ybx.guider.dialog.FinishTeamDialog;
+import com.ybx.guider.fragment.RealNameListFragment;
 import com.ybx.guider.fragment.TeamInfoFragment;
 import com.ybx.guider.fragment.TeamScheduleFragment;
 
@@ -97,8 +98,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                 case 1:
                     return TeamScheduleFragment.newInstance();
                 case 2:
-                    return TeamInfoFragment.newInstance();
-//                    return TeamScheduleFragment.newInstance();
+                    return RealNameListFragment.newInstance();
                 case 3:
                     return TeamInfoFragment.newInstance();
                 case 4:
