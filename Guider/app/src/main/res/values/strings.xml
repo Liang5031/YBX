@@ -93,10 +93,12 @@
     <string name="schedule_number">本团队共有%1$d个行程安排</string>
     <string name="schedule_type">事务类型:</string>
     <string name="schedule_state">状态:</string>
-    <string name="real_name_number">共有%1$d个实名信息</string>
+    <string name="real_name_number">共有%1$d条实名信息</string>
+    <string name="team_log_number">共有%1$d条团队日志</string>
+    <string name="deal_record_number">共有%1$d条成交记录</string>
 
     <!-- String for dialog -->
-    <string name="finish_team_confirmation">您真的确认“接团”吗？</string>
+    <!--<string name="finish_team_confirmation">您真的确认“接团”吗？</string>-->
     <string name="accept_team_confirmation">您真的确认“接团”吗？</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>

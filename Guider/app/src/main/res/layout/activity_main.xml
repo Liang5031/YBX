@@ -10,41 +10,46 @@
         android:layout_height="0dip"
         android:layout_weight="1.0" />
 
-    <RadioGroup
+    <LinearLayout
         android:id="@+id/radioTabs"
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:layout_gravity="bottom"
+        android:background="@color/colorRedPressed"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/tabOngoingList"
-            style="@style/navigate_bottom"
-            android:drawableTop="@mipmap/ic_launcher"
+        <ImageView
+            android:id="@+id/tabOngoing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickOngoingTab"
-            android:text="@string/tab_ongoing_list" />
+            android:src="@mipmap/ongoing" />
 
-        <RadioButton
-            android:id="@+id/tabWaitingList"
-            style="@style/navigate_bottom"
-            android:drawableTop="@mipmap/ic_launcher"
+        <ImageView
+            android:id="@+id/tabWaiting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickWaitingTab"
-            android:text="@string/tab_waiting_list" />
+            android:src="@mipmap/waiting" />
 
-        <RadioButton
-            android:id="@+id/tabFinishList"
-            style="@style/navigate_bottom"
-            android:drawableTop="@mipmap/ic_launcher"
+        <ImageView
+            android:id="@+id/tabFinish"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickFinishTab"
-            android:text="@string/tab_finished_list" />
+            android:src="@mipmap/finish" />
 
-        <RadioButton
+        <ImageView
             android:id="@+id/tabSetting"
-            style="@style/navigate_bottom"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickSettingsTab"
-            android:text="@string/tab_settings" />
-    </RadioGroup>
+            android:src="@mipmap/setting" />
+    </LinearLayout>
 
 </LinearLayout>

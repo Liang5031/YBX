@@ -10,49 +10,54 @@
         android:layout_height="0dip"
         android:layout_weight="1.0" />
 
-    <RadioGroup
-        android:id="@+id/radioTabs"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:layout_gravity="bottom"
+        android:background="@color/colorRedPressed"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/tabInfo"
-            style="@style/navigate_bottom"
-            android:drawableTop="@mipmap/ic_launcher"
+        <ImageView
+            android:id="@+id/tabMainInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickTabInfo"
-            android:text="@string/tab_info" />
+            android:src="@mipmap/main_info" />
 
-        <RadioButton
-            android:id="@+id/tabSchedule"
-            style="@style/navigate_bottom"
-            android:drawableTop="@mipmap/ic_launcher"
+        <ImageView
+            android:id="@+id/tabTeamSchedule"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickTabSchedule"
-            android:text="@string/tab_schedule" />
+            android:src="@mipmap/team_schedule" />
 
-        <RadioButton
-            android:id="@+id/tabRealName"
-            style="@style/navigate_bottom"
-            android:drawableTop="@mipmap/ic_launcher"
+        <ImageView
+            android:id="@+id/tabTeamRealName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickTabRealName"
-            android:text="@string/tab_real_name" />
+            android:src="@mipmap/team_real_name" />
 
-        <RadioButton
-            android:id="@+id/tabDealRecord"
-            style="@style/navigate_bottom"
-            android:drawableTop="@mipmap/ic_launcher"
+        <ImageView
+            android:id="@+id/tabTeamDealRecord"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickTabDealRecord"
-            android:text="@string/tab_deal_record" />
+            android:src="@mipmap/team_deal_record" />
 
-        <RadioButton
-            android:id="@+id/tabLog"
-            style="@style/navigate_bottom"
-            android:drawableTop="@mipmap/ic_launcher"
+        <ImageView
+            android:id="@+id/tabTeamLog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="onClickTabLog"
-            android:text="@string/tab_log" />
-    </RadioGroup>
+            android:src="@mipmap/team_log" />
+    </LinearLayout>
 
 </LinearLayout>
 

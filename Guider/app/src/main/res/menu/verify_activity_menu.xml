@@ -5,17 +5,17 @@
     <item
         android:id="@+id/verify_fragment_refresh"
         android:title="@string/menu_refresh"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/refresh"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/verify_fragment_sign_up"
         android:title="@string/menu_sign_up"
-        android:icon="@mipmap/ic_launcher" />
+        android:icon="@mipmap/refresh" />
 
     <item
         android:id="@+id/verify_fragment_change_account"
         android:title="@string/menu_change_account"
-        android:icon="@mipmap/ic_launcher" />
+        android:icon="@mipmap/refresh" />
 
 </menu>

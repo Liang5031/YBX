@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/windowBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -58,21 +59,41 @@
 
         <TextView
             style="@style/TextNormal"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/schedule_type" />
 
         <Spinner
             android:id="@+id/spinnerType"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_weight="1"
             android:entries="@array/scheduleType"
             android:gravity="center_vertical"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dialog" />
+
+        <TextView
+            style="@style/TextNormal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_weight="1"
+            android:text="@string/schedule_state" />
+
+        <Spinner
+            android:id="@+id/spinnerState"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:entries="@array/scheduleState"
+            android:spinnerMode="dialog" />
 
     </LinearLayout>
 
+    <!--
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -96,13 +117,27 @@
             android:spinnerMode="dropdown" />
 
     </LinearLayout>
+    -->
 
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:background="@color/white"
-        android:drawSelectorOnTop="false" />
+        android:dividerHeight="20dp"
+        android:focusable="true"
+        android:listSelector="@drawable/selector_list_item"
+        android:overScrollMode="never" />
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Loading..."
+        android:visibility="gone" />
 
 </LinearLayout>

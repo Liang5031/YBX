@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.ybx.guider.R;
 import com.ybx.guider.activity.MainActivity;
 import com.ybx.guider.activity.TeamActivity;
+import com.ybx.guider.adapters.DealRecordListAdapter;
+import com.ybx.guider.adapters.TeamListAdapter;
 import com.ybx.guider.responses.BaseResponse;
 
 import java.util.ArrayList;
@@ -24,7 +26,8 @@ import java.util.Map;
  * Created by chenl on 2016/2/11.
  */
 public class TeamListFragement extends ListFragment {
-    private View mLastView = null;
+    private TeamListAdapter mAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -35,113 +38,22 @@ public class TeamListFragement extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String[] from = new String[]{"team_id", "team_description"};
-        final int[] to = new int[]{R.id.team_id, R.id.team_description};
-
-        SimpleAdapter adapter = new SimpleAdapter(
-                this.getActivity(), getSimpleData(),
-                R.layout.team_list_item, from, to);
-        this.setListAdapter(adapter);
-
     }
 
     public void onListItemClick(ListView parent, View v,
                                 int position, long id) {
-
-//        if( mLastView != null && mLastView != v){
-//            switch(mLastView.findViewById(R.id.hideItem).getVisibility()) {
-//                case View.GONE:
-//                    mLastView.findViewById(R.id.hideItem).setVisibility(View.VISIBLE);
-//                    break;
-//                case View.VISIBLE:
-//                    mLastView.findViewById(R.id.hideItem).setVisibility(View.GONE);
-//                    break;
-//            }
-//        }
-//
-//        switch(v.findViewById(R.id.hideItem).getVisibility()) {
-//            case View.GONE:
-//                v.findViewById(R.id.hideItem).setVisibility(View.VISIBLE);
-//                break;
-//            case View.VISIBLE:
-//                v.findViewById(R.id.hideItem).setVisibility(View.GONE);
-//                break;
-//        }
-//        mLastView = v;
-
         Intent intent = new Intent(this.getContext(), TeamActivity.class);
         intent.putExtra(TeamActivity.EXTRA_TEAM_ID, 1);
         startActivity(intent);
     }
 
-    private List<Map<String, Object>> getSimpleData() {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("team_id", "001");
-        map.put("team_description", "天门山1日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "002");
-        map.put("team_description", "天门山2日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "003");
-        map.put("team_description", "天门山3日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "004");
-        map.put("team_description", "天门山4日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "005");
-        map.put("team_description", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "005");
-        map.put("team_description", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "005");
-        map.put("team_description", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "005");
-        map.put("team_description", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "005");
-        map.put("team_description", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "005");
-        map.put("team_description", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "005");
-        map.put("team_description", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "005");
-        map.put("team_description", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("team_id", "005");
-        map.put("team_description", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
-        list.add(map);
-
-        return list;
+        View emptyView = this.getView().findViewById(R.id.empty);
+        this.getListView().setEmptyView(emptyView);
+        mAdapter = new TeamListAdapter(this.getContext());
+        this.setListAdapter(mAdapter);
     }
 }

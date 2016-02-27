@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/main_refresh"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/refresh"
         android:title="@string/menu_refresh"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/main_logout"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/refresh"
         android:title="@string/menu_logout" />
 
     <item
         android:id="@+id/main_change_account"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/refresh"
         android:title="@string/menu_change_account" />
 </menu>

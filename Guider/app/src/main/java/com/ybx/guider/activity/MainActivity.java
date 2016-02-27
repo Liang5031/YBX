@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ybx.guider.R;
@@ -27,11 +28,21 @@ import java.lang.reflect.Method;
 public class MainActivity extends AppCompatActivity implements AccountVerifyFragment.OnFragmentInteractionListener{
     private final static int NUM_ITEMS_MAIN = 4;
     private final static int NUM_ITEMS_VERIFICATION = 1;
+    private final static int PAGE_ONGOING = 0;
+    private final static int PAGE_WAITING = 1;
+    private final static int PAGE_FINISH = 2;
+    private final static int PAGE_SETTING = 3;
+
+
     private MainAdapter mMainAdapter;
     private VerificationAdapter mVerifyAdapter;
     private ViewPager mPager;
     public static String EXTRA_LOGIN_RESULT_CODE = "LOGIN_RESULT_CODE";
     public static String EXTRA_LOGIN_RESULT_MSG = "LOGIN_RESULT_MSG";
+    private ImageView mTabOngoing;
+    private ImageView mTabWaiting;
+    private ImageView mTabFinish;
+    private ImageView mTabSetting;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,6 +87,10 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mTabOngoing = (ImageView)findViewById(R.id.tabOngoing);
+        mTabWaiting = (ImageView)findViewById(R.id.tabWaiting);
+        mTabFinish = (ImageView)findViewById(R.id.tabFinish);
+        mTabSetting = (ImageView)findViewById(R.id.tabSetting);
 
         mMainAdapter = new MainAdapter(getSupportFragmentManager());
         mVerifyAdapter = new VerificationAdapter(getSupportFragmentManager());
@@ -215,19 +230,55 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     }
 
     public void onClickOngoingTab(View view) {
-        mPager.setCurrentItem(0);
+        mPager.setCurrentItem(PAGE_ONGOING);
+        setSelectedItem(PAGE_ONGOING);
     }
 
     public void onClickWaitingTab(View view) {
-        mPager.setCurrentItem(1);
+        mPager.setCurrentItem(PAGE_WAITING);
+        setSelectedItem(PAGE_WAITING);
     }
 
     public void onClickFinishTab(View view) {
-        mPager.setCurrentItem(2);
+        mPager.setCurrentItem(PAGE_FINISH);
+        setSelectedItem(PAGE_FINISH);
     }
 
     public void onClickSettingsTab(View view) {
-        mPager.setCurrentItem(3);
+        mPager.setCurrentItem(PAGE_SETTING);
+        setSelectedItem(PAGE_SETTING);
+    }
+
+    public void setSelectedItem(int index){
+        switch (index){
+            case PAGE_ONGOING:
+                mTabOngoing.setImageResource(R.mipmap.ongoing_pressed);
+                mTabWaiting.setImageResource(R.mipmap.waiting);
+                mTabFinish.setImageResource(R.mipmap.finish);
+                mTabSetting.setImageResource(R.mipmap.setting);
+                break;
+            case PAGE_WAITING:
+                mTabOngoing.setImageResource(R.mipmap.ongoing);
+                mTabWaiting.setImageResource(R.mipmap.waiting_pressed);
+                mTabFinish.setImageResource(R.mipmap.finish);
+                mTabSetting.setImageResource(R.mipmap.setting);
+                break;
+            case PAGE_FINISH:
+                mTabOngoing.setImageResource(R.mipmap.ongoing);
+                mTabWaiting.setImageResource(R.mipmap.waiting);
+                mTabFinish.setImageResource(R.mipmap.finish_pressed);
+                mTabSetting.setImageResource(R.mipmap.setting);
+                break;
+            case PAGE_SETTING:
+                mTabOngoing.setImageResource(R.mipmap.ongoing);
+                mTabWaiting.setImageResource(R.mipmap.waiting);
+                mTabFinish.setImageResource(R.mipmap.finish);
+                mTabSetting.setImageResource(R.mipmap.setting_pressed);
+                break;
+            default:
+                break;
+        }
+
     }
 
 }

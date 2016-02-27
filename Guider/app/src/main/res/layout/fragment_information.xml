@@ -155,7 +155,7 @@
                 android:id="@+id/licenseLink"
                 style="@style/TextSmall"
                 android:layout_width="wrap_content"
-                android:textColor="@color/colorBlue"
+                android:textColor="@color/colorRed"
                 android:autoLink="web"
                 android:text="@string/license_hype_link" />
 

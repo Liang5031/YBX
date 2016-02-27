@@ -2,10 +2,12 @@
 <resources>
     <!--<color name="colorPrimary">#3F51B5</color>-->
     <!--<color name="colorPrimary">#393A3F</color>-->
-    <color name="colorPrimary">#FF6700</color>
+    <!--<color name="colorPrimary">#FF6700</color>-->
+    <color name="colorPrimary">#EC5151</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <!--<color name="colorAccent">#2FB3FF</color>-->
-    <color name="colorAccent">#FF6700</color>
+    <!--<color name="colorAccent">#FF6700</color>-->
+    <color name="colorAccent">#EC5151</color>
     <color name="textColorPrimary">#000000</color>
     <color name="textColor">#202020</color>
     <color name="textColorSecond">#737373</color>
@@ -17,14 +19,19 @@
     <color name="loginBackground">#FAFAFA</color>
     <!--<color name="colorBlue">#2FB3FF</color>-->
     <!--<color name="colorBluePressed">#007BC6</color>-->
-    <color name="colorBlue">#FF6700</color>
-    <color name="colorBluePressed">#DF5900</color>
+    <color name="colorRed">#EC5151</color>
+    <color name="colorRedPressed">#A01515</color>
+    <color name="colorListItemPressed">#F39696</color>
+
+    <color name="colorOverScrollHeader">#EC5151</color>
+    <color name="colorOverScrollFooter">#EC5151</color>
     <color name="colorMIOrange">#FF6700</color>
     <color name="colorMIOrangePressed">#DF5900</color>
     <!--<color name="colorOrangeLight">#EC5151</color>-->
     <!--<color name="colorOrangeDark">#A01515</color>-->
 
     <color name="linkColor">#0000FF</color>
-    <color name="radioButtonBG">#F0F0F0</color>
+    <!--<color name="radioButtonBG">#F0F0F0</color>-->
+    <color name="radioButtonBG">#A01515</color>
 
 </resources>

@@ -76,7 +76,7 @@ public class RealNameListFragment extends ListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.team_schedule_menu, menu);
+        inflater.inflate(R.menu.refresh_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -84,7 +84,7 @@ public class RealNameListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.schedule_fragment_refresh:
+            case R.id.action_refresh:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
