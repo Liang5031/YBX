@@ -148,13 +148,11 @@ public class UploadPhotoFragment extends Fragment {
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             mProgressDialog.dismiss();
-            switch (msg.what) {
-                case 200:
-                    Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传完成！", Toast.LENGTH_LONG).show();
-                    break;
-                default:
-                    Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传失败！", Toast.LENGTH_LONG).show();
-                    break;
+            boolean ret = (boolean)msg.obj;
+            if(ret){
+                Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传完成！", Toast.LENGTH_LONG).show();
+            }else {
+                Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传失败！", Toast.LENGTH_LONG).show();
             }
             super.handleMessage(msg);
         }
@@ -182,12 +180,16 @@ public class UploadPhotoFragment extends Fragment {
                     @Override
                     public void run() {
                         //需要花时间计算的方法
-                        int res = FileImageUpload.uploadFile(UploadPhotoFragment.this.getActivity().getApplicationContext()
-                                                            , mImageUri
-                                                            ,"http://10.0.2.2:8080/TomcatPro/MyFirstServlet"
-                                                            , number+".jpg");
+//                        int res = FileImageUpload.uploadFile(UploadPhotoFragment.this.getActivity().getApplicationContext()
+//                                                            , mImageUri
+//                                                            ,"http://121.40.94.228:8081/source/YUNPhoto_UploadService.asmx"
+//                                                            , number+".jpg");
+
+                        boolean ret = FileImageUpload.callWebService(UploadPhotoFragment.this.getActivity().getApplicationContext()
+                                , mImageUri, number);
+
                         Message message = new Message();
-                        message.what = res;
+                        message.obj = ret;
                         mHandler.sendMessage(message);
                     }
                 }.start();

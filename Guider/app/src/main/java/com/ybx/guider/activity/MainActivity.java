@@ -20,12 +20,13 @@ import android.widget.Toast;
 
 import com.ybx.guider.R;
 import com.ybx.guider.fragment.AccountVerifyFragment;
+import com.ybx.guider.fragment.SettingsFragment;
 import com.ybx.guider.fragment.TeamListFragement;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class MainActivity extends AppCompatActivity implements AccountVerifyFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements AccountVerifyFragment.OnFragmentInteractionListener {
     private final static int NUM_ITEMS_MAIN = 4;
     private final static int NUM_ITEMS_VERIFICATION = 1;
     private final static int PAGE_ONGOING = 0;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     private final static int PAGE_FINISH = 2;
     private final static int PAGE_SETTING = 3;
 
-
+//    private int mCurrentPage = PAGE_ONGOING;
     private MainAdapter mMainAdapter;
     private VerificationAdapter mVerifyAdapter;
     private ViewPager mPager;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         Intent intent;
-        switch(id){
+        switch (id) {
             case R.id.main_change_account:
                 intent = new Intent(this, LoginActivity.class);
                 intent.putExtra(LoginActivity.EXTRA_START_TYPE, LoginActivity.START_TYPE_CHANGE_ACCOUNT);
@@ -87,10 +88,11 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mTabOngoing = (ImageView)findViewById(R.id.tabOngoing);
-        mTabWaiting = (ImageView)findViewById(R.id.tabWaiting);
-        mTabFinish = (ImageView)findViewById(R.id.tabFinish);
-        mTabSetting = (ImageView)findViewById(R.id.tabSetting);
+
+        mTabOngoing = (ImageView) findViewById(R.id.tabOngoing);
+        mTabWaiting = (ImageView) findViewById(R.id.tabWaiting);
+        mTabFinish = (ImageView) findViewById(R.id.tabFinish);
+        mTabSetting = (ImageView) findViewById(R.id.tabSetting);
 
         mMainAdapter = new MainAdapter(getSupportFragmentManager());
         mVerifyAdapter = new VerificationAdapter(getSupportFragmentManager());
@@ -99,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
         Intent i = getIntent();
         String resultCode = i.getStringExtra(EXTRA_LOGIN_RESULT_CODE);
 //        if (resultCode!= null && resultCode.equals(BaseResponse.RESULT_OK)) {
-            findViewById(R.id.radioTabs).setVisibility(View.VISIBLE);
-            setTitle(R.string.app_name_short);
-            mPager.setAdapter(mMainAdapter);
+        findViewById(R.id.radioTabs).setVisibility(View.VISIBLE);
+        setTitle(R.string.app_name_short);
+        mPager.setAdapter(mMainAdapter);
 //        } else if(resultCode!= null && resultCode.equals(BaseResponse.RESULT_FAIL)) {
 //            findViewById(R.id.radioTabs).setVisibility(View.GONE);
 //            setTitle(R.string.verify_title);
@@ -214,43 +216,47 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
 
         @Override
         public Fragment getItem(int position) {
-            return new TeamListFragement();
-//            switch(position){
-//                case 1:
-//                    break;
-//                case 2:
-//                    break;
-//                case 3:
-//                    break;
-//                case 4:
-//                    break;
-//            }
-//            return null;
+            switch (position) {
+                case PAGE_ONGOING:
+                    return new TeamListFragement();
+                case PAGE_WAITING:
+                    return new TeamListFragement();
+                case PAGE_FINISH:
+                    return new TeamListFragement();
+                case PAGE_SETTING:
+                    return SettingsFragment.newInstance();
+                default:
+                    return null;
+            }
         }
     }
 
     public void onClickOngoingTab(View view) {
         mPager.setCurrentItem(PAGE_ONGOING);
         setSelectedItem(PAGE_ONGOING);
+        setTitle("正在带的团");
     }
 
     public void onClickWaitingTab(View view) {
         mPager.setCurrentItem(PAGE_WAITING);
         setSelectedItem(PAGE_WAITING);
+        setTitle("等待我带的团");
     }
 
     public void onClickFinishTab(View view) {
         mPager.setCurrentItem(PAGE_FINISH);
         setSelectedItem(PAGE_FINISH);
+        setTitle("已完成的团");
     }
 
     public void onClickSettingsTab(View view) {
         mPager.setCurrentItem(PAGE_SETTING);
         setSelectedItem(PAGE_SETTING);
+        setTitle("设置");
     }
 
-    public void setSelectedItem(int index){
-        switch (index){
+    public void setSelectedItem(int index) {
+        switch (index) {
             case PAGE_ONGOING:
                 mTabOngoing.setImageResource(R.mipmap.ongoing_pressed);
                 mTabWaiting.setImageResource(R.mipmap.waiting);

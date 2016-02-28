@@ -4,21 +4,31 @@ package com.ybx.guider.utils;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import org.kobjects.base64.Base64;
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
 
 /**
  * * 实现文件上传的工具类
@@ -145,5 +155,105 @@ public class FileImageUpload {
             }
         }
         return returnMessage;
+    }
+
+
+    public static boolean uploadfileByWebService(){
+        return false;
+    }
+
+//    private void testUpload(){
+//        try{
+//            FileInputStream fis = new FileInputStream(fileName);
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            byte[] buffer = new byte[1024];
+//            int count = 0;
+//            while((count = fis.read(buffer)) >= 0){
+//                baos.write(buffer, 0, count);
+//            }
+//            String uploadBuffer = new String(Base64.encode(baos.toByteArray()));  //进行Base64编码
+//            connectWebService(uploadBuffer);
+//            Log.i("connectWebService", "start");
+//            fis.close();
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+
+    private static String getUploadBuffer(Context ctx, Uri imgUri){
+        String Base64EncodedStr = "";
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        InputStream is = null;
+        int len = 0;
+        try {
+            is = ctx.getContentResolver().openInputStream(imgUri);
+            while ((len = is.read(buffer)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+            Base64EncodedStr = new String(Base64.encode(baos.toByteArray()));
+            is.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Base64EncodedStr;
+    }
+
+    public static boolean callWebService(Context ctx, Uri srcUri, String filename) {
+//        String uploadBuffer = "";
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        byte[] buffer = new byte[1024];
+//        InputStream is = null;
+//        int len = 0;
+//        try {
+//            is = ctx.getContentResolver().openInputStream(srcUri);
+//            while ((len = is.read(buffer)) != -1) {
+//                baos.write(buffer, 0, len);
+//            }
+//            uploadBuffer = new String(Base64.encode(baos.toByteArray()));
+//            is.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        boolean result = false;
+        // 命名空间
+        String nameSpace = "http://DigitalScience.WebService";
+        // 调用的方法名称
+        String methodName = "UploadFileByBase64";
+        // SOAP Action
+        String soapAction = "http://DigitalScience.WebService/UploadFileByBase64";
+        // EndPoint
+        String endPoint =  "http://121.40.94.228:8081/source/YUNPhoto_UploadService.asmx";
+
+        // 指定WebService的命名空间和调用的方法名
+        SoapObject rpc = new SoapObject(nameSpace, methodName);
+
+        rpc.addProperty("GuiderID", filename);       //参数1   图片名
+        rpc.addProperty("base64Data", getUploadBuffer(ctx, srcUri));
+        // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER10);
+
+        envelope.bodyOut = rpc;
+        // 设置是否调用的是dotNet开发的WebService
+        envelope.dotNet = true;
+        // 等价于envelope.bodyOut = rpc;
+        envelope.setOutputSoapObject(rpc);
+
+        HttpTransportSE transport = new HttpTransportSE(endPoint);
+        try {
+            // 调用WebService
+            transport.call(soapAction, envelope);
+            Object ret = envelope.getResponse();
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = false;
+        }
+        return result;
     }
 }

@@ -13,7 +13,7 @@
     <string name="password">密码 :</string>
     <string name="password_hint">密码</string>
     <string name="company_name">长沙蕾欧娜信息科技有限公司</string>
-    <string name="copy_right">保留所有权利</string>
+    <string name="copy_right">2016年 2月 保留所有权利</string>
 
     <!-- String for reset password activity -->
     <string name="get_verify_code_introduction">通过向您个人信息中的手机号发送验证码，请确保此手机在您身边，验证码60秒内有效</string>
@@ -118,5 +118,6 @@
     <string name="menu_cancel_reservation">取消预约</string>
 
     <string name="name_label">姓名</string>
+    <string name="title_activity_change_password">ChangePasswordActivity</string>
 
 </resources>

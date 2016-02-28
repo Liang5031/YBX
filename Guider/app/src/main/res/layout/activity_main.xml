@@ -50,6 +50,7 @@
             android:layout_weight="1"
             android:onClick="onClickSettingsTab"
             android:src="@mipmap/setting" />
+
     </LinearLayout>
 
 </LinearLayout>

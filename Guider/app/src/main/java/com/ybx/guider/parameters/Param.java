@@ -14,17 +14,19 @@ import java.util.Map;
  */
 public class Param {
     public Map<String, String> mParams = new HashMap();
-
+    public String mPageName = "";
 
     public Param() {
         setSignType(ParamUtils.VALUE_SIGN_TYPE_MD5);
         setCharSet(ParamUtils.VALUE_DEFAULT_CHAR_SET);
         setServiceVersion(ParamUtils.VALUE_DEFAULT_SERVICE_VERSION);
+    }
 
-//        addParam(ParamUtils.KEY_SIGN_TYPE,ParamUtils.VALUE_SIGN_TYPE_MD5);
-//        addParam(ParamUtils.KEY_INPUT_CHARSET,ParamUtils.VALUE_DEFAULT_CHAR_SET);
-//        addParam(ParamUtils.KEY_SERVICE_VERSION,ParamUtils.VALUE_DEFAULT_SERVICE_VERSION);
-//        addParam(ParamUtils.KEY_SIGN,ParamUtils.generateSign() );
+    public Param(String mPageName) {
+        mPageName = mPageName;
+        setSignType(ParamUtils.VALUE_SIGN_TYPE_MD5);
+        setCharSet(ParamUtils.VALUE_DEFAULT_CHAR_SET);
+        setServiceVersion(ParamUtils.VALUE_DEFAULT_SERVICE_VERSION);
     }
 
     private void sortByKey() {
@@ -112,6 +114,9 @@ public class Param {
         return "";
     }
 
+    public String getmPageName(){
+        return mPageName;
+    }
     public void setServiceVersion(String version) {
         addParam(ParamUtils.KEY_SERVICE_VERSION, version);
     }

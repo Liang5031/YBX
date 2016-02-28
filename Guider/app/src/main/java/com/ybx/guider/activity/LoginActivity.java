@@ -65,8 +65,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             mProgressDialog.dismiss();
         }
         Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
     }
 
     @Override
@@ -77,8 +77,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
         if (response.mReturnCode.equals(BaseResponse.RESULT_OK)) {
             Intent intent = new Intent(this, MainActivity.class);
-//            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_CODE, response.mReturnCode);
-            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_CODE, BaseResponse.RESULT_FAIL);
+            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_CODE, response.mReturnCode);
+//            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_CODE, BaseResponse.RESULT_FAIL);
             intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_MSG, response.mReturnMSG);
             startActivity(intent);
             this.finish();
@@ -99,12 +99,12 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     }
 
     public void onClickLogin(View view) {
-//        if (inputCheck()) {
-//            PreferencesUtils.saveLoginInfo(this, mGuiderNumber.getText().toString(), mPassword.getText().toString(), mIsAutoLogin.isChecked());
-//            reqeustLogin(mGuiderNumber.getText().toString(), mPassword.getText().toString());
-//        }
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        if (inputCheck()) {
+            PreferencesUtils.saveLoginInfo(this, mGuiderNumber.getText().toString(), mPassword.getText().toString(), mIsAutoLogin.isChecked());
+            reqeustLogin(mGuiderNumber.getText().toString(), mPassword.getText().toString());
+        }
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
     }
 
     public void onClickAutoLogin(View view) {
@@ -136,7 +136,10 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
         LoginParam param = new LoginParam();
         param.setUser(guiderNumber);
-        param.setSign(EncryptUtils.generateSign(param.getParamStringInOrder(), password));
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, password);
+        param.setSign(sign);
+
         LoginRequest request = new LoginRequest(URLUtils.generateURL(ParamUtils.PAGE_LOGIN, param), this, this);
 
         VolleyRequestQueue.getInstance(this).add(request);

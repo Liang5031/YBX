@@ -6,9 +6,12 @@ import com.ybx.guider.parameters.Param;
  * Created by chenl on 2016/2/4.
  */
 public class URLUtils {
-    public static String SERVER_URL = "http://www.baidu.com/";
+
+//    "http://10.0.2.2:8080/TomcatPro/MyFirstServlet"
+
+    public static String SERVER_URL = "http://121.40.94.228:8081/source/";
     public static String TEST_SERVER_URL = "http://10.0.2.2:8080/";
-    public static boolean isTestMode = true;
+    public static boolean isTestMode = false;
 
     public static String generateURL(String pageName, Param param) {
         String params = param.getParamString();

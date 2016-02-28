@@ -6,9 +6,10 @@ package com.ybx.guider.parameters;
 public class LoginParam extends Param {
 
     public LoginParam(){
+        mPageName = ParamUtils.PAGE_LOGIN;
     }
 
     public void setUser(String user){
-        addParam(ParamUtils.KEY_GUIDER_NUMBER, user);
+        addParam(ParamUtils.KEY_USER, user);
     }
 }
