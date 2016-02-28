@@ -22,6 +22,8 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
     private TextView mTVPrev;
     private TextView mTVNext;
     private String mVerifyCode;
+    private String mPhoneNumber;
+    private boolean mIsPhotoUploaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +57,14 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
     }
 
     @Override
-    public void onPhoneVerified(String verifyCode) {
+    public void onPhoneVerified(String phoneNumber, String verifyCode) {
+        mPhoneNumber = phoneNumber;
         mVerifyCode = verifyCode;
     }
 
     @Override
-    public void onPhotoUploaded(Uri uri) {
-
+    public void onPhotoUploaded(boolean isUploaded) {
+        mIsPhotoUploaded = isUploaded;
     }
 
     @Override
@@ -78,7 +81,7 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
             if( mVerifyCode==null || mVerifyCode.isEmpty()){
                 Toast.makeText(SignUpActivity.this, "验证码不能为空！", Toast.LENGTH_SHORT).show();
             } else {
-                loadFragment(SignUpInfoFragment.newInstance(), false);
+                loadFragment(SignUpInfoFragment.newInstance(mPhoneNumber, mVerifyCode), false);
                 setStep(STEP_THREE);
             }
         }

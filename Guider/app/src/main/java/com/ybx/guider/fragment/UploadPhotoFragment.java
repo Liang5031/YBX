@@ -39,15 +39,11 @@ public class UploadPhotoFragment extends Fragment {
     private ImageView mImageView;
     private ProgressDialog mProgressDialog;
     private EditText mETGuiderNumber;
-
-    // TODO: Rename and change types of parameters
     private String mGuiderNumber;
-//    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public UploadPhotoFragment() {
-        // Required empty public constructor
+
     }
 
     /**
@@ -80,9 +76,9 @@ public class UploadPhotoFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(boolean isUploaded) {
         if (mListener != null) {
-            mListener.onPhotoUploaded(uri);
+            mListener.onPhotoUploaded(isUploaded);
         }
     }
 
@@ -115,7 +111,7 @@ public class UploadPhotoFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onPhotoUploaded(Uri uri);
+        void onPhotoUploaded(boolean isUploaded);
     }
 
 
@@ -155,6 +151,10 @@ public class UploadPhotoFragment extends Fragment {
                 Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传失败！", Toast.LENGTH_LONG).show();
             }
             super.handleMessage(msg);
+
+            if (mListener != null) {
+                mListener.onPhotoUploaded(ret);
+            }
         }
     };
 
@@ -179,12 +179,6 @@ public class UploadPhotoFragment extends Fragment {
                 new Thread() {
                     @Override
                     public void run() {
-                        //需要花时间计算的方法
-//                        int res = FileImageUpload.uploadFile(UploadPhotoFragment.this.getActivity().getApplicationContext()
-//                                                            , mImageUri
-//                                                            ,"http://121.40.94.228:8081/source/YUNPhoto_UploadService.asmx"
-//                                                            , number+".jpg");
-
                         boolean ret = FileImageUpload.callWebService(UploadPhotoFragment.this.getActivity().getApplicationContext()
                                 , mImageUri, number);
 
@@ -193,15 +187,6 @@ public class UploadPhotoFragment extends Fragment {
                         mHandler.sendMessage(message);
                     }
                 }.start();
-
-//                UploadFileTask task = new UploadFileTask(UploadPhotoFragment.this.getActivity().getApplicationContext()
-//                        , mImageUri
-//                        , URLUtils.getServerUrl()
-//                        , "1234.jpg");
-//                task.execute();
-
-
-
             }
         });
 
@@ -265,32 +250,5 @@ public class UploadPhotoFragment extends Fragment {
         intent.putExtra("outputX", outputX);
         intent.putExtra("outputY", outputY);
         startActivityForResult(intent, CROP_PHOTO);
-    }
-
-    private class UploadFileTask extends AsyncTask<Void, Integer, Integer> {
-        private Context mCtx;
-        private String mRequestURL;
-        private String mFileName;
-        private Uri mUri;
-
-        public UploadFileTask(Context ctx, Uri uri, String requestURL, String fileName) {
-            mCtx = ctx;
-            mRequestURL = requestURL;
-            mFileName = fileName;
-            mUri = uri;
-        }
-
-        protected Integer doInBackground(Void... params) {
-            int res = FileImageUpload.uploadFile(mCtx, mUri, mRequestURL, mFileName);
-            return res;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-//            setProgressPercent(progress[0]);
-        }
-
-        protected void onPostExecute(Integer result) {
-//            showDialog("Downloaded " + result + " bytes");
-        }
     }
 }

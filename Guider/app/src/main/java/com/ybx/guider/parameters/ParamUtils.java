@@ -5,9 +5,29 @@ package com.ybx.guider.parameters;
  */
 public class ParamUtils {
     /* Page name for all requests */
-    public static String PAGE_LOGIN = "YUNGuider_Login.aspx";
-    public static String PAGE_RESET_PASSWORD = "YUNGuider_ChangePwd.aspx";
-    public static String PAGE_GET_VERIFY_CODE = "YUNGuider_GetCheckCode.aspx";
+    public static String PAGE_GUIDER_LOGIN = "YUNGuider_Login.aspx";
+    public static String PAGE_GUIDER_LOGOUT = "YUNGuider_Logout.aspx";
+    public static String PAGE_GUIDER_RESET_PASSWORD = "YUNGuider_ResetPwd.aspx";
+    public static String PAGE_GUIDER_CHANGE_PASSWORD = "YUNGuider_ChangePwd.aspx";
+    public static String PAGE_GET_CHECK_CODE = "YUNGuider_GetCheckCode.aspx";
+    public static String PAGE_GUIDER_REGISTER = "YUNGuider_Register.aspx";
+    public static String PAGE_APPOINTMENT_CHANGE = "YUNAppointment_Change.aspx";
+    public static String PAGE_APPOINTMENT_CANCEL = "YUNAppointment_Cancel.aspx";
+    public static String PAGE_APPOINTMENT_PERMISSION_QUERY = "YUNAppointmentPermision_Query.aspx";
+    public static String PAGE_DEAL_INFO_QUERY = "YUNDealInfo_Query.aspx";
+    public static String PAGE_GUIDER_QUERY = "YUNGuider_Query.aspx";
+    public static String PAGE_TEAM_QUERY = "YUNTeam_Query.aspx";
+    public static String PAGE_TEAM_REAL_NAME_QUERY = "YUNTeamIdentityInfo_Query.aspx";
+    public static String PAGE_TEAM_SCHEDULE_QUERY = "YUNTeamTripInfo_Query.aspx";
+    public static String PAGE_TEAM_DEAL_QUERY = "YUNTeamDeal_Query.aspx";
+    public static String PAGE_TEAM_ACCEPT = "YUNTeamOper_Accept.aspx";
+    public static String PAGE_TEAM_COMPLETE = "YUNTeamOper_Complete.aspx";
+    public static String PAGE_TEAM_LOG_QUERY = "YUNTeamLog_Query.aspx";
+    public static String PAGE_GUIDER_UPDATE_INFO = "YUNGuider_Update.aspx";
+    public static String PAGE_DEPT_QUERY = "YUNRelationObjects_Query.aspx";
+    public static String PAGE_DEPT_ADD = "YUNRelationObjects_Add.aspx";
+    public static String PAGE_PROVIDER_QUERY = "YUNProvider_Query.aspx";
+    public static String PAGE_CUSTOMER_QUERY = "YUNCustomer_Query.aspx";
 
 
     /* 签名方式 -- String(8) 取值：MD5，默认：MD5 暂时只支持MD5 */
@@ -16,6 +36,8 @@ public class ParamUtils {
     public static String KEY_SERVICE_VERSION = "service_version";
     /* 字符集 -- String(8) 默认 UTF-8*/
     public static String KEY_INPUT_CHARSET ="input_charset";
+    /* 手机验证码的明文 */
+    public static String KEY_VERIFY_CODE ="sSMSCode";
     /* 签名 -- String(32) */
     public static String KEY_SIGN = "sign";
     /* 用户名 -- String(64) 导游证号 */
@@ -85,7 +107,7 @@ public class ParamUtils {
     /* 学历  -- string(20) */
     public static String KEY_EDUCATION = "sEducation";
     /* 毕业时间  -- string(14) 可以是年份 */
-    public static String KEY_GRADUCATION = "sGraducation";
+    public static String KEY_GRADUATION = "sGraducation";
     /* 电话  -- String(20) */
     public static String KEY_PHONE = "sPhone";
     /* QQ  -- String(20) */
@@ -94,14 +116,8 @@ public class ParamUtils {
     public static String KEY_WECHAT = "sWeChart";
 
 
-
-
-
     public static String VALUE_SIGN_TYPE_MD5 = "MD5";
     public static String VALUE_DEFAULT_SERVICE_VERSION = "1.0";
     public static String VALUE_DEFAULT_CHAR_SET = "UTF-8";
 
-//    public static String generateSign(String params){
-//        return "sign";
-//    }
 }

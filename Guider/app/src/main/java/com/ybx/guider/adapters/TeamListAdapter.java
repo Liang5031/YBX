@@ -41,4 +41,6 @@ public class TeamListAdapter extends BaseAdapter {
         }
         return convertView;
     }
+
+
 }

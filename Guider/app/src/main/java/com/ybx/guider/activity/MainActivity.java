@@ -100,12 +100,12 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
         mPager = (ViewPager) findViewById(R.id.viewpager);
         Intent i = getIntent();
         String resultCode = i.getStringExtra(EXTRA_LOGIN_RESULT_CODE);
-//        if (resultCode!= null && resultCode.equals(BaseResponse.RESULT_OK)) {
-        findViewById(R.id.radioTabs).setVisibility(View.VISIBLE);
+//        if (resultCode!= null && resultCode.equals(XMLResponse.RESULT_OK)) {
+        findViewById(R.id.tabs).setVisibility(View.VISIBLE);
         setTitle(R.string.app_name_short);
         mPager.setAdapter(mMainAdapter);
-//        } else if(resultCode!= null && resultCode.equals(BaseResponse.RESULT_FAIL)) {
-//            findViewById(R.id.radioTabs).setVisibility(View.GONE);
+//        } else if(resultCode!= null && resultCode.equals(XMLResponse.RESULT_FAIL)) {
+//            findViewById(R.id.tabs).setVisibility(View.GONE);
 //            setTitle(R.string.verify_title);
 //            mPager.setAdapter(mVerifyAdapter);
 //        }
@@ -218,11 +218,11 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
         public Fragment getItem(int position) {
             switch (position) {
                 case PAGE_ONGOING:
-                    return new TeamListFragement();
+                    return TeamListFragement.newInstance(TeamListFragement.TEAM_STATUS_ONGOING);
                 case PAGE_WAITING:
-                    return new TeamListFragement();
+                    return TeamListFragement.newInstance(TeamListFragement.TEAM_STATUS_WAITING);
                 case PAGE_FINISH:
-                    return new TeamListFragement();
+                    return TeamListFragement.newInstance(TeamListFragement.TEAM_STATUS_FINISHED);
                 case PAGE_SETTING:
                     return SettingsFragment.newInstance();
                 default:

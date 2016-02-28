@@ -4,19 +4,21 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
 import com.ybx.guider.parameters.LoginParam;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.LoginRequest;
-import com.ybx.guider.responses.BaseResponse;
+import com.ybx.guider.responses.XMLResponse;
 import com.ybx.guider.responses.LoginResponse;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
@@ -33,7 +35,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     public static String START_TYPE_CHANGE_ACCOUNT = "CHANGE_ACCOUNT";
     public static String START_TYPE_LOGOUT = "LOGOUT";
     public static String START_TYPE_DEFAULT = "DEFAULT";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,37 +60,10 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         mIsAutoLogin.setChecked(PreferencesUtils.getIsAutoLogin(this));
     }
 
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        if(mProgressDialog!=null&& mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-        Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
-    }
 
-    @Override
-    public void onResponse(LoginResponse response) {
-        if(mProgressDialog!=null&& mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-
-        if (response.mReturnCode.equals(BaseResponse.RESULT_OK)) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_CODE, response.mReturnCode);
-//            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_CODE, BaseResponse.RESULT_FAIL);
-            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_MSG, response.mReturnMSG);
-            startActivity(intent);
-            this.finish();
-        } else {
-            Toast.makeText(this, response.mReturnMSG, Toast.LENGTH_LONG).show();
-        }
-    }
 
     public void onClickForgot(View view) {
         Intent intent = new Intent(this, ResetPasswordActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
@@ -125,7 +99,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         return true;
     }
 
-
     private void reqeustLogin(String guiderNumber, String password) {
         if (guiderNumber.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "导游证号和密码不能为空！", Toast.LENGTH_LONG).show();
@@ -140,8 +113,48 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         String sign = EncryptUtils.generateSign(orderParams, password);
         param.setSign(sign);
 
-        LoginRequest request = new LoginRequest(URLUtils.generateURL(ParamUtils.PAGE_LOGIN, param), this, this);
+        String url = URLUtils.generateURL(ParamUtils.PAGE_GUIDER_LOGIN, param);
+        LoginRequest request = new LoginRequest(url, this, this);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         VolleyRequestQueue.getInstance(this).add(request);
+
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
+//        this.finish();
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        if(mProgressDialog!=null&& mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+        Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
+        if (URLUtils.isDebug) {
+            Log.d(URLUtils.DEBUG_TAG, "Volly error: " + error.toString());
+        }
+    }
+
+    @Override
+    public void onResponse(LoginResponse response) {
+        if(mProgressDialog!=null&& mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+
+        if (response.mReturnCode.equals(XMLResponse.RESULT_OK)) {
+            Intent intent = new Intent(this, MainActivity.class);
+//            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_CODE, response.mReturnCode);
+//            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_MSG, response.mReturnMSG);
+            startActivity(intent);
+            this.finish();
+        } else {
+            Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
+            if (URLUtils.isDebug) {
+                Log.d(URLUtils.DEBUG_TAG, "Respones MSG: " + response.mReturnMSG);
+            }
+        }
     }
 }

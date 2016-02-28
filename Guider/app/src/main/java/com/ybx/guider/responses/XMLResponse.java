@@ -14,7 +14,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by chenl on 2016/2/5.
  */
-public class BaseResponse {
+public class XMLResponse {
     public static String RESPONSE_RETURN_CODE = "retcode";
     public static String RESPONSE_RETURN_MSG = "retmsg";
     public static String RESPONSE_SIGN = "sign";
@@ -26,13 +26,19 @@ public class BaseResponse {
     public String mReturnMSG;
     public String mSign;
 
-    public BaseResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
+    private NetworkResponse mResponse;
+
+    public void setResponse(NetworkResponse response){
+        mResponse = response;
+    }
+
+    public XMLResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
         String xmlString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
         XmlPullParser xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
         ;
         xmlPullParser.setInput(new StringReader(xmlString));
         try {
-            parse(xmlPullParser, response);
+            parse(xmlPullParser);
         } catch (IOException e) {
             e.printStackTrace();
             throw new XmlPullParserException(e.getMessage());
@@ -51,7 +57,7 @@ public class BaseResponse {
         mSign = sign;
     }
 
-    private void parse(XmlPullParser parser, NetworkResponse response) throws XmlPullParserException, IOException {
+    private void parse(XmlPullParser parser) throws XmlPullParserException, IOException {
 
         int eventCode = parser.getEventType();//获取事件类型
         while (eventCode != XmlPullParser.END_DOCUMENT) {

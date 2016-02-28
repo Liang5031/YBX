@@ -12,6 +12,8 @@ public class URLUtils {
     public static String SERVER_URL = "http://121.40.94.228:8081/source/";
     public static String TEST_SERVER_URL = "http://10.0.2.2:8080/";
     public static boolean isTestMode = false;
+    public static boolean isDebug = true;
+    public static String DEBUG_TAG = "chenl";
 
     public static String generateURL(String pageName, Param param) {
         String params = param.getParamString();
