@@ -14,13 +14,13 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
-import com.ybx.guider.utils.PreferencesUtils;
+import com.ybx.guider.parameters.Param;
+import com.ybx.guider.parameters.ParamUtils;
+import com.ybx.guider.requests.XMLRequest;
+import com.ybx.guider.responses.GetVerifyCodeResponse;
+import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.utils.URLUtils;
 import com.ybx.guider.utils.VolleyRequestQueue;
-import com.ybx.guider.parameters.GetVerifyCodeParam;
-import com.ybx.guider.parameters.ParamUtils;
-import com.ybx.guider.requests.GetVerifyCodeRequest;
-import com.ybx.guider.responses.GetVerifyCodeResponse;
 
 public class PhoneVerifyFragment extends Fragment {
     private EditText mETPhoneNumber;
@@ -128,7 +128,7 @@ public class PhoneVerifyFragment extends Fragment {
     }
 
     public void GetVerifyCode() {
-        GetVerifyCodeParam param = new GetVerifyCodeParam();
+        Param param = new Param(ParamUtils.PAGE_GET_CHECK_CODE);
         param.removeParam(ParamUtils.KEY_SIGN_TYPE);
 
         param.setPhoneNumber(mPhoneNumber);
@@ -137,7 +137,7 @@ public class PhoneVerifyFragment extends Fragment {
         Response.Listener<GetVerifyCodeResponse> listener = new Response.Listener<GetVerifyCodeResponse>() {
             @Override
             public void onResponse(GetVerifyCodeResponse response) {
-                if (response.mReturnCode.equals(GetVerifyCodeResponse.RESULT_OK)) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
                     Toast.makeText(PhoneVerifyFragment.this.getContext(), "验证码已发送至您的手机!", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(PhoneVerifyFragment.this.getContext(), response.mReturnMSG, Toast.LENGTH_LONG).show();
@@ -152,9 +152,9 @@ public class PhoneVerifyFragment extends Fragment {
             }
         };
 
-        String url = URLUtils.generateURL(ParamUtils.PAGE_GET_CHECK_CODE, param);
-        GetVerifyCodeRequest request = new GetVerifyCodeRequest(url, listener, errorListener);
-        request.setShouldCache(false);
+        String url = URLUtils.generateURL(param);
+        XMLRequest<GetVerifyCodeResponse> request = new XMLRequest<GetVerifyCodeResponse>(url, listener, errorListener, new GetVerifyCodeResponse());
+//        request.setShouldCache(false);
 
         VolleyRequestQueue.getInstance(PhoneVerifyFragment.this.getContext()).add(request);
     }

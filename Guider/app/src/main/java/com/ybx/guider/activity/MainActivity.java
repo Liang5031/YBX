@@ -22,6 +22,7 @@ import com.ybx.guider.R;
 import com.ybx.guider.fragment.AccountVerifyFragment;
 import com.ybx.guider.fragment.SettingsFragment;
 import com.ybx.guider.fragment.TeamListFragement;
+import com.ybx.guider.responses.ResponseUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -34,12 +35,13 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     private final static int PAGE_FINISH = 2;
     private final static int PAGE_SETTING = 3;
 
-//    private int mCurrentPage = PAGE_ONGOING;
+    //    private int mCurrentPage = PAGE_ONGOING;
     private MainAdapter mMainAdapter;
     private VerificationAdapter mVerifyAdapter;
     private ViewPager mPager;
-    public static String EXTRA_LOGIN_RESULT_CODE = "LOGIN_RESULT_CODE";
-    public static String EXTRA_LOGIN_RESULT_MSG = "LOGIN_RESULT_MSG";
+    //    public static String EXTRA_LOGIN_RESULT_CODE = "LOGIN_RESULT_CODE";
+    public static String EXTRA_ACCOUNT_STATUS = "account_status";
+
     private ImageView mTabOngoing;
     private ImageView mTabWaiting;
     private ImageView mTabFinish;
@@ -99,16 +101,16 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
 
         mPager = (ViewPager) findViewById(R.id.viewpager);
         Intent i = getIntent();
-        String resultCode = i.getStringExtra(EXTRA_LOGIN_RESULT_CODE);
-//        if (resultCode!= null && resultCode.equals(XMLResponse.RESULT_OK)) {
-        findViewById(R.id.tabs).setVisibility(View.VISIBLE);
-        setTitle(R.string.app_name_short);
-        mPager.setAdapter(mMainAdapter);
-//        } else if(resultCode!= null && resultCode.equals(XMLResponse.RESULT_FAIL)) {
-//            findViewById(R.id.tabs).setVisibility(View.GONE);
-//            setTitle(R.string.verify_title);
-//            mPager.setAdapter(mVerifyAdapter);
-//        }
+        String status = i.getStringExtra(EXTRA_ACCOUNT_STATUS);
+        if (status != null && status.equals(ResponseUtils.ACCOUNT_STATUS_ACTIVE)) {
+            findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+            setTitle(R.string.app_name_short);
+            mPager.setAdapter(mMainAdapter);
+        } else if (status != null && status.equals(ResponseUtils.ACCOUNT_STATUS_CHECKING)) {
+            findViewById(R.id.tabs).setVisibility(View.GONE);
+            setTitle(R.string.verify_title);
+            mPager.setAdapter(mVerifyAdapter);
+        }
 
         mPager.addOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {

@@ -50,8 +50,8 @@ public class VolleyRequestQueue {
     }
 
     public <T> void add(Request<T> req) {
-        if (URLUtils.isTestMode) {
-            Log.d("chenl", "Method :" + req.getMethod() + " Request URL: " + req.getUrl());
+        if (URLUtils.isDebug) {
+            Log.d(URLUtils.TAG_OUTPUT_STREAM, " Request URL: " + req.getUrl());
         }
         getRequestQueue().add(req);
 

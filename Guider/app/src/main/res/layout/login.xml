@@ -50,8 +50,7 @@
                 style="@style/EditNormal"
                 android:layout_width="@dimen/edit_width_normal"
                 android:layout_alignParentRight="true"
-                android:hint="@string/guider_number_hint"
-                android:inputType="number" />
+                android:hint="@string/guider_number_hint" />
         </RelativeLayout>
 
         <RelativeLayout

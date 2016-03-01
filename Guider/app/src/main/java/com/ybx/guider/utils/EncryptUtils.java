@@ -41,15 +41,13 @@ public class EncryptUtils {
 
     //计算24位长的密码byte值,首先对原始密钥做MD5算hash值，再用前8位数据对应补全后8位
     public static byte[] GetKeyBytes(String strKey) throws Exception {
-        if (null == strKey || strKey.length() < 1)
+        if (null == strKey || strKey.length() < 1) {
             throw new Exception("key is null or empty!");
+        }
 
         MessageDigest alg = MessageDigest.getInstance("MD5");
         alg.update(strKey.getBytes());
         byte[] bkey = alg.digest();
-
-//        System.out.println("md5key.length=" + bkey.length);
-//        System.out.println("md5key=" + byte2hex(bkey));
 
         int start = bkey.length;
         byte[] bkey24 = new byte[24];
@@ -61,9 +59,6 @@ public class EncryptUtils {
         for (int i = start; i < 24; i++) {
             bkey24[i] = bkey[i - start];
         }
-
-//        System.out.println("byte24key.length=" + bkey24.length);
-//        System.out.println("byte24key=" + byte2hex(bkey24));
 
         return bkey24;
     }
@@ -157,7 +152,7 @@ public class EncryptUtils {
         return hex.toString();
     }
 
-    public static String generateSign(String paramsInOrder, String password){
+    public static String generateSign(String paramsInOrder, String password) {
         SimpleDateFormat s = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
         String timestamp = s.format(new Date());
 

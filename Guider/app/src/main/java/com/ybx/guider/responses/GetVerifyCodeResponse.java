@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class GetVerifyCodeResponse extends XMLResponse {
 
-    public GetVerifyCodeResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
-        super(response);
-    }
+//    public GetVerifyCodeResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
+//        super(response);
+//    }
 }

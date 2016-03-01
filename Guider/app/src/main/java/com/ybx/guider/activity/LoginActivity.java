@@ -11,15 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
-import com.ybx.guider.parameters.LoginParam;
+import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
-import com.ybx.guider.requests.LoginRequest;
-import com.ybx.guider.responses.XMLResponse;
+import com.ybx.guider.requests.XMLRequest;
 import com.ybx.guider.responses.LoginResponse;
+import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
@@ -60,8 +59,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         mIsAutoLogin.setChecked(PreferencesUtils.getIsAutoLogin(this));
     }
 
-
-
     public void onClickForgot(View view) {
         Intent intent = new Intent(this, ResetPasswordActivity.class);
         startActivity(intent);
@@ -87,12 +84,12 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
     private boolean inputCheck() {
         if (mGuiderNumber == null || mGuiderNumber.getText().toString().isEmpty()) {
-            Toast.makeText(this, "请输入导游证号！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "导游证号不能为空！", Toast.LENGTH_LONG).show();
             return false;
         }
 
         if (mPassword == null || mPassword.getText().toString().isEmpty()) {
-            Toast.makeText(this, "请输入密码！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "密码不能为空！", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -100,25 +97,31 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     }
 
     private void reqeustLogin(String guiderNumber, String password) {
-        if (guiderNumber.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "导游证号和密码不能为空！", Toast.LENGTH_LONG).show();
+        if (guiderNumber == null || guiderNumber.isEmpty()) {
+            return;
+        }
+        if (password == null || password.isEmpty()) {
             return;
         }
 
         mProgressDialog = ProgressDialog.show(this, "正在登录", "请稍等...", true, false);
 
-        LoginParam param = new LoginParam();
+        Param param = new Param(ParamUtils.PAGE_GUIDER_LOGIN);
         param.setUser(guiderNumber);
+
         String orderParams = param.getParamStringInOrder();
         String sign = EncryptUtils.generateSign(orderParams, password);
         param.setSign(sign);
 
-        String url = URLUtils.generateURL(ParamUtils.PAGE_GUIDER_LOGIN, param);
-        LoginRequest request = new LoginRequest(url, this, this);
+        String url = URLUtils.generateURL(param);
+        XMLRequest<LoginResponse> request = new XMLRequest<LoginResponse>(url, this, this, new LoginResponse());
+/*
+        request.setShouldCache(false);
         request.setRetryPolicy(new DefaultRetryPolicy(
                 5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+*/
 
         VolleyRequestQueue.getInstance(this).add(request);
 
@@ -129,31 +132,38 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        if(mProgressDialog!=null&& mProgressDialog.isShowing()) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
         Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
         if (URLUtils.isDebug) {
-            Log.d(URLUtils.DEBUG_TAG, "Volly error: " + error.toString());
+            Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
         }
     }
 
     @Override
     public void onResponse(LoginResponse response) {
-        if(mProgressDialog!=null&& mProgressDialog.isShowing()) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
 
-        if (response.mReturnCode.equals(XMLResponse.RESULT_OK)) {
-            Intent intent = new Intent(this, MainActivity.class);
-//            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_CODE, response.mReturnCode);
-//            intent.putExtra(MainActivity.EXTRA_LOGIN_RESULT_MSG, response.mReturnMSG);
-            startActivity(intent);
-            this.finish();
+        if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+            if (response.mAccountStatus.equals(ResponseUtils.ACCOUNT_STATUS_INACTIVE)) {
+                Toast.makeText(this, "账号已禁用！", Toast.LENGTH_LONG).show();
+            } else if (response.mAccountStatus.equals(ResponseUtils.ACCOUNT_STATUS_ACTIVE)
+                    || response.mAccountStatus.equals(ResponseUtils.ACCOUNT_STATUS_CHECKING)) {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra(MainActivity.EXTRA_ACCOUNT_STATUS, response.mAccountStatus);
+                startActivity(intent);
+                this.finish();
+            } else {
+                Toast.makeText(this, "注册审核未通过！", Toast.LENGTH_LONG).show();
+            }
+
         } else {
             Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
-                Log.d(URLUtils.DEBUG_TAG, "Respones MSG: " + response.mReturnMSG);
+                Log.d(URLUtils.TAG_DEBUG, "Respones MSG: " + response.mReturnMSG);
             }
         }
     }

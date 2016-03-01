@@ -16,7 +16,7 @@
     <string name="copy_right">2016年 2月 保留所有权利</string>
 
     <!-- String for reset password activity -->
-    <string name="get_verify_code_introduction">通过向您个人信息中的手机号发送验证码，请确保此手机在您身边，验证码60秒内有效</string>
+    <string name="get_verify_code_introduction">通过向您个人信息中的手机号发送验证码，请确保此手机在您身边，验证码十分钟内有效请尽快完成重置。</string>
     <string name="verify_code">验证码 :</string>
     <string name="verify_code_hint">验证码</string>
     <string name="get_verify_code">获取验证码</string>

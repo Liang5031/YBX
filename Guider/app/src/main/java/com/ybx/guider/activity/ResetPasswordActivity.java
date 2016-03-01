@@ -3,57 +3,57 @@ package com.ybx.guider.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
-import com.ybx.guider.parameters.GetVerifyCodeParam;
+import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
-import com.ybx.guider.parameters.ResetPasswordParam;
-import com.ybx.guider.requests.GetVerifyCodeRequest;
-import com.ybx.guider.requests.ResetPasswordRequest;
+import com.ybx.guider.requests.XMLRequest;
 import com.ybx.guider.responses.GetVerifyCodeResponse;
 import com.ybx.guider.responses.ResetPasswordResponse;
+import com.ybx.guider.responses.ResponseUtils;
+import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
 
 public class ResetPasswordActivity extends AppCompatActivity implements Response.Listener<ResetPasswordResponse>, Response.ErrorListener {
     private EditText mGuiderNumber;
+    private EditText mNewPassword;
+    private EditText mConfirmPassword;
+    private EditText mVerifyCode;
+    private CheckBox mRememberPWD;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_passward);
         this.setTitle(R.string.reset_password);
 
+        mRememberPWD = (CheckBox)findViewById(R.id.remember_password);
+        mVerifyCode = (EditText)findViewById(R.id.verifyCode);
+        mNewPassword = (EditText)findViewById(R.id.newPassword);
+        mConfirmPassword = (EditText)findViewById(R.id.confirmPassword);
         mGuiderNumber = (EditText)findViewById(R.id.guiderNumber);
         mGuiderNumber.setText(PreferencesUtils.getGuiderNumber(this));
     }
 
-
-    public void onClickResetPassword(View view) {
-        ResetPasswordParam param = new ResetPasswordParam();
-        param.setGuiderNumber("user");
-        param.setNewPassword("123456");
-        ResetPasswordRequest request = new ResetPasswordRequest(URLUtils.generateURL(ParamUtils.PAGE_GUIDER_RESET_PASSWORD, param), this, this);
-        VolleyRequestQueue.getInstance(this).add(request);
-    }
-
     public void onClickGetVerifyCode(View view) {
-        GetVerifyCodeParam param = new GetVerifyCodeParam();
         if(mGuiderNumber.getText().toString().isEmpty()){
             Toast.makeText(this,"导游证号不能为空！", Toast.LENGTH_LONG).show();
         }
 
+        Param param = new Param(ParamUtils.PAGE_GET_CHECK_CODE);
         param.setGuiderNumber(mGuiderNumber.getText().toString());
-
         Response.Listener<GetVerifyCodeResponse> listener = new Response.Listener<GetVerifyCodeResponse>(){
             @Override
             public void onResponse(GetVerifyCodeResponse response) {
-                if (response.mReturnCode.equals(GetVerifyCodeResponse.RESULT_OK)) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
                     Toast.makeText(ResetPasswordActivity.this, "获取验证码成功!", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(ResetPasswordActivity.this, "获取验证码失败!", Toast.LENGTH_LONG).show();
@@ -68,9 +68,52 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
             }
         };
 
-        GetVerifyCodeRequest request = new GetVerifyCodeRequest(URLUtils.generateURL(ParamUtils.PAGE_GET_CHECK_CODE, param), listener, errorListener);
+        String url = URLUtils.generateURL(param);
+        XMLRequest<GetVerifyCodeResponse> request = new XMLRequest<GetVerifyCodeResponse>(url,  listener, errorListener, new GetVerifyCodeResponse());
 
         VolleyRequestQueue.getInstance(this).add(request);
+    }
+
+    private boolean inputCheck(){
+        if (mGuiderNumber == null || mGuiderNumber.getText().toString().isEmpty()) {
+            Toast.makeText(this, "导游证号不能为空！", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (mVerifyCode == null || mVerifyCode.getText().toString().isEmpty()) {
+            Toast.makeText(this, "验证码不能为空！", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (mNewPassword == null || mNewPassword.getText().toString().isEmpty()) {
+            Toast.makeText(this, "新密码不能为空！", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (mNewPassword.getText().toString().length() < Utils.MIN_LENGTH_OF_PASSWORD) {
+            Toast.makeText(this, "新密码长度不能小于6！", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (!Utils.checkPassword(mNewPassword.getText().toString())) {
+            Toast.makeText(this, "新密码必须同时包含字母和数字！", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (mConfirmPassword == null || mConfirmPassword.getText().toString().isEmpty()) {
+            Toast.makeText(this, "确认密码不能为空！", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
+    }
+    public void onClickResetPassword(View view) {
+        if(inputCheck()) {
+            Param param = new Param(ParamUtils.PAGE_GUIDER_RESET_PASSWORD);
+            param.setUser(mGuiderNumber.getText().toString());
+            param.setVerifyCode(mVerifyCode.getText().toString());
+            param.setNewPassword(EncryptUtils.md5(mNewPassword.getText().toString()));
+
+            String url = URLUtils.generateURL(param);
+            XMLRequest<ResetPasswordResponse> request = new XMLRequest<ResetPasswordResponse>(url, this, this, new ResetPasswordResponse());
+            VolleyRequestQueue.getInstance(this).add(request);
+        }
     }
 
     @Override
@@ -80,8 +123,11 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
 
     @Override
     public void onResponse(ResetPasswordResponse response) {
-        if (response.mReturnCode.equals(ResetPasswordResponse.RESULT_OK)) {
+        if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
             Toast.makeText(this, "重置密码成功！", Toast.LENGTH_LONG).show();
+            if(mRememberPWD.isChecked()){
+                PreferencesUtils.setGuiderNumber(this,mGuiderNumber.getText().toString());
+            }
         } else {
             Toast.makeText(this, response.mReturnMSG, Toast.LENGTH_LONG).show();
         }

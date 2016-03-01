@@ -20,17 +20,11 @@ public class Param {
     public Map<String, String> mParams = new HashMap();
     public String mPageName = "";
 
-    public Param() {
-        setSignType(ParamUtils.VALUE_SIGN_TYPE_MD5);
-        setCharSet(ParamUtils.VALUE_DEFAULT_CHAR_SET);
-        setServiceVersion(ParamUtils.VALUE_DEFAULT_SERVICE_VERSION);
-    }
-
     public Param(String pageName) {
         mPageName = pageName;
-        setSignType(ParamUtils.VALUE_SIGN_TYPE_MD5);
-        setCharSet(ParamUtils.VALUE_DEFAULT_CHAR_SET);
-        setServiceVersion(ParamUtils.VALUE_DEFAULT_SERVICE_VERSION);
+//        setSignType(ParamUtils.VALUE_SIGN_TYPE_MD5);
+//        setCharSet(ParamUtils.VALUE_DEFAULT_CHAR_SET);
+//        setServiceVersion(ParamUtils.VALUE_DEFAULT_SERVICE_VERSION);
     }
 
     private void sortByKey() {
@@ -67,7 +61,7 @@ public class Param {
                 /* Remove the last '&' */
                 String params = encodedParams.substring(0, encodedParams.length() - 1);
                 if (URLUtils.isDebug) {
-                    Log.d(URLUtils.DEBUG_TAG, "Ordered parameter string: " + params);
+                    Log.d(URLUtils.TAG_DEBUG, "Ordered parameter string: " + params);
                 }
                 return params;
             }
@@ -92,7 +86,7 @@ public class Param {
                 /* Remove the last '&' */
                 String params = encodedParams.substring(0, encodedParams.length() - 1);
                 if (URLUtils.isDebug) {
-                    Log.d(URLUtils.DEBUG_TAG, "Parameter string: " + params);
+                    Log.d(URLUtils.TAG_DEBUG, "Parameter string: " + params);
                 }
                 return params;
             }
@@ -125,6 +119,10 @@ public class Param {
             return mParams.get(key);
         }
         return "";
+    }
+
+    public void setPageName(String pageName){
+        mPageName = pageName;
     }
 
     public String getPageName() {

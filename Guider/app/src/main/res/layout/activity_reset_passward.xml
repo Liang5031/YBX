@@ -119,6 +119,7 @@
     </RelativeLayout>
 
     <CheckBox
+        android:id="@+id/remember_password"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/text_height_normal"
         android:layout_marginLeft="50dp"

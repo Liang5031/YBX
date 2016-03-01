@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class ResetPasswordResponse extends XMLResponse {
 
-    public ResetPasswordResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
-        super(response);
-    }
+//    public ResetPasswordResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
+//        super(response);
+//    }
 }

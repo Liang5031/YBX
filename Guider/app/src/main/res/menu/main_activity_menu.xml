@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/main_refresh"
-        android:icon="@mipmap/refresh"
+        android:icon="@drawable/selector_refresh_button"
         android:title="@string/menu_refresh"
         app:showAsAction="ifRoom" />
 
