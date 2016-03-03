@@ -1,10 +1,7 @@
 package com.ybx.guider.responses;
 
-import android.util.Log;
-
 import com.android.volley.NetworkResponse;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.ybx.guider.utils.URLUtils;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -52,11 +49,11 @@ public class XMLResponse {
                     startDocument(parser);
                     break;
                 case XmlPullParser.START_TAG://开始读取某个标签
-                    if (ResponseUtils.RESPONSE_RETURN_CODE.equals(parser.getName())) {
+                    if (ResponseUtils.TAG_RETURN_CODE.equals(parser.getName())) {
                         setReturnCode(parser.nextText());
-                    } else if (ResponseUtils.RESPONSE_RETURN_MSG.equals(parser.getName())) {
+                    } else if (ResponseUtils.TAG_RETURN_MSG.equals(parser.getName())) {
                         setReturnMSG(parser.nextText());
-                    } else if (ResponseUtils.RESPONSE_SIGN.equals(parser.getName())) {
+                    } else if (ResponseUtils.TAG_SIGN.equals(parser.getName())) {
                         setSign(parser.nextText());
                     } else {
                         startTag(parser);

@@ -15,16 +15,12 @@ import java.io.IOException;
 public class LoginResponse extends XMLResponse {
     public String mAccountStatus;
 
-//    public LoginResponse(NetworkResponse response) throws XmlPullParserException, UnsupportedEncodingException {
-//        super(response);
-//    }
-
     public void startDocument(XmlPullParser parser) throws IOException, XmlPullParserException {
         Log.d(URLUtils.TAG_DEBUG, "startDocument called");
     }
 
     public void startTag(XmlPullParser parser) throws IOException, XmlPullParserException {
-        if (ResponseUtils.RESPONSE_ACCOUNT_STATUS.equals(parser.getName())) {
+        if (ResponseUtils.TAG_ACCOUNT_STATUS.equals(parser.getName())) {
             mAccountStatus = parser.nextText();
         }
         Log.d(URLUtils.TAG_DEBUG, "startTag called");

@@ -97,10 +97,10 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
             return false;
         }
 
-        if (mUserId == null || mUserId.getText().toString().isEmpty()) {
-            Toast.makeText(this.getContext(), "导游证号不能为空！", Toast.LENGTH_LONG).show();
-            return false;
-        }
+//        if (mUserId == null || mUserId.getText().toString().isEmpty()) {
+//            Toast.makeText(this.getContext(), "导游证号不能为空！", Toast.LENGTH_LONG).show();
+//            return false;
+//        }
 
         if (mPassword == null || mPassword.getText().toString().isEmpty()) {
             Toast.makeText(this.getContext(), "密码不能为空！", Toast.LENGTH_LONG).show();
@@ -186,7 +186,10 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
         param.setVerifyCode(mVerifyCode);
         param.setGuiderNumber(PreferencesUtils.getGuiderNumber(this.getContext()));
         param.setGuiderName(mUserName.getText().toString());
-        param.setGuiderIdentity(mUserId.getText().toString());
+        if(!mUserId.getText().toString().isEmpty()) {
+            param.setGuiderIdentity(mUserId.getText().toString());
+        }
+        param.setGuiderNumber(PreferencesUtils.getGuiderNumber(this.getContext()));
         param.setPhoneNumber(mPhoneNumber);
         param.setFistLanguage(mFirstLanguage.getText().toString());
         param.setSecondLanguage(mSecondLanguage.getText().toString());

@@ -124,10 +124,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 */
 
         VolleyRequestQueue.getInstance(this).add(request);
-
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
-//        this.finish();
     }
 
     @Override
@@ -163,8 +159,13 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         } else {
             Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
-                Log.d(URLUtils.TAG_DEBUG, "Respones MSG: " + response.mReturnMSG);
+                Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
+                Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
             }
+
+//            Intent intent = new Intent(this, MainActivity.class);
+//            intent.putExtra(MainActivity.EXTRA_ACCOUNT_STATUS, "1");
+//            startActivity(intent);
         }
     }
 }

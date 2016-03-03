@@ -116,73 +116,19 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
                     public void onPageSelected(int position) {
-
+                        if (position == 0) {
+                            setSelectedItem(PAGE_ONGOING);
+                        } else if (position == 1) {
+                            setSelectedItem(PAGE_WAITING);
+                        } else if (position == 2) {
+                            setSelectedItem(PAGE_FINISH);
+                        } else if (position == 3) {
+                            setSelectedItem(PAGE_SETTING);
+                        }
                     }
                 });
 
-
-//        ActionBar actionBar = getSupportActionBar();
-//        // 是否显示应用程序图标，默认为true
-//        actionBar.setDisplayShowHomeEnabled(true);
-//        // 是否显示应用程序标题，默认为true
-//        actionBar.setDisplayShowTitleEnabled(true);
-//
-//        /*
-//         * 是否将应用程序图标转变成可点击的按钮，默认为false。
-//         *
-//         * 如果设置了DisplayHomeAsUpEnabled为true，
-//         *
-//         * 则该设置自动为 true。
-//         */
-//        actionBar.setHomeButtonEnabled(true);
-//        /*
-//         * 在应用程序图标的左边显示一个向左的箭头，
-//         *
-//         * 并且将HomeButtonEnabled设为true。
-//         *
-//         * 默认为false。
-//         */
-//        actionBar.setDisplayHomeAsUpEnabled(true);
-//
-//        forceShowOverflowMenu();
-    }
-
-    /**
-     * 如果设备有物理菜单按键，需要将其屏蔽才能显示OverflowMenu
-     */
-    private void forceShowOverflowMenu() {
-        try {
-            ViewConfiguration config = ViewConfiguration.get(this);
-            Field menuKeyField = ViewConfiguration.class
-                    .getDeclaredField("sHasPermanentMenuKey");
-            if (menuKeyField != null) {
-                menuKeyField.setAccessible(true);
-                menuKeyField.setBoolean(config, false);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 显示OverflowMenu的Icon
-     *
-     * @param featureId
-     * @param menu
-     */
-    private void setOverflowIconVisible(int featureId, Menu menu) {
-        if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
-            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
-                try {
-                    Method m = menu.getClass().getDeclaredMethod(
-                            "setOptionalIconsVisible", Boolean.TYPE);
-                    m.setAccessible(true);
-                    m.invoke(menu, true);
-                } catch (Exception e) {
-                    Log.d("OverflowIconVisible", e.getMessage());
-                }
-            }
-        }
+        setSelectedItem(PAGE_ONGOING);
     }
 
     @Override
@@ -206,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
         }
     }
 
-    public static class MainAdapter extends FragmentPagerAdapter {
+    public class MainAdapter extends FragmentPagerAdapter {
         public MainAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -236,25 +182,21 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     public void onClickOngoingTab(View view) {
         mPager.setCurrentItem(PAGE_ONGOING);
         setSelectedItem(PAGE_ONGOING);
-        setTitle("正在带的团");
     }
 
     public void onClickWaitingTab(View view) {
         mPager.setCurrentItem(PAGE_WAITING);
         setSelectedItem(PAGE_WAITING);
-        setTitle("等待我带的团");
     }
 
     public void onClickFinishTab(View view) {
         mPager.setCurrentItem(PAGE_FINISH);
         setSelectedItem(PAGE_FINISH);
-        setTitle("已完成的团");
     }
 
     public void onClickSettingsTab(View view) {
         mPager.setCurrentItem(PAGE_SETTING);
         setSelectedItem(PAGE_SETTING);
-        setTitle("设置");
     }
 
     public void setSelectedItem(int index) {
@@ -264,24 +206,28 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
                 mTabWaiting.setImageResource(R.mipmap.waiting);
                 mTabFinish.setImageResource(R.mipmap.finish);
                 mTabSetting.setImageResource(R.mipmap.setting);
+                setTitle("正在带的团");
                 break;
             case PAGE_WAITING:
                 mTabOngoing.setImageResource(R.mipmap.ongoing);
                 mTabWaiting.setImageResource(R.mipmap.waiting_pressed);
                 mTabFinish.setImageResource(R.mipmap.finish);
                 mTabSetting.setImageResource(R.mipmap.setting);
+                setTitle("等待我带的团");
                 break;
             case PAGE_FINISH:
                 mTabOngoing.setImageResource(R.mipmap.ongoing);
                 mTabWaiting.setImageResource(R.mipmap.waiting);
                 mTabFinish.setImageResource(R.mipmap.finish_pressed);
                 mTabSetting.setImageResource(R.mipmap.setting);
+                setTitle("已完成的团");
                 break;
             case PAGE_SETTING:
                 mTabOngoing.setImageResource(R.mipmap.ongoing);
                 mTabWaiting.setImageResource(R.mipmap.waiting);
                 mTabFinish.setImageResource(R.mipmap.finish);
                 mTabSetting.setImageResource(R.mipmap.setting_pressed);
+                setTitle("设置");
                 break;
             default:
                 break;

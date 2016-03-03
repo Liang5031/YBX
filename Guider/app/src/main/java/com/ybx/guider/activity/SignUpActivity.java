@@ -80,6 +80,8 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
         } else if(f instanceof PhoneVerifyFragment){
             if( mVerifyCode==null || mVerifyCode.isEmpty()){
                 Toast.makeText(SignUpActivity.this, "验证码不能为空！", Toast.LENGTH_SHORT).show();
+            } else if( mPhoneNumber==null || mPhoneNumber.isEmpty()){
+                Toast.makeText(SignUpActivity.this, "手机号不能为空！", Toast.LENGTH_SHORT).show();
             } else {
                 loadFragment(SignUpInfoFragment.newInstance(mPhoneNumber, mVerifyCode), false);
                 setStep(STEP_THREE);

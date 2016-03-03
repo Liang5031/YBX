@@ -35,7 +35,14 @@ public class EncryptUtils {
     /// <param name="strKey">原始密钥字符串</param>
     /// <returns></returns>
     public static String Encrypt3DES(String value, String key) throws Exception {
-        String str = byte2Base64(encryptMode(GetKeyBytes(key), value.getBytes()));
+        if (key.length() < 24)
+        {
+            key+="000000000000000000000000000000000";
+        }
+        key = key.substring(0, 24);
+
+//        String str = byte2Base64(encryptMode(GetKeyBytes(key), value.getBytes()));
+        String str = byte2Base64(encryptMode(key.getBytes("UTF-8"), value.getBytes("UTF-8")));
         return str;
     }
 
@@ -66,6 +73,7 @@ public class EncryptUtils {
 
     private static final String Algorithm = "DESede"; //定义 加密算法,可用 DES,DESede,Blowfish
 
+
     //keybyte为加密密钥，长度为24字节
     //src为被加密的数据缓冲区（源）
     public static byte[] encryptMode(byte[] keybyte, byte[] src) {
@@ -74,6 +82,7 @@ public class EncryptUtils {
             //生成密钥
             SecretKey deskey = new SecretKeySpec(keybyte, Algorithm); //加密
             Cipher c1 = Cipher.getInstance(Algorithm);
+
             c1.init(Cipher.ENCRYPT_MODE, deskey);
             return c1.doFinal(src);
         } catch (java.security.NoSuchAlgorithmException e1) {
@@ -112,7 +121,8 @@ public class EncryptUtils {
 
     //转换成base64编码
     public static String byte2Base64(byte[] b) {
-        return Base64.encodeToString(b, Base64.DEFAULT);
+//        return Base64.encodeToString(b, Base64.DEFAULT);
+        return Base64.encodeToString(b, Base64.NO_WRAP);
     }
 
 
@@ -154,16 +164,19 @@ public class EncryptUtils {
 
     public static String generateSign(String paramsInOrder, String password) {
         SimpleDateFormat s = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-        String timestamp = s.format(new Date());
+//        String timestamp = s.format(new Date());
+        String timestamp = "201603040052440967";
 
-        String d1 = md5(paramsInOrder);
+//        String hashPWD = md5(password).toUpperCase();
+        String d1 = md5(paramsInOrder.toUpperCase());
+
         String p1 = md5(password);
-        String d2 = md5(p1);
+        String d2 = md5(p1.toUpperCase());
         String d3 = d1 + timestamp + d2;
 
         String d4 = null;
         try {
-            d4 = Encrypt3DES(d3, p1);
+            d4 = Encrypt3DES(d3.toUpperCase(), p1.toUpperCase());
         } catch (Exception e) {
             e.printStackTrace();
         }

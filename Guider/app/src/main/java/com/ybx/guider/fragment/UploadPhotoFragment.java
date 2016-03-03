@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.ybx.guider.utils.FileImageUpload;
 import com.ybx.guider.R;
+import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
 
 public class UploadPhotoFragment extends Fragment {
@@ -147,8 +148,10 @@ public class UploadPhotoFragment extends Fragment {
             boolean ret = (boolean)msg.obj;
             if(ret){
                 Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传完成！", Toast.LENGTH_LONG).show();
+                PreferencesUtils.setGuiderNumber(UploadPhotoFragment.this.getContext(), mETGuiderNumber.getText().toString());
             }else {
                 Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传失败！", Toast.LENGTH_LONG).show();
+                PreferencesUtils.setGuiderNumber(UploadPhotoFragment.this.getContext(), mETGuiderNumber.getText().toString());
             }
             super.handleMessage(msg);
 
@@ -172,6 +175,11 @@ public class UploadPhotoFragment extends Fragment {
                 final String number = mETGuiderNumber.getText().toString();
                 if(number.isEmpty()){
                     Toast.makeText(UploadPhotoFragment.this.getContext(), "导游证号不能为空！", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if(mImageUri == null){
+                    Toast.makeText(UploadPhotoFragment.this.getContext(), "请先选择照片！", Toast.LENGTH_LONG).show();
                     return;
                 }
 

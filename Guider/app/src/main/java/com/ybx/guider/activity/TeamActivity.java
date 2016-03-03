@@ -192,6 +192,5 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
             default:
                 break;
         }
-
     }
 }
