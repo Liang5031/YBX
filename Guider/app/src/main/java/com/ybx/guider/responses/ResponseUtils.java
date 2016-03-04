@@ -14,7 +14,7 @@ public class ResponseUtils {
     public static String TAG_PAGE_COUNT = "pagecount";                      /* 在当前查询条件下一共有多少页数据 */
     public static String TAG_PAGE_INDEX = "pageindex";                      /* 当前返回数据的页号 */
     public static String TAG_IS_LASTPAGE = "islastpage";                    /* 当前页是否是当前查询条件的最后一页，“1”表示是最后一页 */
-    public static String TAG_ITEM = "TeamItem";
+    public static String TAG_ITEM = "item";
     public static String TAG_ITEM_TEAM_INDEX = "TeamIndex";                 /* 团队编号，全局唯一，BIGINT */
     public static String TAG_ITEM_AGENCY_NAME = "AgencyName";               /* 旅行社名称,string(64) */
     public static String TAG_ITEM_DEPARTMENT_NAME = "DepartmentName";       /* 部门名称，string(64) */

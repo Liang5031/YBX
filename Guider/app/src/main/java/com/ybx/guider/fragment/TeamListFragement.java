@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -34,10 +35,11 @@ import java.util.ArrayList;
 public class TeamListFragement extends ListFragment implements Response.Listener<TeamQueryResponse>, Response.ErrorListener {
     private TeamListAdapter mAdapter;
     private static String ARG_TEAM_STATUS = "team_status";
-    public static int TEAM_STATUS_ONGOING = 1;  /* 4 -- 导游已接团 */
-    public static int TEAM_STATUS_WAITING = 2;  /* 3 -- 已委派待接团 */
-    public static int TEAM_STATUS_FINISHED = 3; /* 5 - 带团完成待结算 */
+    public static int TEAM_STATUS_ONGOING = 4;  /* 4 -- 导游已接团 */
+    public static int TEAM_STATUS_WAITING = 3;  /* 3 -- 已委派待接团 */
+    public static int TEAM_STATUS_FINISHED = 5; /* 5 - 带团完成待结算 */
     public ArrayList<TeamItem> mAllTeamItems;
+    TextView mEmptyView;
 
     private int mTeamStatus;
 
@@ -69,7 +71,9 @@ public class TeamListFragement extends ListFragment implements Response.Listener
         if (mAdapter != null) {
             TeamItem item = (TeamItem) mAdapter.getItem(position);
             Intent intent = new Intent(this.getContext(), TeamActivity.class);
-            intent.putExtra(TeamActivity.EXTRA_TEAM_ID, item.TeamIndex);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(TeamActivity.EXTRA_TEAM_ITEM, item);
+            intent.putExtras(bundle);
             startActivity(intent);
         }
     }
@@ -78,9 +82,10 @@ public class TeamListFragement extends ListFragment implements Response.Listener
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        View emptyView = this.getView().findViewById(R.id.empty);
-        this.getListView().setEmptyView(emptyView);
+        mEmptyView = (TextView)this.getView().findViewById(R.id.empty);
+        this.getListView().setEmptyView(mEmptyView);
         requestTeamList(mTeamStatus, 0);
+        mAllTeamItems.clear();
     }
 
 //    public void requestData(){
@@ -102,12 +107,14 @@ public class TeamListFragement extends ListFragment implements Response.Listener
 
         String url = URLUtils.generateURL(param);
         XMLRequest<TeamQueryResponse> request = new XMLRequest<TeamQueryResponse>(url, this, this, new TeamQueryResponse());
+        request.setShouldCache(false);
         VolleyRequestQueue.getInstance(this.getContext()).add(request);
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Toast.makeText(this.getContext(), "获取团队列表失败！", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this.getContext(), "获取团队列表失败！", Toast.LENGTH_LONG).show();
+        mEmptyView.setText("网络连接失败，请检查网络连接是否可用！");
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
         }
@@ -123,17 +130,17 @@ public class TeamListFragement extends ListFragment implements Response.Listener
             if(1== response.mIsLastPage) {
                 mAdapter = new TeamListAdapter(this.getContext(), mAllTeamItems);
                 this.setListAdapter(mAdapter);
+//                mAdapter.notifyDataSetChanged();
             } else {
                 requestTeamList(mTeamStatus, response.mPageIndex+1);
             }
         } else {
-            Toast.makeText(this.getContext(), "获取团队列表失败！", Toast.LENGTH_LONG).show();
+            mEmptyView.setText(response.mReturnMSG);
+//            Toast.makeText(this.getContext(), "获取团队列表失败！", Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
                 Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
             }
         }
-
-
     }
 }

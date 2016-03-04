@@ -1,9 +1,11 @@
 package com.ybx.guider.responses;
 
+import java.io.Serializable;
+
 /**
  * Created by chenl on 2016/3/3.
  */
-public class TeamItem {
+public class TeamItem implements Serializable {
     public String TeamIndex;
     public String AgencyName;
     public String DepartmentName;

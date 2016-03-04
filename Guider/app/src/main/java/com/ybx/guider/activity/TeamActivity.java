@@ -21,6 +21,7 @@ import com.ybx.guider.fragment.RealNameListFragment;
 import com.ybx.guider.fragment.TeamInfoFragment;
 import com.ybx.guider.fragment.TeamLogListFragment;
 import com.ybx.guider.fragment.TeamScheduleFragment;
+import com.ybx.guider.responses.TeamItem;
 
 public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.OnFragmentInteractionListener,
         AcceptTeamDialog.AcceptTeamDialogListener, FinishTeamDialog.FinishTeamDialogListener {
@@ -29,11 +30,12 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     private final static int PAGE_TEAM_REAL_NAME = 2;
     private final static int PAGE_TEAM_DEAL_RECORD = 3;
     private final static int PAGE_TEAM_LOG = 4;
-    public static String EXTRA_TEAM_ID = "TEAM_ID";
+    public static String EXTRA_TEAM_ITEM = "team_item";
     private final static int NUM_ITEMS = 5;
     private PageAdapter mPageAdapter;
     private ViewPager mPager;
-    private int mTeamId = -1;
+//    public int mTeamId = -1;
+    public TeamItem mTeamItem;
 
     private ImageView mTabMainInfo;
     private ImageView mTabTeamSchedule;
@@ -53,7 +55,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         mTabTeamLog = (ImageView)findViewById(R.id.tabTeamLog);
 
         Intent i = getIntent();
-        mTeamId = i.getIntExtra(EXTRA_TEAM_ID, -1);
+        mTeamItem=(TeamItem)i.getSerializableExtra(EXTRA_TEAM_ITEM);
 
         mPageAdapter = new PageAdapter(getSupportFragmentManager());
         mPager = (ViewPager) findViewById(R.id.viewpager);

@@ -115,8 +115,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 
         String url = URLUtils.generateURL(param);
         XMLRequest<LoginResponse> request = new XMLRequest<LoginResponse>(url, this, this, new LoginResponse());
-/*
         request.setShouldCache(false);
+/*
         request.setRetryPolicy(new DefaultRetryPolicy(
                 5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
-        Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "登录失败！请检查网络连接是否可用", Toast.LENGTH_LONG).show();
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
         }
@@ -143,11 +143,11 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             mProgressDialog.dismiss();
         }
 
-        if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
-            if (response.mAccountStatus.equals(ResponseUtils.ACCOUNT_STATUS_INACTIVE)) {
+        if (response.mReturnCode.equals(ResponseUtils.RESULT_OK) && response.mAccountStatus!=null) {
+            if (response.mAccountStatus.equalsIgnoreCase(ResponseUtils.ACCOUNT_STATUS_INACTIVE)) {
                 Toast.makeText(this, "账号已禁用！", Toast.LENGTH_LONG).show();
-            } else if (response.mAccountStatus.equals(ResponseUtils.ACCOUNT_STATUS_ACTIVE)
-                    || response.mAccountStatus.equals(ResponseUtils.ACCOUNT_STATUS_CHECKING)) {
+            } else if (response.mAccountStatus.equalsIgnoreCase(ResponseUtils.ACCOUNT_STATUS_ACTIVE)
+                    || response.mAccountStatus.equalsIgnoreCase(ResponseUtils.ACCOUNT_STATUS_CHECKING)) {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra(MainActivity.EXTRA_ACCOUNT_STATUS, response.mAccountStatus);
                 startActivity(intent);
@@ -155,17 +155,12 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             } else {
                 Toast.makeText(this, "注册审核未通过！", Toast.LENGTH_LONG).show();
             }
-
         } else {
             Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
                 Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
             }
-
-//            Intent intent = new Intent(this, MainActivity.class);
-//            intent.putExtra(MainActivity.EXTRA_ACCOUNT_STATUS, "1");
-//            startActivity(intent);
         }
     }
 }

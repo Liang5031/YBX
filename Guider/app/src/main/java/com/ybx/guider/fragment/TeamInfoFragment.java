@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.SimpleAdapter;
 
 import com.ybx.guider.R;
+import com.ybx.guider.activity.TeamActivity;
 import com.ybx.guider.dialog.AcceptTeamDialog;
 import com.ybx.guider.dialog.FinishTeamDialog;
+import com.ybx.guider.responses.TeamItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,14 +33,8 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class TeamInfoFragment extends ListFragment{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static String FIELD_LABEL = "label";
+    private static String FIELD_VALUE = "value";
 
     private OnFragmentInteractionListener mListener;
 
@@ -55,10 +51,6 @@ public class TeamInfoFragment extends ListFragment{
     // TODO: Rename and change types and number of parameters
     public static TeamInfoFragment newInstance() {
         TeamInfoFragment fragment = new TeamInfoFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -88,16 +80,13 @@ public class TeamInfoFragment extends ListFragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        final String[] from = new String[] {"label", "value"};
+        final String[] from = new String[] {FIELD_LABEL, FIELD_VALUE};
         final int[]  to = new int[] {R.id.label, R.id.value};
 
+        TeamItem item = ((TeamActivity)this.getActivity()).mTeamItem;
+
         SimpleAdapter adapter = new SimpleAdapter(
-                this.getActivity(), getSimpleData(),
+                this.getActivity(), getData(item),
                 R.layout.team_info_list_item, from, to);
         this.setListAdapter(adapter);
         setHasOptionsMenu(true);
@@ -107,7 +96,6 @@ public class TeamInfoFragment extends ListFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_team_info, container, false);
     }
 
@@ -150,88 +138,91 @@ public class TeamInfoFragment extends ListFragment{
         void onFragmentInteraction(Uri uri);
     }
 
-    private List<Map<String, Object>> getSimpleData() {
+    private List<Map<String, Object>> getData(TeamItem item) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("label", "团队编号:");
-        map.put("value", "249572345720");
+
+        map.put(FIELD_LABEL, "团队编号:");
+        map.put("value", item.TeamIndex);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "行程单编号:");
-        map.put("value", "1234234134134134");
+        map.put(FIELD_LABEL, "行程单编号:");
+        map.put("value", item.TeamOrderNumber);
+        list.add(map);
+
+        Integer count = Integer.valueOf(item.PepleCount1) + Integer.valueOf(item.PepleCount2);
+        map = new HashMap<String, Object>();
+        map.put(FIELD_LABEL, "总人数:");
+        map.put("value", count.toString());
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "总人数:");
-        map.put("value", "7");
+        map.put(FIELD_LABEL, "成年人数:");
+        map.put("value", item.PepleCount1);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "成年人数:");
-        map.put("value", "5");
+        map.put(FIELD_LABEL, "未成年人数:");
+        map.put("value", item.PepleCount2);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "未成年人数:");
-        map.put("value", "2");
+        map.put(FIELD_LABEL, "成员描述:");
+        map.put("value", item.MemberDesc);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "成员描述:");
-        map.put("value", "5大2小，含两个老年人");
+        map.put(FIELD_LABEL, "行程日期:");
+        map.put("value", item.StartDate + "至" + item.EndDate);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "行程日期:");
-        map.put("value", "2016-01-01至2016-01-07");
+        map.put(FIELD_LABEL, "行程简述:");
+        map.put("value", item.TripDesc);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "行程简述:");
-        map.put("value", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
+        map.put(FIELD_LABEL, "说明:");
+        map.put("value", "???");
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "说明:");
-        map.put("value", "天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游天门山5日游");
+        map.put(FIELD_LABEL, "旅行社:");
+        map.put("value", item.AgencyName);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "旅行社:");
-        map.put("value", "天门山5日游天门山5日游天门山5日游");
+        map.put(FIELD_LABEL, "部门:");
+        map.put("value", item.DepartmentName);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "部门:");
-        map.put("value", "天门山5日游天门山");
+        map.put(FIELD_LABEL, "计调:");
+        map.put("value", item.CName);
         list.add(map);
 
+/*
         map = new HashMap<String, Object>();
-        map.put("label", "计调:");
-        map.put("value", "张三");
+        map.put(FIELD_LABEL, "客源地:");
+        map.put("value", "??");
         list.add(map);
+*/
 
         map = new HashMap<String, Object>();
-        map.put("label", "客源地:");
-        map.put("value", "长沙");
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("label", "团队来源:");
-        map.put("value", "长沙");
+        map.put(FIELD_LABEL, "团队来源:");
+        map.put("value", item.TeamFrom);
         list.add(map);
 
 
         map = new HashMap<String, Object>();
-        map.put("label", "来源说明:");
-        map.put("value", "未知");
+        map.put(FIELD_LABEL, "来源说明:");
+        map.put("value", item.TeamFromDesc);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("label", "状态:");
-        map.put("value", "未知");
+        map.put(FIELD_LABEL, "状态:");
+        map.put("value", item.Status);
         list.add(map);
         return list;
     }

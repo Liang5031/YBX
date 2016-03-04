@@ -51,9 +51,6 @@
         </activity>
 
         <activity android:name=".activity.ChangePasswordActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
         </activity>
     </application>
 

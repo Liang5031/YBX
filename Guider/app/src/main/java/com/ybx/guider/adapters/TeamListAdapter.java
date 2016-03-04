@@ -18,7 +18,6 @@ import java.util.ArrayList;
  */
 public class TeamListAdapter extends BaseAdapter {
     private Context mContext;
-    private TeamQueryResponse mResponse;
     private ArrayList<TeamItem> mTeamItems;
 
     public TeamListAdapter(Context context, ArrayList<TeamItem> teamItems) {
@@ -28,8 +27,8 @@ public class TeamListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if( mResponse !=null && mResponse.mTeamItems !=null ){
-            return mResponse.mTeamItems.size();
+        if(mTeamItems !=null ){
+            return mTeamItems.size();
         }
         return 0;
     }
@@ -44,7 +43,7 @@ public class TeamListAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override

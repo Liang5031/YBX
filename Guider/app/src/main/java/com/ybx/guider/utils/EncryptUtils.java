@@ -164,13 +164,13 @@ public class EncryptUtils {
 
     public static String generateSign(String paramsInOrder, String password) {
         SimpleDateFormat s = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-//        String timestamp = s.format(new Date());
-        String timestamp = "201603040052440967";
+        String timestamp = s.format(new Date());
+//        String timestamp = "201603040052440967";
 
 //        String hashPWD = md5(password).toUpperCase();
         String d1 = md5(paramsInOrder.toUpperCase());
 
-        String p1 = md5(password);
+        String p1 = md5(password).toUpperCase();
         String d2 = md5(p1.toUpperCase());
         String d3 = d1 + timestamp + d2;
 

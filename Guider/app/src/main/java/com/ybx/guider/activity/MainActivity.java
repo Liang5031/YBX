@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -100,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
         mVerifyAdapter = new VerificationAdapter(getSupportFragmentManager());
 
         mPager = (ViewPager) findViewById(R.id.viewpager);
+        mPager.setOffscreenPageLimit(1);
+
         Intent i = getIntent();
         String status = i.getStringExtra(EXTRA_ACCOUNT_STATUS);
         if (status != null && status.equals(ResponseUtils.ACCOUNT_STATUS_ACTIVE)) {
@@ -158,6 +161,17 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
         }
 
         @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+//        @Override
+//        public void destroyItem(ViewGroup container, int position, Object object) {
+//            Fragment f = (Fragment) object;
+//            container.removeView(f.getView());
+//        }
+
+        @Override
         public int getCount() {
             return NUM_ITEMS_MAIN;
         }
@@ -180,22 +194,22 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     }
 
     public void onClickOngoingTab(View view) {
-        mPager.setCurrentItem(PAGE_ONGOING);
+        mPager.setCurrentItem(PAGE_ONGOING,false);
         setSelectedItem(PAGE_ONGOING);
     }
 
     public void onClickWaitingTab(View view) {
-        mPager.setCurrentItem(PAGE_WAITING);
+        mPager.setCurrentItem(PAGE_WAITING,false);
         setSelectedItem(PAGE_WAITING);
     }
 
     public void onClickFinishTab(View view) {
-        mPager.setCurrentItem(PAGE_FINISH);
+        mPager.setCurrentItem(PAGE_FINISH,false);
         setSelectedItem(PAGE_FINISH);
     }
 
     public void onClickSettingsTab(View view) {
-        mPager.setCurrentItem(PAGE_SETTING);
+        mPager.setCurrentItem(PAGE_SETTING,false);
         setSelectedItem(PAGE_SETTING);
     }
 
