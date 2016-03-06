@@ -46,7 +46,7 @@ public class RealNameListAdapter extends BaseAdapter {
         return position;
     }
 
-    void initView(View view, int position) {
+    void initViews(View view, int position) {
         if (mItems != null && mItems.size() > 0) {
             RealNameItem item = mItems.get(position);
 //            ((TextView) view.findViewById(R.id.realNameIdx)).setText(position);
@@ -61,7 +61,7 @@ public class RealNameListAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(R.layout.real_name_list_item, null);
-            initView(convertView, position);
+            initViews(convertView, position);
         }
         return convertView;
     }

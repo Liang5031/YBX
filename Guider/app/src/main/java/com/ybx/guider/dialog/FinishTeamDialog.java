@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 
 import com.ybx.guider.R;
+import com.ybx.guider.responses.TeamItem;
 
 /**
  * Created by chenl on 2016/2/18.

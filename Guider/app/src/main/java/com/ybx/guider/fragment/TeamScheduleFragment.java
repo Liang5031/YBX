@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
 import com.ybx.guider.adapters.TeamScheduleListAdapter;
+import com.ybx.guider.dialog.ScheduleDetailDialog;
 import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
@@ -137,9 +138,17 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 //        super.onListItemClick(l, v, position, id);
+//        int idx = v.getId();
+//        switch(idx){
+//
+//
+//        }
 
         mAdapter.changeVisibility(v, position);
 //        mAdapter.notifyDataSetChanged();
+
+//        ScheduleDetailDialog dialog = ScheduleDetailDialog.newInstance(mTeamItem);
+//        dialog.show(getActivity().getSupportFragmentManager(), "detail");
     }
 
     @Override
@@ -192,6 +201,7 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
 
         param.setUser(PreferencesUtils.getGuiderNumber(this.getContext()));
         param.setTeamIndex(teamIndex);
+        param.setPageIndex(page.toString());
 
         String orderParams = param.getParamStringInOrder();
         String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this.getContext()));

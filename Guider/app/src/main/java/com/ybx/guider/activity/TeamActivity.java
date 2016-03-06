@@ -136,7 +136,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                 case PAGE_TEAM_DEAL_RECORD:
                     return DealRecordListFragment.newInstance(mItem);
                 case PAGE_TEAM_LOG:
-                    return TeamLogListFragment.newInstance();
+                    return TeamLogListFragment.newInstance(mItem);
                 default:
                     return null;
             }

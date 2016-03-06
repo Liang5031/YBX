@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ybx.guider.R;
 import com.ybx.guider.responses.ResponseUtils;
@@ -53,14 +54,15 @@ public class TeamScheduleListAdapter extends BaseAdapter {
 
     void initViews(View view, int position) {
         if (mAllItems != null && mAllItems.size() > 0) {
+
             TeamScheduleItem item = mAllItems.get(position);
             ((TextView) view.findViewById(R.id.schedule_date)).setText(ResponseUtils.formatDate(item.Date));
             ((TextView) view.findViewById(R.id.schedule_TimeRequire)).setText(item.TimeRequire);
             ((TextView) view.findViewById(R.id.schedule_TripType)).setText(item.TripType);
             ((TextView) view.findViewById(R.id.schedule_TranName)).setText(item.TranName);
             ((TextView) view.findViewById(R.id.schedule_Desc)).setText(item.Desc);
-            ((TextView) view.findViewById(R.id.schedule_status)).setText(item.Status);
-            ((TextView) view.findViewById(R.id.schedule_TripIndex)).setText(item.TripIndex);
+//            ((TextView) view.findViewById(R.id.schedule_status)).setText(item.Status);
+//            ((TextView) view.findViewById(R.id.schedule_TripIndex)).setText(item.TripIndex);
             ((TextView) view.findViewById(R.id.schedule_TranType)).setText(item.TranType);
             ((TextView) view.findViewById(R.id.schedule_ProviderNumber)).setText(item.ProviderNumber);
             ((TextView) view.findViewById(R.id.schedule_ProviderName)).setText(item.ProviderName);

@@ -134,6 +134,7 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
             if (1 == response.mIsLastPage) {
                 mAdapter = new DealRecordListAdapter(this.getContext(), mAllItems);
                 this.setListAdapter(mAdapter);
+                mEmptyView.setText("");
                 setCount(mAllItems.size());
             } else {
                 requestRealNameInfo(response.mPageIndex + 1);

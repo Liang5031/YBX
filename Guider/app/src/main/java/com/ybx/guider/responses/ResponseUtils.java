@@ -73,6 +73,22 @@ public class ResponseUtils {
     public static String TAG_COUNT = "count";          /* 数量，对应SL字段，decimal(18,2) */
     public static String TAG_REC_DATE = "recdate";        /* 成交日期，对应CJRQ字段，string(8) */
 
+    /* YUNTeamLog_Query.aspx */
+    public static String TAG_LOG_ID = "logid";              /* 日志ID	对应RZID字段，	Bigint	PK */
+    public static String TAG_DATE_TIME = "datetime";        /* 日期时间	对应RQSJ字段，	Char(14) */
+    public static String TAG_LOG_TYPE = "logtype";          /* 消息类型	对应XXLX字段	Char(1)	“1”消息，“2”警告，“3”错误 */
+    public static String TAG_EVENT_TYPE = "eventtype";        /* 事件类型	SJLX	CHAR(1)	“1”创建，“U”修改，“2”确认“3”委派。“4”导游接团。“5”结算。“6”存档。“7”发起预约。“8”确认预约。“9”成交。“A”撤消预约 */
+    public static String TAG_LOG_DESC = "description";        /* 事件描述	SJMS	Varchar(200)  */
+    public static String TAG_OBJ_NAME = "objectname";        /* 对象名称	DXMC	Nvarchar(64)	 	当事件类型为7，8，9时，此值为供应商名称；当事件类型为2时，此值为导游证号及姓名 */
+
+
+
+
+
+
+
+
+
 
     public static String RESULT_OK = "0";
     public static String RESULT_FAIL = "1";
@@ -86,11 +102,21 @@ public class ResponseUtils {
     public static String TYPE_OTHERS = "3";
 
     /**
-     * YYYYMMDD to YYYY-MM-DD
+     * YYYYMMDD to YYYY/MM/DD
      */
     public static String formatDate(String date) {
         if (date != null && date.length() == 8) {
             return date.substring(0, 4) + "/" + date.substring(4, 6) + "/" + date.substring(6, 8);
+        }
+        return "";
+    }
+
+    /**
+     * YYYYMMDDHHMMSS to YYYY/MM/DD HH:MM
+     */
+    public static String formatDateTime(String dateTime) {
+        if (dateTime != null && dateTime.length() == 14) {
+            return dateTime.substring(0, 4) + "/" + dateTime.substring(4, 6) + "/" + dateTime.substring(6, 8) + " " + dateTime.substring(8,10) + ":" + dateTime.substring(10,12);
         }
         return "";
     }
