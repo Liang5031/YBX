@@ -74,7 +74,7 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mUserName = (EditText) this.getView().findViewById(R.id.userName);
-        mUserId = (EditText) this.getView().findViewById(R.id.userId);
+        mUserId = (EditText) this.getView().findViewById(R.id.number);
         mPassword = (EditText) this.getView().findViewById(R.id.password);
         mConfirmPassword = (EditText) this.getView().findViewById(R.id.confirmPassword);
         mFirstLanguage = (EditText) this.getView().findViewById(R.id.firstLanguage);
@@ -203,6 +203,7 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
 
         String url = URLUtils.generateURL(param);
         XMLRequest<XMLResponse> request = new XMLRequest<XMLResponse>(url, this, this, new XMLResponse());
+        request.setShouldCache(false);
 
         VolleyRequestQueue.getInstance(this.getContext()).add(request);
     }

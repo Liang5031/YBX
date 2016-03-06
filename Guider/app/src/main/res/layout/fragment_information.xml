@@ -44,7 +44,7 @@
                 android:text="@string/user_id" />
 
             <EditText
-                android:id="@+id/userId"
+                android:id="@+id/number"
                 style="@style/EditNormal"
                 android:layout_width="@dimen/edit_width_normal"
                 android:layout_alignParentRight="true"

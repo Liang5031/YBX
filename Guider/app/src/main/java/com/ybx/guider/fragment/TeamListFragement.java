@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,7 +20,7 @@ import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.TeamItem;
-import com.ybx.guider.responses.TeamQueryResponse;
+import com.ybx.guider.responses.TeamListResponse;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
@@ -32,16 +31,18 @@ import java.util.ArrayList;
 /**
  * Created by chenl on 2016/2/11.
  */
-public class TeamListFragement extends ListFragment implements Response.Listener<TeamQueryResponse>, Response.ErrorListener {
-    private TeamListAdapter mAdapter;
+public class TeamListFragement extends ListFragment implements Response.Listener<TeamListResponse>, Response.ErrorListener {
+
     private static String ARG_TEAM_STATUS = "team_status";
     public static int TEAM_STATUS_ONGOING = 4;  /* 4 -- 导游已接团 */
     public static int TEAM_STATUS_WAITING = 3;  /* 3 -- 已委派待接团 */
     public static int TEAM_STATUS_FINISHED = 5; /* 5 - 带团完成待结算 */
     public ArrayList<TeamItem> mAllTeamItems;
-    TextView mEmptyView;
 
-    private int mTeamStatus;
+    TextView mEmptyView;
+    XMLRequest<TeamListResponse> mRequest;
+    TeamListAdapter mAdapter;
+    int mTeamStatus;
 
     public static TeamListFragement newInstance(int teamStatus) {
         TeamListFragement fragment = new TeamListFragement();
@@ -82,57 +83,65 @@ public class TeamListFragement extends ListFragment implements Response.Listener
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mEmptyView = (TextView)this.getView().findViewById(R.id.empty);
+        mEmptyView = (TextView) this.getView().findViewById(R.id.empty);
         this.getListView().setEmptyView(mEmptyView);
-        requestTeamList(mTeamStatus, 0);
+        requestTeamList(mTeamStatus, ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
         mAllTeamItems.clear();
     }
 
-//    public void requestData(){
-//        requestTeamList(mTeamStatus, 0);
-//    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRequest.cancel();
+    }
 
-    public void requestTeamList(Integer status,Integer page) {
+    public void requestTeamList(Integer status, Integer page, boolean isRefresh) {
+        if (this.getContext() == null) {
+            return;
+        }
+
         Param param = new Param(ParamUtils.PAGE_TEAM_QUERY);
 
         param.setUser(PreferencesUtils.getGuiderNumber(this.getContext()));
         param.setTeamStatus(status.toString());
-        if(page != 0 ) {
-            param.setPageIndex(page.toString());
-        }
+        param.setPageIndex(page.toString());
 
         String orderParams = param.getParamStringInOrder();
         String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this.getContext()));
         param.setSign(sign);
 
         String url = URLUtils.generateURL(param);
-        XMLRequest<TeamQueryResponse> request = new XMLRequest<TeamQueryResponse>(url, this, this, new TeamQueryResponse());
-        request.setShouldCache(false);
-        VolleyRequestQueue.getInstance(this.getContext()).add(request);
+        mRequest = new XMLRequest<TeamListResponse>(url, this, this, new TeamListResponse());
+        mRequest.setShouldCache(true);
+        if (isRefresh) {
+            /* remove cache first */
+            VolleyRequestQueue.getInstance(this.getContext()).remove(url);
+        }
+
+        VolleyRequestQueue.getInstance(this.getContext()).add(mRequest);
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
 //        Toast.makeText(this.getContext(), "获取团队列表失败！", Toast.LENGTH_LONG).show();
-        mEmptyView.setText("网络连接失败，请检查网络连接是否可用！");
+        mEmptyView.setText("请求失败！");
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
         }
     }
 
     @Override
-    public void onResponse(TeamQueryResponse response) {
-        if(response != null && response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
-            for (TeamItem item : response.mTeamItems) {
+    public void onResponse(TeamListResponse response) {
+        if (response != null && response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+            for (TeamItem item : response.mItems) {
                 mAllTeamItems.add(item);
             }
 
-            if(1== response.mIsLastPage) {
+            if (1 == response.mIsLastPage) {
                 mAdapter = new TeamListAdapter(this.getContext(), mAllTeamItems);
                 this.setListAdapter(mAdapter);
-//                mAdapter.notifyDataSetChanged();
             } else {
-                requestTeamList(mTeamStatus, response.mPageIndex+1);
+                requestTeamList(mTeamStatus, response.mPageIndex + 1, false);
             }
         } else {
             mEmptyView.setText(response.mReturnMSG);

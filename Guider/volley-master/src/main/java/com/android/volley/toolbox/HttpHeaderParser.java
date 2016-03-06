@@ -38,7 +38,7 @@ public class HttpHeaderParser {
      */
     public static Cache.Entry parseCacheHeaders(NetworkResponse response) {
         long now = System.currentTimeMillis();
-
+        long MAX_AGE_HARD_CORD = 10*60*1000; /* 10 minutes, this value should be set by server */
         Map<String, String> headers = response.headers;
 
         long serverDate = 0;
@@ -98,7 +98,7 @@ public class HttpHeaderParser {
         // Cache-Control takes precedence over an Expires header, even if both exist and Expires
         // is more restrictive.
         if (hasCacheControl) {
-            softExpire = now + maxAge * 1000;
+            softExpire = now + maxAge * 1000 + MAX_AGE_HARD_CORD;
             finalExpire = mustRevalidate
                     ? softExpire
                     : softExpire + staleWhileRevalidate * 1000;

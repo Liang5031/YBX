@@ -116,6 +116,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         String url = URLUtils.generateURL(param);
         XMLRequest<LoginResponse> request = new XMLRequest<LoginResponse>(url, this, this, new LoginResponse());
         request.setShouldCache(false);
+
+//        request.setCacheTime(10*60);
 /*
         request.setRetryPolicy(new DefaultRetryPolicy(
                 5000,
@@ -144,6 +146,9 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         }
 
         if (response.mReturnCode.equals(ResponseUtils.RESULT_OK) && response.mAccountStatus!=null) {
+            /* clear cache after login */
+            VolleyRequestQueue.getInstance(this).clear();
+
             if (response.mAccountStatus.equalsIgnoreCase(ResponseUtils.ACCOUNT_STATUS_INACTIVE)) {
                 Toast.makeText(this, "账号已禁用！", Toast.LENGTH_LONG).show();
             } else if (response.mAccountStatus.equalsIgnoreCase(ResponseUtils.ACCOUNT_STATUS_ACTIVE)

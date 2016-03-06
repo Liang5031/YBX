@@ -16,17 +16,14 @@ public class LoginResponse extends XMLResponse {
     public String mAccountStatus;
 
     public void startDocument(XmlPullParser parser) throws IOException, XmlPullParserException {
-        Log.d(URLUtils.TAG_DEBUG, "startDocument called");
     }
 
     public void startTag(XmlPullParser parser) throws IOException, XmlPullParserException {
         if (ResponseUtils.TAG_ACCOUNT_STATUS.equals(parser.getName())) {
             mAccountStatus = parser.nextText();
         }
-        Log.d(URLUtils.TAG_DEBUG, "startTag called");
     }
 
     public void endTag(XmlPullParser parser) {
-        Log.d(URLUtils.TAG_DEBUG, "endTag called");
     }
 }

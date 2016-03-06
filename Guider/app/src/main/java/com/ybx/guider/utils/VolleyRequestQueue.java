@@ -54,6 +54,17 @@ public class VolleyRequestQueue {
             Log.d(URLUtils.TAG_OUTPUT_STREAM, " Request URL: " + req.getUrl());
         }
         getRequestQueue().add(req);
+    }
 
+    public void remove(String key){
+        getRequestQueue().getCache().remove(key);
+    }
+
+    public void invalidate(String key,boolean fullExpire){
+        getRequestQueue().getCache().invalidate(key, fullExpire);
+    }
+
+    public void clear(){
+        getRequestQueue().getCache().clear();
     }
 }

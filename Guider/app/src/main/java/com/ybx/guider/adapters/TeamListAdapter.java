@@ -8,8 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ybx.guider.R;
+import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.TeamItem;
-import com.ybx.guider.responses.TeamQueryResponse;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class TeamListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if(mTeamItems !=null ){
+        if (mTeamItems != null) {
             return mTeamItems.size();
         }
         return 0;
@@ -35,7 +35,7 @@ public class TeamListAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        if( mTeamItems !=null ){
+        if (mTeamItems != null) {
             return mTeamItems.get(position);
         }
         return null;
@@ -46,18 +46,29 @@ public class TeamListAdapter extends BaseAdapter {
         return position;
     }
 
+    String getPeopleCount(int audlt, int child) {
+        String FORMAT = "共%d（%d/%d）游客"; /* 共35（30/5）游客 */
+        String count = String.format(FORMAT, audlt + child, audlt, child);
+        return count;
+    }
+
+    void initViews(View view, int position) {
+        if (mTeamItems != null && mTeamItems.size() > 0) {
+            TeamItem item = mTeamItems.get(position);
+            ((TextView) view.findViewById(R.id.team_description)).setText(item.TripDesc);
+            ((TextView) view.findViewById(R.id.startEndDate)).setText(ResponseUtils.formatDate(item.StartDate) + " - " + ResponseUtils.formatDate(item.EndDate));
+            ((TextView) view.findViewById(R.id.peopleCount)).setText(getPeopleCount(Integer.valueOf(item.PepleCount1), Integer.valueOf(item.PepleCount2)));
+            ((TextView) view.findViewById(R.id.totalAmount)).setText("总团款：￥" + item.TotalAmount);
+            ((TextView) view.findViewById(R.id.department)).setText(item.AgencyName + " " + item.DepartmentName);
+        }
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(R.layout.team_list_item, null);
-            TextView teamID = (TextView)convertView.findViewById(R.id.team_id);
-            TextView teamTime = (TextView)convertView.findViewById(R.id.team_time);
-            TextView teamDesc = (TextView)convertView.findViewById(R.id.team_description);
-            TeamItem item = mTeamItems.get(position);
-            teamID.setText(item.TeamIndex);
-            teamTime.setText(item.StartDate);
-            teamDesc.setText(item.TripDesc);
+            convertView = inflater.inflate(R.layout.team_list_item_new, null);
+            initViews(convertView, position);
         }
         return convertView;
     }

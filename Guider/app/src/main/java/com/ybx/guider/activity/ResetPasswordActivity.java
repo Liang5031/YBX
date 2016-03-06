@@ -70,7 +70,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
 
         String url = URLUtils.generateURL(param);
         XMLRequest<GetVerifyCodeResponse> request = new XMLRequest<GetVerifyCodeResponse>(url,  listener, errorListener, new GetVerifyCodeResponse());
-
+        request.setShouldCache(false);
         VolleyRequestQueue.getInstance(this).add(request);
     }
 
@@ -112,6 +112,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
 
             String url = URLUtils.generateURL(param);
             XMLRequest<ResetPasswordResponse> request = new XMLRequest<ResetPasswordResponse>(url, this, this, new ResetPasswordResponse());
+            request.setShouldCache(false);
             VolleyRequestQueue.getInstance(this).add(request);
         }
     }

@@ -154,7 +154,7 @@ public class PhoneVerifyFragment extends Fragment {
 
         String url = URLUtils.generateURL(param);
         XMLRequest<GetVerifyCodeResponse> request = new XMLRequest<GetVerifyCodeResponse>(url, listener, errorListener, new GetVerifyCodeResponse());
-//        request.setShouldCache(false);
+        request.setShouldCache(false);
 
         VolleyRequestQueue.getInstance(PhoneVerifyFragment.this.getContext()).add(request);
     }

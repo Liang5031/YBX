@@ -119,5 +119,5 @@ public class ParamUtils {
     public static String VALUE_SIGN_TYPE_MD5 = "MD5";
     public static String VALUE_DEFAULT_SERVICE_VERSION = "1.0";
     public static String VALUE_DEFAULT_CHAR_SET = "UTF-8";
-
+    public static int VALUE_FIRST_PAGE_INDEX = 0;
 }

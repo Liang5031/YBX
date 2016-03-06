@@ -17,6 +17,7 @@ import com.ybx.guider.R;
 import com.ybx.guider.activity.TeamActivity;
 import com.ybx.guider.dialog.AcceptTeamDialog;
 import com.ybx.guider.dialog.FinishTeamDialog;
+import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.TeamItem;
 
 import java.util.ArrayList;
@@ -123,68 +124,79 @@ public class TeamInfoFragment extends ListFragment{
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    String getCountStr(String adultCount, String childCount){
+        Integer adult = Integer.valueOf(adultCount);
+        Integer child = Integer.valueOf(childCount);
+        Integer total = adult + child;
+        String countStr = "";
+
+        if(total>0){
+            countStr += "共" + total + "人，";
+        }
+
+        if(adult>0 ){
+            countStr += adult + "成人";
+        }
+
+        if(child>0){
+            countStr += child + "小孩";
+        }
+
+        return  countStr;
     }
 
     private List<Map<String, Object>> getData(TeamItem item) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
 
-        map.put(FIELD_LABEL, "团队编号:");
-        map.put("value", item.TeamIndex);
-        list.add(map);
-
         map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "行程单编号:");
-        map.put("value", item.TeamOrderNumber);
-        list.add(map);
-
-        Integer count = Integer.valueOf(item.PepleCount1) + Integer.valueOf(item.PepleCount2);
-        map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "总人数:");
-        map.put("value", count.toString());
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "成年人数:");
-        map.put("value", item.PepleCount1);
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "未成年人数:");
-        map.put("value", item.PepleCount2);
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "成员描述:");
-        map.put("value", item.MemberDesc);
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "行程日期:");
-        map.put("value", item.StartDate + "至" + item.EndDate);
-        list.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "行程简述:");
+        map.put(FIELD_LABEL, "行程概述:");
         map.put("value", item.TripDesc);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "说明:");
-        map.put("value", "???");
+        map.put(FIELD_LABEL, "起止日期:");
+        map.put("value", ResponseUtils.formatDate(item.StartDate) + " - " + ResponseUtils.formatDate(item.EndDate));
+        list.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put(FIELD_LABEL, "行程单号:");
+        map.put("value", item.TeamOrderNumber);
+        list.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put(FIELD_LABEL, "游客人数:");
+        map.put("value", getCountStr(item.PepleCount1,item.PepleCount2));
+        list.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put(FIELD_LABEL, "团员说明:");
+        map.put("value", item.MemberDesc);
+        list.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put(FIELD_LABEL, "团款总额:");
+        map.put("value", item.TotalAmount);
+        list.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put(FIELD_LABEL, "收款提醒:");
+        map.put("value", item.TotalAmountDesc);
+        list.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put(FIELD_LABEL, "来源渠道:");
+        map.put("value", item.TeamFrom);
+        list.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put(FIELD_LABEL, "客源地:");
+        map.put("value", item.Touristsource);
         list.add(map);
 
         map = new HashMap<String, Object>();
@@ -202,28 +214,21 @@ public class TeamInfoFragment extends ListFragment{
         map.put("value", item.CName);
         list.add(map);
 
-/*
         map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "客源地:");
-        map.put("value", "??");
-        list.add(map);
-*/
-
-        map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "团队来源:");
-        map.put("value", item.TeamFrom);
-        list.add(map);
-
-
-        map = new HashMap<String, Object>();
-        map.put(FIELD_LABEL, "来源说明:");
-        map.put("value", item.TeamFromDesc);
+        map.put(FIELD_LABEL, "备注:");
+        map.put("value", item.memo);
         list.add(map);
 
         map = new HashMap<String, Object>();
         map.put(FIELD_LABEL, "状态:");
-        map.put("value", item.Status);
+        map.put("value", item.StatusName);
         list.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put(FIELD_LABEL, "系统代码:");
+        map.put("value", item.TeamIndex);
+        list.add(map);
+
         return list;
     }
 }

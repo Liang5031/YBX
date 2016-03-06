@@ -21,6 +21,8 @@ import com.ybx.guider.fragment.RealNameListFragment;
 import com.ybx.guider.fragment.TeamInfoFragment;
 import com.ybx.guider.fragment.TeamLogListFragment;
 import com.ybx.guider.fragment.TeamScheduleFragment;
+import com.ybx.guider.parameters.ParamUtils;
+import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.TeamItem;
 
 public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.OnFragmentInteractionListener,
@@ -34,7 +36,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     private final static int NUM_ITEMS = 5;
     private PageAdapter mPageAdapter;
     private ViewPager mPager;
-//    public int mTeamId = -1;
+    //    public int mTeamId = -1;
     public TeamItem mTeamItem;
 
     private ImageView mTabMainInfo;
@@ -48,26 +50,37 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team);
 
-        mTabMainInfo = (ImageView)findViewById(R.id.tabMainInfo);
-        mTabTeamSchedule = (ImageView)findViewById(R.id.tabTeamSchedule);
-        mTabTeamDealRecord = (ImageView)findViewById(R.id.tabTeamDealRecord);
-        mTabTeamRealName = (ImageView)findViewById(R.id.tabTeamRealName);
-        mTabTeamLog = (ImageView)findViewById(R.id.tabTeamLog);
+        mTabMainInfo = (ImageView) findViewById(R.id.tabMainInfo);
+        mTabTeamSchedule = (ImageView) findViewById(R.id.tabTeamSchedule);
+        mTabTeamDealRecord = (ImageView) findViewById(R.id.tabTeamDealRecord);
+        mTabTeamRealName = (ImageView) findViewById(R.id.tabTeamRealName);
+        mTabTeamLog = (ImageView) findViewById(R.id.tabTeamLog);
 
         Intent i = getIntent();
-        mTeamItem=(TeamItem)i.getSerializableExtra(EXTRA_TEAM_ITEM);
+        mTeamItem = (TeamItem) i.getSerializableExtra(EXTRA_TEAM_ITEM);
 
-        mPageAdapter = new PageAdapter(getSupportFragmentManager());
+        mPageAdapter = new PageAdapter(getSupportFragmentManager(),mTeamItem);
         mPager = (ViewPager) findViewById(R.id.viewpager);
         mPager.addOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
                     public void onPageSelected(int position) {
-
+                        if (position == 0) {
+                            setSelectedItem(PAGE_MAIN_INFO);
+                        } else if (position == 1) {
+                            setSelectedItem(PAGE_TEAM_SCHEDULE);
+                        } else if (position == 2) {
+                            setSelectedItem(PAGE_TEAM_REAL_NAME);
+                        } else if (position == 3) {
+                            setSelectedItem(PAGE_TEAM_DEAL_RECORD);
+                        }else if (position == 4) {
+                            setSelectedItem(PAGE_TEAM_LOG);
+                        }
                     }
                 });
 
         mPager.setAdapter(mPageAdapter);
+        setSelectedItem(PAGE_MAIN_INFO);
     }
 
     @Override
@@ -96,8 +109,14 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     }
 
     public static class PageAdapter extends FragmentPagerAdapter {
-        public PageAdapter(FragmentManager fm) {
+        String teamDuration;
+        String teamOrderNumber;
+        String teamDesc;
+        TeamItem mItem;
+
+        public PageAdapter(FragmentManager fm, TeamItem item) {
             super(fm);
+            mItem = item;
         }
 
         @Override
@@ -107,15 +126,15 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
 
         @Override
         public Fragment getItem(int position) {
-            switch(position){
+            switch (position) {
                 case PAGE_MAIN_INFO:
                     return TeamInfoFragment.newInstance();
                 case PAGE_TEAM_SCHEDULE:
-                    return TeamScheduleFragment.newInstance();
+                    return TeamScheduleFragment.newInstance(mItem);
                 case PAGE_TEAM_REAL_NAME:
-                    return RealNameListFragment.newInstance();
+                    return RealNameListFragment.newInstance(mItem);
                 case PAGE_TEAM_DEAL_RECORD:
-                    return DealRecordListFragment.newInstance();
+                    return DealRecordListFragment.newInstance(mItem);
                 case PAGE_TEAM_LOG:
                     return TeamLogListFragment.newInstance();
                 default:
@@ -127,41 +146,37 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     public void onClickTabInfo(View view) {
         mPager.setCurrentItem(PAGE_MAIN_INFO);
         setSelectedItem(PAGE_MAIN_INFO);
-        setTitle(R.string.title_info);
     }
 
     public void onClickTabSchedule(View view) {
         mPager.setCurrentItem(PAGE_TEAM_SCHEDULE);
         setSelectedItem(PAGE_TEAM_SCHEDULE);
-        setTitle(R.string.title_schedule);
     }
 
     public void onClickTabRealName(View view) {
         mPager.setCurrentItem(PAGE_TEAM_REAL_NAME);
         setSelectedItem(PAGE_TEAM_REAL_NAME);
-        setTitle(R.string.title_real_name);
     }
 
     public void onClickTabDealRecord(View view) {
         mPager.setCurrentItem(PAGE_TEAM_DEAL_RECORD);
         setSelectedItem(PAGE_TEAM_DEAL_RECORD);
-        setTitle(R.string.title_deal_record);
     }
 
     public void onClickTabLog(View view) {
         mPager.setCurrentItem(PAGE_TEAM_LOG);
         setSelectedItem(PAGE_TEAM_LOG);
-        setTitle(R.string.title_log);
     }
 
-    public void setSelectedItem(int index){
-        switch (index){
+    public void setSelectedItem(int index) {
+        switch (index) {
             case PAGE_MAIN_INFO:
                 mTabMainInfo.setImageResource(R.mipmap.main_info_pressed);
                 mTabTeamSchedule.setImageResource(R.mipmap.team_schedule);
                 mTabTeamRealName.setImageResource(R.mipmap.team_real_name);
                 mTabTeamDealRecord.setImageResource(R.mipmap.team_deal_record);
                 mTabTeamLog.setImageResource(R.mipmap.team_log);
+                setTitle(R.string.title_info);
                 break;
             case PAGE_TEAM_SCHEDULE:
                 mTabMainInfo.setImageResource(R.mipmap.main_info);
@@ -169,6 +184,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                 mTabTeamRealName.setImageResource(R.mipmap.team_real_name);
                 mTabTeamDealRecord.setImageResource(R.mipmap.team_deal_record);
                 mTabTeamLog.setImageResource(R.mipmap.team_log);
+                setTitle(R.string.title_schedule);
                 break;
             case PAGE_TEAM_REAL_NAME:
                 mTabMainInfo.setImageResource(R.mipmap.main_info);
@@ -176,6 +192,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                 mTabTeamRealName.setImageResource(R.mipmap.team_real_name_pressed);
                 mTabTeamDealRecord.setImageResource(R.mipmap.team_deal_record);
                 mTabTeamLog.setImageResource(R.mipmap.team_log);
+                setTitle(R.string.title_real_name);
                 break;
             case PAGE_TEAM_DEAL_RECORD:
                 mTabMainInfo.setImageResource(R.mipmap.main_info);
@@ -183,6 +200,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                 mTabTeamRealName.setImageResource(R.mipmap.team_real_name);
                 mTabTeamDealRecord.setImageResource(R.mipmap.team_deal_record_pressed);
                 mTabTeamLog.setImageResource(R.mipmap.team_log);
+                setTitle(R.string.title_deal_record);
                 break;
             case PAGE_TEAM_LOG:
                 mTabMainInfo.setImageResource(R.mipmap.main_info);
@@ -190,6 +208,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                 mTabTeamRealName.setImageResource(R.mipmap.team_real_name);
                 mTabTeamDealRecord.setImageResource(R.mipmap.team_deal_record);
                 mTabTeamLog.setImageResource(R.mipmap.team_log_pressed);
+                setTitle(R.string.title_log);
                 break;
             default:
                 break;

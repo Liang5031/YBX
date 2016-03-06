@@ -1,9 +1,5 @@
 package com.ybx.guider.responses;
 
-import android.util.Log;
-
-import com.ybx.guider.utils.URLUtils;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -13,15 +9,15 @@ import java.util.ArrayList;
 /**
  * Created by chenlia1 on 2016/2/4.
  */
-public class TeamQueryResponse extends XMLResponse {
+public class TeamListResponse extends XMLResponse {
     public int mPageCount;
     public int mPageIndex;
     public int mIsLastPage;
-    public ArrayList<TeamItem> mTeamItems;
+    public ArrayList<TeamItem> mItems;
     TeamItem mItem;
 
     public void startDocument(XmlPullParser parser) throws IOException, XmlPullParserException {
-        mTeamItems = new ArrayList<TeamItem>();
+        mItems = new ArrayList<TeamItem>();
     }
 
     public void startTag(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -89,7 +85,7 @@ public class TeamQueryResponse extends XMLResponse {
     public void endTag(XmlPullParser parser) {
         String TAG = parser.getName();
         if (ResponseUtils.TAG_ITEM.equalsIgnoreCase(TAG)) {
-            mTeamItems.add(mItem);
+            mItems.add(mItem);
         }
     }
 }
