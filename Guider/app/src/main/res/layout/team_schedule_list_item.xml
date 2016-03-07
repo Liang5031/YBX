@@ -8,8 +8,8 @@
     android:paddingRight="15dp"
     android:paddingTop="15dp">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -20,69 +20,80 @@
             android:layout_alignParentLeft="true"
             android:text="吃"
             android:textColor="@color/colorRed"
+            android:textSize="32dp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/schedule_date"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/schedule_TranType"
-            android:text="2016/01/10" />
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/schedule_TimeRequire"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/schedule_date"
-            android:text="上午09:00" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/schedule_TranName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/schedule_TimeRequire"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="大成山水国际大酒店" />
+                <TextView
+                    android:id="@+id/schedule_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2016/01/10" />
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/schedule_TimeRequire"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/schedule_date"
+                    android:text="上午09:00" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/schedule_TranName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/schedule_TimeRequire"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="大成山水国际大酒店" />
 
+            </RelativeLayout>
 
-        <TextView
-            android:id="@+id/schedule_TripType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="[行程内]" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/schedule_ProviderAppMode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/schedule_TripType"
-            android:text="支持预约" />
+                <TextView
+                    android:id="@+id/schedule_TripType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="[行程内]" />
 
-        <TextView
-            android:id="@+id/schedule_Desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/schedule_ProviderAppMode"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="对当前行程的说明。。。。。。" />
+                <TextView
+                    android:id="@+id/schedule_ProviderAppMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/schedule_TripType"
+                    android:text="支持预约" />
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/schedule_Desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/schedule_ProviderAppMode"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="对当前行程的说明。。。。。。" />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/hideItems"
@@ -93,7 +104,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -124,7 +135,7 @@
                 android:text="事项:" />
 
             <TextView
-                android:id="@+id/schedule_ProviderNumber"
+                android:id="@+id/schedule_TranName2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -145,7 +156,7 @@
                 android:text="行程说明:" />
 
             <TextView
-                android:id="@+id/schedule_TripDesc"
+                android:id="@+id/schedule_Desc2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -238,7 +249,6 @@
                 android:text="对当前预约情况的描述。。。。。。" />
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -250,6 +260,7 @@
                 style="@style/BottonNormal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:focusable="false"
                 android:text="标识完成" />
@@ -259,46 +270,54 @@
                 style="@style/BottonNormal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:focusable="false"
                 android:text="取消行程" />
 
-            <!-- <Button
-                 android:id="@+id/btnStartAppo"
-                 style="@style/BottonNormal"
-                 android:layout_width="0dp"
-                 android:layout_height="wrap_content"
-                 android:layout_marginLeft="5dp"
-                 android:layout_weight="1"
-                 android:onClick="onClickCancel"
-                 android:focusable="false"
-                 android:text="发起预约" />
+            <Button
+                android:id="@+id/btnStartAppo"
+                style="@style/BottonNormal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:onClick="onClickCancel"
+                android:text="发起预约" />
 
-             <Button
-                 android:id="@+id/btnCancelAppo"
-                 style="@style/BottonNormal"
-                 android:layout_width="0dp"
-                 android:layout_height="wrap_content"
-                 android:layout_marginLeft="5dp"
-                 android:layout_weight="1"
-                 android:onClick="onClickCancel"
-                 android:focusable="false"
-                 android:text="撤销预约" />
+            <Button
+                android:id="@+id/btnCancelAppo"
+                style="@style/BottonNormal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:onClick="onClickCancel"
+                android:text="撤销预约" />
 
-             <Button
-                 android:id="@+id/btnChangeAppo"
-                 style="@style/BottonNormal"
-                 android:layout_width="0dp"
-                 android:layout_height="wrap_content"
-                 android:layout_marginLeft="5dp"
-                 android:layout_weight="1"
-                 android:onClick="onClickCancel"
-                 android:focusable="false"
-                 android:text="改签预约" />-->
+            <Button
+                android:id="@+id/btnChangeAppo"
+                style="@style/BottonNormal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:onClick="onClickCancel"
+                android:text="改签预约" />
 
+            <Button
+                android:id="@+id/btnSync"
+                style="@style/BottonNormal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:onClick="onClickSync"
+                android:text="同步" />
         </LinearLayout>
     </LinearLayout>
-
-
 </LinearLayout>

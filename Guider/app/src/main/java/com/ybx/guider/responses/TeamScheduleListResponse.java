@@ -38,9 +38,17 @@ public class TeamScheduleListResponse extends XMLResponse {
         }else if (ResponseUtils.TAG_TIME_REQUIRE.equalsIgnoreCase(TAG)) {
             mItem.TimeRequire = parser.nextText();;
         }else if (ResponseUtils.TAG_TRIP_TYPE.equalsIgnoreCase(TAG)) {
-            mItem.TripType = parser.nextText();;
+            try {
+                mItem.TripType = Integer.valueOf(parser.nextText());
+            } catch(NumberFormatException e){
+                mItem.TripType = TeamScheduleItem.TRIP_TYPE_UNKNOW;
+            }
         }else if (ResponseUtils.TAG_TRAN_TYPE.equalsIgnoreCase(TAG)) {
-            mItem.TranType = parser.nextText();;
+            try {
+                mItem.TranType = Integer.valueOf(parser.nextText());
+            } catch(NumberFormatException e){
+                mItem.TranType = TeamScheduleItem.TRAN_TYPE_UNKNOW;
+            }
         }else if (ResponseUtils.TAG_TRAN_NAME.equalsIgnoreCase(TAG)) {
             mItem.TranName = parser.nextText();;
         }else if (ResponseUtils.TAG_PROVIDER_NUMBER.equalsIgnoreCase(TAG)) {
@@ -50,13 +58,21 @@ public class TeamScheduleListResponse extends XMLResponse {
         }else if (ResponseUtils.TAG_DESC.equalsIgnoreCase(TAG)) {
             mItem.Desc = parser.nextText();;
         }else if (ResponseUtils.TAG_STATUS.equalsIgnoreCase(TAG)) {
-            mItem.Status = parser.nextText();;
+            try {
+                mItem.Status = Integer.valueOf(parser.nextText());
+            } catch(NumberFormatException e){
+                mItem.Status = TeamScheduleItem.TRIP_STATUS_UNKNOW;
+            }
         }else if (ResponseUtils.TAG_APPO_NUMBER.equalsIgnoreCase(TAG)) {
             mItem.AppoNumber = parser.nextText();;
         }else if (ResponseUtils.TAG_APPO_DESC.equalsIgnoreCase(TAG)) {
             mItem.AppoDesc = parser.nextText();;
         }else if (ResponseUtils.TAG_PROVIDER_APP_MODE.equalsIgnoreCase(TAG)) {
-            mItem.ProviderAppMode = parser.nextText();;
+            try {
+                mItem.ProviderAppMode = Integer.valueOf(parser.nextText());
+            } catch(NumberFormatException e){
+                mItem.ProviderAppMode = TeamScheduleItem.PROVIDER_APP_MODE_UNKNOW;
+            }
         }
     }
 

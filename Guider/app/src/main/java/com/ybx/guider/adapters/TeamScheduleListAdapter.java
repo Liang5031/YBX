@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ybx.guider.R;
 import com.ybx.guider.responses.ResponseUtils;
@@ -52,23 +51,71 @@ public class TeamScheduleListAdapter extends BaseAdapter {
         return position;
     }
 
+    void hideAllButton(View view) {
+        view.findViewById(R.id.btnFinish).setVisibility(View.GONE);
+        view.findViewById(R.id.btnCancelSchedule).setVisibility(View.GONE);
+        view.findViewById(R.id.btnStartAppo).setVisibility(View.GONE);
+        view.findViewById(R.id.btnCancelAppo).setVisibility(View.GONE);
+        view.findViewById(R.id.btnChangeAppo).setVisibility(View.GONE);
+        view.findViewById(R.id.btnSync).setVisibility(View.GONE);
+    }
+
+    void setButtonVisibility(TeamScheduleItem item, View view) {
+        hideAllButton(view);
+        int status = item.getStatus();
+
+        switch (status) {
+            case TeamScheduleItem.TRIP_STATUS_INIT:
+                if (TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()
+                        || TeamScheduleItem.PROVIDER_APP_MODE_REMOTE == item.getProviderAppMode()) {
+                    view.findViewById(R.id.btnStartAppo).setVisibility(View.VISIBLE);
+                }
+                break;
+
+            case TeamScheduleItem.TRIP_STATUS_BOOKING:/* fall through */
+            case TeamScheduleItem.TRIP_STATUS_BOOK_SUCCESS:
+                view.findViewById(R.id.btnCancelAppo).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnChangeAppo).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnSync).setVisibility(View.VISIBLE);
+                break;
+
+            case TeamScheduleItem.TRIP_STATUS_BOOKING_CANCEL:
+                if (TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()
+                        || TeamScheduleItem.PROVIDER_APP_MODE_REMOTE == item.getProviderAppMode()) {
+                    view.findViewById(R.id.btnStartAppo).setVisibility(View.VISIBLE);
+                }
+                break;
+
+            case TeamScheduleItem.TRIP_STATUS_DONE:/* fall through */
+            case TeamScheduleItem.TRIP_STATUS_TRIP_CANCEL:
+                view.findViewById(R.id.btnFinish).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnCancelSchedule).setVisibility(View.VISIBLE);
+                break;
+            default:
+                break;
+        }
+    }
+
     void initViews(View view, int position) {
         if (mAllItems != null && mAllItems.size() > 0) {
-
             TeamScheduleItem item = mAllItems.get(position);
-            ((TextView) view.findViewById(R.id.schedule_date)).setText(ResponseUtils.formatDate(item.Date));
-            ((TextView) view.findViewById(R.id.schedule_TimeRequire)).setText(item.TimeRequire);
-            ((TextView) view.findViewById(R.id.schedule_TripType)).setText(item.TripType);
-            ((TextView) view.findViewById(R.id.schedule_TranName)).setText(item.TranName);
-            ((TextView) view.findViewById(R.id.schedule_Desc)).setText(item.Desc);
-//            ((TextView) view.findViewById(R.id.schedule_status)).setText(item.Status);
-//            ((TextView) view.findViewById(R.id.schedule_TripIndex)).setText(item.TripIndex);
-            ((TextView) view.findViewById(R.id.schedule_TranType)).setText(item.TranType);
-            ((TextView) view.findViewById(R.id.schedule_ProviderNumber)).setText(item.ProviderNumber);
-            ((TextView) view.findViewById(R.id.schedule_ProviderName)).setText(item.ProviderName);
-            ((TextView) view.findViewById(R.id.schedule_AppoNumber)).setText(item.AppoNumber);
-            ((TextView) view.findViewById(R.id.schedule_AppoDesc)).setText(item.AppoDesc);
-            ((TextView) view.findViewById(R.id.schedule_ProviderAppMode)).setText(item.ProviderAppMode);
+            ((TextView) view.findViewById(R.id.schedule_TranType)).setText(item.getTranTypeValue());
+            ((TextView) view.findViewById(R.id.schedule_date)).setText(ResponseUtils.formatDate(item.getDate()));
+            ((TextView) view.findViewById(R.id.schedule_TimeRequire)).setText(item.getTimeRequire());
+            ((TextView) view.findViewById(R.id.schedule_TranName)).setText(item.geTranName());
+            ((TextView) view.findViewById(R.id.schedule_TripType)).setText(item.getTripTypeValue());
+            ((TextView) view.findViewById(R.id.schedule_ProviderAppMode)).setText(item.getProviderAppModeValue());
+            ((TextView) view.findViewById(R.id.schedule_Desc)).setText(item.getDesc());
+            ((TextView) view.findViewById(R.id.schedule_TimeRequire2)).setText(item.getTimeRequire());
+            ((TextView) view.findViewById(R.id.schedule_TranName2)).setText(item.geTranName());
+            ((TextView) view.findViewById(R.id.schedule_Desc2)).setText(item.getDesc());
+            ((TextView) view.findViewById(R.id.schedule_ProviderName)).setText(item.getProviderName());
+            ((TextView) view.findViewById(R.id.schedule_status)).setText(item.getStatusValue());
+            ((TextView) view.findViewById(R.id.schedule_AppoNumber)).setText(item.getAppoNumber());
+            ((TextView) view.findViewById(R.id.schedule_AppoDesc)).setText(item.getAppoDesc());
+//            ((TextView) view.findViewById(R.id.schedule_TripIndex)).setText(item.getTripIndex());
+
+            setButtonVisibility(item, view);
         }
     }
 
@@ -78,13 +125,13 @@ public class TeamScheduleListAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(R.layout.team_schedule_list_item, null);
-            initViews(convertView, position);
             holder = new Holder();
             holder.hideItems = convertView.findViewById(R.id.hideItems);
             convertView.setTag(holder);
         } else {
             holder = (Holder) convertView.getTag();
         }
+        initViews(convertView, position);
 
         if (mLastPosition == position) {
             holder.hideItems.setVisibility(mLastVisibility);

@@ -135,6 +135,51 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         setHasOptionsMenu(true);
     }
 
+    void hideAllButton(View view) {
+        view.findViewById(R.id.btnFinish).setVisibility(View.GONE);
+        view.findViewById(R.id.btnCancelSchedule).setVisibility(View.GONE);
+        view.findViewById(R.id.btnStartAppo).setVisibility(View.GONE);
+        view.findViewById(R.id.btnCancelAppo).setVisibility(View.GONE);
+        view.findViewById(R.id.btnChangeAppo).setVisibility(View.GONE);
+        view.findViewById(R.id.btnSync).setVisibility(View.GONE);
+    }
+
+    void setButtonVisibility(TeamScheduleItem item, View view) {
+        hideAllButton(view);
+        int status = item.getStatus();
+
+        switch (status) {
+            case TeamScheduleItem.TRIP_STATUS_INIT:
+                if (TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()
+                        || TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()) {
+                    view.findViewById(R.id.btnStartAppo).setVisibility(View.VISIBLE);
+                }
+                break;
+
+            case TeamScheduleItem.TRIP_STATUS_BOOKING:/* fall through */
+            case TeamScheduleItem.TRIP_STATUS_BOOK_SUCCESS:
+                view.findViewById(R.id.btnCancelAppo).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnChangeAppo).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnSync).setVisibility(View.VISIBLE);
+                break;
+
+            case TeamScheduleItem.TRIP_STATUS_BOOKING_CANCEL:
+                if (TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()
+                        || TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()) {
+                    view.findViewById(R.id.btnStartAppo).setVisibility(View.VISIBLE);
+                }
+                break;
+
+            case TeamScheduleItem.TRIP_STATUS_DONE:/* fall through */
+            case TeamScheduleItem.TRIP_STATUS_TRIP_CANCEL:
+                view.findViewById(R.id.btnFinish).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnCancelSchedule).setVisibility(View.VISIBLE);
+                break;
+            default:
+                break;
+        }
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 //        super.onListItemClick(l, v, position, id);
@@ -147,6 +192,7 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         mAdapter.changeVisibility(v, position);
 //        mAdapter.notifyDataSetChanged();
 
+//        setButtonVisibility(l.getAdapter().getItem(position), view);
 //        ScheduleDetailDialog dialog = ScheduleDetailDialog.newInstance(mTeamItem);
 //        dialog.show(getActivity().getSupportFragmentManager(), "detail");
     }
