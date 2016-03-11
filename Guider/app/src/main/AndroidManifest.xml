@@ -18,19 +18,16 @@
             android:theme="@style/AppTheme.Notitle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name=".activity.ResetPasswordActivity"
             android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.LoginActivity" />
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value=".activity.LoginActivity" />-->
         </activity>
-
         <activity
             android:name=".activity.SignUpActivity"
             android:screenOrientation="portrait">
@@ -38,7 +35,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LoginActivity" />
         </activity>
-
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
@@ -49,8 +45,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-
-        <activity android:name=".activity.ChangePasswordActivity">
+        <activity
+            android:name=".activity.ChangePasswordActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity android:name=".activity.ReservationActivity">
         </activity>
     </application>
 

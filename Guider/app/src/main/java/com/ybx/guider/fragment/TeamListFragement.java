@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -15,6 +18,8 @@ import com.android.volley.VolleyError;
 import com.ybx.guider.R;
 import com.ybx.guider.activity.TeamActivity;
 import com.ybx.guider.adapters.TeamListAdapter;
+import com.ybx.guider.dialog.AcceptTeamDialog;
+import com.ybx.guider.dialog.FinishTeamDialog;
 import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
@@ -59,11 +64,38 @@ public class TeamListFragement extends ListFragment implements Response.Listener
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mAllTeamItems.clear();
+            requestTeamList(mTeamStatus, ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
+        }
+    }
+
+/*    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.team_info_fragment_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.team_info_accept:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }*/
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mTeamStatus = getArguments().getInt(ARG_TEAM_STATUS);
         }
+        setHasOptionsMenu(true);
         mAllTeamItems = new ArrayList<TeamItem>();
     }
 
@@ -85,14 +117,15 @@ public class TeamListFragement extends ListFragment implements Response.Listener
 
         mEmptyView = (TextView) this.getView().findViewById(R.id.empty);
         this.getListView().setEmptyView(mEmptyView);
-        requestTeamList(mTeamStatus, ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
-        mAllTeamItems.clear();
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mRequest.cancel();
+        if(mRequest!=null) {
+            mRequest.cancel();
+        }
     }
 
     public void requestTeamList(Integer status, Integer page, boolean isRefresh) {

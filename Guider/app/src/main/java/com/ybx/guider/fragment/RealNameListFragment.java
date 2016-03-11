@@ -76,9 +76,17 @@ public class RealNameListFragment extends ListFragment implements Response.Liste
 
         mEmptyView = (TextView) this.getView().findViewById(R.id.empty);
         this.getListView().setEmptyView(mEmptyView);
-        mAllItems.clear();
-        requestRealNameInfo(ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
 
+
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mAllItems.clear();
+            requestRealNameInfo(ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
+        }
     }
 
     @Override

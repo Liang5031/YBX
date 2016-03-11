@@ -165,7 +165,7 @@ public class TeamScheduleItem implements Serializable {
     }
 
     public String getAppoDesc(){
-        return AppoNumber;
+        return AppoDesc;
     }
 
     public int getProviderAppMode(){
@@ -175,8 +175,9 @@ public class TeamScheduleItem implements Serializable {
     public String getProviderAppModeValue(){
           switch(ProviderAppMode){
             case PROVIDER_APP_MODE_NOT_SUPPORT:
-                return PROVIDER_APP_MODE_VALUE_NOT_SUPPORT;
             case PROVIDER_APP_MODE_CLOUD:
+                return PROVIDER_APP_MODE_VALUE_NOT_SUPPORT;
+
             case PROVIDER_APP_MODE_REMOTE:
                 return PROVIDER_APP_MODE_VALUE_SUPPORT;
             default:

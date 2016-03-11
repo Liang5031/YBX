@@ -24,6 +24,7 @@ import com.ybx.guider.fragment.TeamScheduleFragment;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.TeamItem;
+import com.ybx.guider.responses.TeamScheduleItem;
 
 public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.OnFragmentInteractionListener,
         AcceptTeamDialog.AcceptTeamDialogListener, FinishTeamDialog.FinishTeamDialogListener {
@@ -61,6 +62,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
 
         mPageAdapter = new PageAdapter(getSupportFragmentManager(),mTeamItem);
         mPager = (ViewPager) findViewById(R.id.viewpager);
+//        mPager.setOffscreenPageLimit();
         mPager.addOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
@@ -109,9 +111,6 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     }
 
     public static class PageAdapter extends FragmentPagerAdapter {
-        String teamDuration;
-        String teamOrderNumber;
-        String teamDesc;
         TeamItem mItem;
 
         public PageAdapter(FragmentManager fm, TeamItem item) {
@@ -213,5 +212,37 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
             default:
                 break;
         }
+    }
+
+    public void onClickFinish(View view){
+        Toast.makeText(this, "onClickFinish", Toast.LENGTH_LONG).show();
+    }
+
+    public void onClickCancelSchedule(View view){
+        Toast.makeText(this, "onClickCancelSchedule", Toast.LENGTH_LONG).show();
+    }
+
+    public void onClickStartAppo(View view){
+        TeamScheduleItem item = (TeamScheduleItem)view.getTag();
+        Intent intent = new Intent(this, ReservationActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_ITEM, mTeamItem);
+        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_SCHEDULE_ITEM, item);
+        intent.putExtras(bundle);
+        startActivity(intent);
+
+//        Toast.makeText(this, "onClickStartAppo", Toast.LENGTH_LONG).show();
+    }
+
+    public void onClickCancelAppo(View view){
+        Toast.makeText(this, "onClickCancelAppo", Toast.LENGTH_LONG).show();
+    }
+
+    public void onClickChangeAppo(View view){
+        Toast.makeText(this, "onClickChangeAppo", Toast.LENGTH_LONG).show();
+    }
+
+    public void onClickSync(View view){
+        Toast.makeText(this, "onClickSync", Toast.LENGTH_LONG).show();
     }
 }

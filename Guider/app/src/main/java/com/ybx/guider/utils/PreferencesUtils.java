@@ -15,6 +15,7 @@ public class PreferencesUtils {
     public static String PREFS_KEY_GUIDER_NUMBER = "guider_number";
     public static String PREFS_KEY_PASSWORD = "password";
     public static String PREFS_KEY_AUTO_LOGIN = "auto_login";
+    public static String PREFS_KEY_PAGE_INDEX = "page_index";
 
     public static void clearLoginInfo(Context ctx) {
         SharedPreferences sp = ctx.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
@@ -73,5 +74,17 @@ public class PreferencesUtils {
     public static String getPassword(Context ctx) {
         SharedPreferences sp = ctx.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
         return sp.getString(PREFS_KEY_PASSWORD, "");
+    }
+
+    public static void setLastPageIndex(Context ctx, int index) {
+        SharedPreferences sp = ctx.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(PREFS_KEY_PAGE_INDEX, index);
+        editor.commit();
+    }
+
+    public static int getLastPageIndex(Context ctx) {
+        SharedPreferences sp = ctx.getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
+        return sp.getInt(PREFS_KEY_PAGE_INDEX, 0);
     }
 }

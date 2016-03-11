@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="15dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:paddingTop="15dp">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ybx.guider.activity.ReservationActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_gravity="center"
             android:text="吃"
             android:textColor="@color/colorRed"
             android:textSize="32dp"
@@ -85,241 +88,208 @@
                     android:id="@+id/schedule_Desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="2dp"
                     android:layout_toRightOf="@id/schedule_ProviderAppMode"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="对当前行程的说明。。。。。。" />
 
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/appoDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="无预约" />
         </LinearLayout>
     </LinearLayout>
 
+
     <LinearLayout
-        android:id="@+id/hideItems"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="时间要求:" />
+                android:text="预约日期:" />
 
-            <TextView
-                android:id="@+id/schedule_TimeRequire2"
+            <EditText
+                android:id="@+id/date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="4"
-                android:text="上午09:00" />
+                android:layout_weight="2"
+                android:inputType="text"
+                android:onClick="onClickDate"
+                android:textSize="14dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="事项:" />
+                android:text="预约服务:" />
 
-            <TextView
-                android:id="@+id/schedule_TranName2"
+            <Spinner
+                android:id="@+id/spinnerServices"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="4"
-                android:text="12345678" />
+                android:layout_height="30dp"
+                android:layout_weight="2"
+                android:spinnerMode="dialog"></Spinner>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="行程说明:" />
+                android:text="预约时段:" />
 
-            <TextView
-                android:id="@+id/schedule_Desc2"
+            <Spinner
+                android:id="@+id/spinnerTimeSlot"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="4"
-                android:text="天门山风景区管理处" />
+                android:layout_height="30dp"
+                android:layout_weight="2"
+                android:spinnerMode="dialog"></Spinner>
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="供应商:" />
+                android:text="人数:" />
 
-            <TextView
-                android:id="@+id/schedule_ProviderName"
+            <EditText
+                android:id="@+id/peopleCount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="4"
-                android:text="天门山风景区管理处" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="状态:" />
-
-            <TextView
-                android:id="@+id/schedule_status"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="4"
-                android:text="待执行" />
+                android:layout_weight="2"
+                android:hint="必须填写"
+                android:inputType="number"
+                android:textSize="14dp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="预约编号:" />
+                android:text="成员描述:" />
 
-            <TextView
-                android:id="@+id/schedule_AppoNumber"
+            <EditText
+                android:id="@+id/memberDesc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="4"
-                android:text="341341341" />
+                android:layout_weight="2"
+                android:inputType="text"
+                android:textSize="14dp" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="2dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="预约描述:" />
+                android:text="随团手机1:" />
 
-            <TextView
-                android:id="@+id/schedule_AppoDesc"
+            <EditText
+                android:id="@+id/phone1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="4"
-                android:text="对当前预约情况的描述。。。。。。" />
+                android:layout_weight="2"
+                android:hint="必须填写"
+                android:inputType="phone"
+                android:textSize="14dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="随团手机2:" />
+
+            <EditText
+                android:id="@+id/phone2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:inputType="phone"
+                android:textSize="14dp" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnFinish"
-                style="@style/BottonNormal"
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:focusable="false"
-                android:onClick="onClickFinish"
-                android:text="标识完成" />
+                android:text="预约备注:" />
 
-            <Button
-                android:id="@+id/btnCancelSchedule"
-                style="@style/BottonNormal"
+            <EditText
+                android:id="@+id/memo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:onClick="onClickCancelSchedule"
-                android:text="取消行程" />
-
-            <Button
-                android:id="@+id/btnStartAppo"
-                style="@style/BottonNormal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:onClick="onClickStartAppo"
-                android:text="发起预约" />
-
-            <Button
-                android:id="@+id/btnCancelAppo"
-                style="@style/BottonNormal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:onClick="onClickCancelAppo"
-                android:text="撤销预约" />
-
-            <Button
-                android:id="@+id/btnChangeAppo"
-                style="@style/BottonNormal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:onClick="onClickChangeAppo"
-                android:text="改签预约" />
-
-            <Button
-                android:id="@+id/btnSync"
-                style="@style/BottonNormal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:focusable="false"
-                android:onClick="onClickSync"
-                android:text="同步" />
+                android:layout_weight="2"
+                android:inputType="text"
+                android:textSize="14dp" />
         </LinearLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/startAppo"
+        style="@style/BottonNormal"
+        android:layout_width="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:onClick="onClickStartAppo"
+        android:text="发起预约" />
 </LinearLayout>

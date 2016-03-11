@@ -75,9 +75,16 @@ public class TeamLogListFragment extends ListFragment implements Response.Listen
 
         mEmptyView = (TextView) this.getView().findViewById(R.id.empty);
         this.getListView().setEmptyView(mEmptyView);
-        mAllItems.clear();
         setCount(0);
-        requestTeamLog(ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mAllItems.clear();
+            requestTeamLog(ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
+        }
     }
 
     @Override

@@ -33,7 +33,7 @@ import java.util.Map;
  * Use the {@link TeamInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TeamInfoFragment extends ListFragment{
+public class TeamInfoFragment extends ListFragment {
     private static String FIELD_LABEL = "label";
     private static String FIELD_VALUE = "value";
 
@@ -64,7 +64,7 @@ public class TeamInfoFragment extends ListFragment{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch(id){
+        switch (id) {
             case R.id.team_info_accept:
                 AcceptTeamDialog newFragment = new AcceptTeamDialog();
                 newFragment.show(getActivity().getSupportFragmentManager(), "accept");
@@ -81,10 +81,10 @@ public class TeamInfoFragment extends ListFragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final String[] from = new String[] {FIELD_LABEL, FIELD_VALUE};
-        final int[]  to = new int[] {R.id.label, R.id.value};
+        final String[] from = new String[]{FIELD_LABEL, FIELD_VALUE};
+        final int[] to = new int[]{R.id.label, R.id.value};
 
-        TeamItem item = ((TeamActivity)this.getActivity()).mTeamItem;
+        TeamItem item = ((TeamActivity) this.getActivity()).mTeamItem;
 
         SimpleAdapter adapter = new SimpleAdapter(
                 this.getActivity(), getData(item),
@@ -129,28 +129,32 @@ public class TeamInfoFragment extends ListFragment{
         void onFragmentInteraction(Uri uri);
     }
 
-    String getCountStr(String adultCount, String childCount){
+    String getCountStr(String adultCount, String childCount) {
         Integer adult = Integer.valueOf(adultCount);
         Integer child = Integer.valueOf(childCount);
         Integer total = adult + child;
         String countStr = "";
 
-        if(total>0){
+        if (total > 0) {
             countStr += "共" + total + "人，";
         }
 
-        if(adult>0 ){
+        if (adult > 0) {
             countStr += adult + "成人";
         }
 
-        if(child>0){
+        if (child > 0) {
             countStr += child + "小孩";
         }
 
-        return  countStr;
+        return countStr;
     }
 
     private List<Map<String, Object>> getData(TeamItem item) {
+
+        if (item == null)
+            return null;
+
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -171,7 +175,7 @@ public class TeamInfoFragment extends ListFragment{
 
         map = new HashMap<String, Object>();
         map.put(FIELD_LABEL, "游客人数:");
-        map.put("value", getCountStr(item.PepleCount1,item.PepleCount2));
+        map.put("value", getCountStr(item.PepleCount1, item.PepleCount2));
         list.add(map);
 
         map = new HashMap<String, Object>();

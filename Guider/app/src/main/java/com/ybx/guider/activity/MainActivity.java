@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import com.ybx.guider.fragment.AccountVerifyFragment;
 import com.ybx.guider.fragment.SettingsFragment;
 import com.ybx.guider.fragment.TeamListFragement;
 import com.ybx.guider.responses.ResponseUtils;
+import com.ybx.guider.utils.PreferencesUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -92,6 +94,11 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        ActionBar ab = getSupportActionBar();
+//        // Enable the Up button
+//        ab.setDisplayHomeAsUpEnabled(true);
+//        ab.setHomeButtonEnabled(true);
+
         mTabOngoing = (ImageView) findViewById(R.id.tabOngoing);
         mTabWaiting = (ImageView) findViewById(R.id.tabWaiting);
         mTabFinish = (ImageView) findViewById(R.id.tabFinish);
@@ -105,10 +112,18 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
 
         Intent i = getIntent();
         String status = i.getStringExtra(EXTRA_ACCOUNT_STATUS);
-        if (status != null && status.equals(ResponseUtils.ACCOUNT_STATUS_ACTIVE)) {
+        if( status == null ){
             findViewById(R.id.tabs).setVisibility(View.VISIBLE);
             setTitle(R.string.app_name_short);
             mPager.setAdapter(mMainAdapter);
+            mPager.setCurrentItem(PreferencesUtils.getLastPageIndex(this), false);
+            setSelectedItem(PreferencesUtils.getLastPageIndex(this));
+        } else if (status != null && status.equals(ResponseUtils.ACCOUNT_STATUS_ACTIVE)) {
+            findViewById(R.id.tabs).setVisibility(View.VISIBLE);
+            setTitle(R.string.app_name_short);
+            mPager.setAdapter(mMainAdapter);
+            mPager.setCurrentItem(PAGE_ONGOING, false);
+            setSelectedItem(PAGE_ONGOING);
         } else if (status != null && status.equals(ResponseUtils.ACCOUNT_STATUS_CHECKING)) {
             findViewById(R.id.tabs).setVisibility(View.GONE);
             setTitle(R.string.verify_title);
@@ -130,8 +145,6 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
                         }
                     }
                 });
-
-        setSelectedItem(PAGE_ONGOING);
     }
 
     @Override
@@ -164,12 +177,6 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
         public int getItemPosition(Object object) {
             return POSITION_NONE;
         }
-
-//        @Override
-//        public void destroyItem(ViewGroup container, int position, Object object) {
-//            Fragment f = (Fragment) object;
-//            container.removeView(f.getView());
-//        }
 
         @Override
         public int getCount() {
@@ -214,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     }
 
     public void setSelectedItem(int index) {
+        PreferencesUtils.setLastPageIndex(this, index);
         switch (index) {
             case PAGE_ONGOING:
                 mTabOngoing.setImageResource(R.mipmap.ongoing_pressed);

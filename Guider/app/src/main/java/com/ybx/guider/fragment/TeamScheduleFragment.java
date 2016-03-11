@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -72,41 +73,37 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         return fragment;
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-//        menu.setHeaderTitle("文件操作");
-        // add context menu item
-//        menu.add(0, MENU_ITEM_SYNC, Menu.NONE, R.string.menu_sync);
-        menu.add(0, MENU_ITEM_CANCEL_SCHEDULE, Menu.NONE, R.string.menu_cancel_schedule);
-        menu.add(0, MENU_ITEM_FINISH_SCHEDULE, Menu.NONE, R.string.menu_finish_schedule);
-        menu.add(0, MENU_ITEM_CHANGE_RESERVATION, Menu.NONE, R.string.menu_cancel_reservation);
-        menu.add(0, MENU_ITEM_MAKE_RESERVATION, Menu.NONE, R.string.menu_make_reservation);
-        menu.add(0, MENU_ITEM_CANCEL_RESERVATION, Menu.NONE, R.string.menu_cancel_reservation);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case 1:
-                // do something
-                break;
-            case 2:
-                // do something
-                break;
-            case 3:
-                // do something
-                break;
-            case 4:
-                // do something
-                break;
-            default:
-                return super.onContextItemSelected(item);
-        }
-        return true;
-    }
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        menu.add(0, MENU_ITEM_CANCEL_SCHEDULE, Menu.NONE, R.string.menu_cancel_schedule);
+//        menu.add(0, MENU_ITEM_FINISH_SCHEDULE, Menu.NONE, R.string.menu_finish_schedule);
+//        menu.add(0, MENU_ITEM_CHANGE_RESERVATION, Menu.NONE, R.string.menu_cancel_reservation);
+//        menu.add(0, MENU_ITEM_MAKE_RESERVATION, Menu.NONE, R.string.menu_make_reservation);
+//        menu.add(0, MENU_ITEM_CANCEL_RESERVATION, Menu.NONE, R.string.menu_cancel_reservation);
+//    }
+//
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//
+//        switch (item.getItemId()) {
+//            case 1:
+//                // do something
+//                break;
+//            case 2:
+//                // do something
+//                break;
+//            case 3:
+//                // do something
+//                break;
+//            case 4:
+//                // do something
+//                break;
+//            default:
+//                return super.onContextItemSelected(item);
+//        }
+//        return true;
+//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -119,9 +116,20 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         int id = item.getItemId();
         switch (id) {
             case R.id.action_refresh:
+                mAllTeamSchduleItems.clear();
+                requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mAllTeamSchduleItems.clear();
+            requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
         }
     }
 
@@ -135,66 +143,10 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         setHasOptionsMenu(true);
     }
 
-    void hideAllButton(View view) {
-        view.findViewById(R.id.btnFinish).setVisibility(View.GONE);
-        view.findViewById(R.id.btnCancelSchedule).setVisibility(View.GONE);
-        view.findViewById(R.id.btnStartAppo).setVisibility(View.GONE);
-        view.findViewById(R.id.btnCancelAppo).setVisibility(View.GONE);
-        view.findViewById(R.id.btnChangeAppo).setVisibility(View.GONE);
-        view.findViewById(R.id.btnSync).setVisibility(View.GONE);
-    }
-
-    void setButtonVisibility(TeamScheduleItem item, View view) {
-        hideAllButton(view);
-        int status = item.getStatus();
-
-        switch (status) {
-            case TeamScheduleItem.TRIP_STATUS_INIT:
-                if (TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()
-                        || TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()) {
-                    view.findViewById(R.id.btnStartAppo).setVisibility(View.VISIBLE);
-                }
-                break;
-
-            case TeamScheduleItem.TRIP_STATUS_BOOKING:/* fall through */
-            case TeamScheduleItem.TRIP_STATUS_BOOK_SUCCESS:
-                view.findViewById(R.id.btnCancelAppo).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.btnChangeAppo).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.btnSync).setVisibility(View.VISIBLE);
-                break;
-
-            case TeamScheduleItem.TRIP_STATUS_BOOKING_CANCEL:
-                if (TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()
-                        || TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()) {
-                    view.findViewById(R.id.btnStartAppo).setVisibility(View.VISIBLE);
-                }
-                break;
-
-            case TeamScheduleItem.TRIP_STATUS_DONE:/* fall through */
-            case TeamScheduleItem.TRIP_STATUS_TRIP_CANCEL:
-                view.findViewById(R.id.btnFinish).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.btnCancelSchedule).setVisibility(View.VISIBLE);
-                break;
-            default:
-                break;
-        }
-    }
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-//        super.onListItemClick(l, v, position, id);
-//        int idx = v.getId();
-//        switch(idx){
-//
-//
-//        }
-
         mAdapter.changeVisibility(v, position);
 //        mAdapter.notifyDataSetChanged();
-
-//        setButtonVisibility(l.getAdapter().getItem(position), view);
-//        ScheduleDetailDialog dialog = ScheduleDetailDialog.newInstance(mTeamItem);
-//        dialog.show(getActivity().getSupportFragmentManager(), "detail");
     }
 
     @Override
@@ -217,7 +169,6 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
             ((TextView) this.getView().findViewById(R.id.teamOrderNumber)).setText(ResponseUtils.getTeamOrderNumber(mTeamItem.TeamOrderNumber));
             ((TextView) this.getView().findViewById(R.id.teamDesc)).setText(mTeamItem.TripDesc);
         }
-        requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
     }
 
     @Override
@@ -234,6 +185,14 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
     public void onDestroy() {
         super.onDestroy();
         mRequest.cancel();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mTeamItem!=null) {
+            requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
+        }
     }
 
     void setScheduleCount(int count) {

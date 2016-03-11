@@ -150,8 +150,8 @@ public class Param {
         addParam(ParamUtils.KEY_USER, guiderNumber);
     }
 
-    public void setProviderId(Integer providerId) {
-        addParam(ParamUtils.KEY_PROVIDER_ID, providerId.toString());
+    public void setProviderId(String providerId) {
+        addParam(ParamUtils.KEY_PROVIDER_ID, providerId);
     }
 
     public void setNewPassword(String password) {

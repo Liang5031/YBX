@@ -56,14 +56,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="显示所有" />
+            android:text="显示全部行程" />
 
         <RadioButton
             android:id="@+id/rbToday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
-            android:text="仅显示当日" />
+            android:text="仅显示今日行程" />
 
     </RadioGroup>
 

@@ -66,30 +66,35 @@ public class TeamScheduleListAdapter extends BaseAdapter {
 
         switch (status) {
             case TeamScheduleItem.TRIP_STATUS_INIT:
-                if (TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()
-                        || TeamScheduleItem.PROVIDER_APP_MODE_REMOTE == item.getProviderAppMode()) {
+                if (TeamScheduleItem.PROVIDER_APP_MODE_REMOTE == item.getProviderAppMode()) {
                     view.findViewById(R.id.btnStartAppo).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.btnStartAppo).setTag(item);
                 }
                 break;
 
             case TeamScheduleItem.TRIP_STATUS_BOOKING:/* fall through */
             case TeamScheduleItem.TRIP_STATUS_BOOK_SUCCESS:
                 view.findViewById(R.id.btnCancelAppo).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnCancelAppo).setTag(item);
                 view.findViewById(R.id.btnChangeAppo).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnChangeAppo).setTag(item);
                 view.findViewById(R.id.btnSync).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnSync).setTag(item);
                 break;
 
             case TeamScheduleItem.TRIP_STATUS_BOOKING_CANCEL:
-                if (TeamScheduleItem.PROVIDER_APP_MODE_CLOUD == item.getProviderAppMode()
-                        || TeamScheduleItem.PROVIDER_APP_MODE_REMOTE == item.getProviderAppMode()) {
+                if (TeamScheduleItem.PROVIDER_APP_MODE_REMOTE == item.getProviderAppMode()) {
                     view.findViewById(R.id.btnStartAppo).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.btnStartAppo).setTag(item);
                 }
                 break;
 
             case TeamScheduleItem.TRIP_STATUS_DONE:/* fall through */
             case TeamScheduleItem.TRIP_STATUS_TRIP_CANCEL:
                 view.findViewById(R.id.btnFinish).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnFinish).setTag(item);
                 view.findViewById(R.id.btnCancelSchedule).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.btnCancelSchedule).setTag(item);
                 break;
             default:
                 break;

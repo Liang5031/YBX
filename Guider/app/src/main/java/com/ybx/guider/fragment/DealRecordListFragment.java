@@ -84,8 +84,15 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
         setCount(mAllItems.size());
         mEmptyView = (TextView) this.getView().findViewById(R.id.empty);
         this.getListView().setEmptyView(mEmptyView);
+    }
 
-        requestRealNameInfo(ParamUtils.VALUE_FIRST_PAGE_INDEX);
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mAllItems.clear();
+            requestRealNameInfo(ParamUtils.VALUE_FIRST_PAGE_INDEX);
+        }
     }
 
     @Override

@@ -28,7 +28,9 @@ public class ParamUtils {
     public static String PAGE_DEPT_ADD = "YUNRelationObjects_Add.aspx";
     public static String PAGE_PROVIDER_QUERY = "YUNProvider_Query.aspx";
     public static String PAGE_CUSTOMER_QUERY = "YUNCustomer_Query.aspx";
-
+    public static String PAGE_SERVICE_ITEM_QUERY = "YUNServiceItem_Query.aspx";
+    public static String PAGE_SERVICE_TIME_SPAN_QUERY = "YUNServiceTimeSpan_Query.aspx";
+    public static String PAGE_START_APPOINTMENT = "YUNAppointment_Add.aspx";
 
     /* 签名方式 -- String(8) 取值：MD5，默认：MD5 暂时只支持MD5 */
     public static String KEY_SIGN_TYPE = "sign_type";

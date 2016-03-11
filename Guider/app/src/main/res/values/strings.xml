@@ -79,11 +79,11 @@
     <string name="tab_info">基本信息</string>
     <string name="title_info">团队基本信息</string>
     <string name="tab_schedule">行程安排</string>
-    <string name="title_schedule">团队行程安排</string>
+    <string name="title_schedule">行程安排</string>
     <string name="tab_real_name">实名信息</string>
-    <string name="title_real_name">团队实名信息</string>
+    <string name="title_real_name">实名信息</string>
     <string name="tab_deal_record">成交记录</string>
-    <string name="title_deal_record">团队成交记录</string>
+    <string name="title_deal_record">成交记录</string>
     <string name="tab_log">日志信息</string>
     <string name="title_log">团队日志信息</string>
 

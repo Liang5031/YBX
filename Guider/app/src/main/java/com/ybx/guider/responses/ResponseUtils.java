@@ -82,7 +82,24 @@ public class ResponseUtils {
     public static String TAG_OBJ_NAME = "objectname";        /* 对象名称	DXMC	Nvarchar(64)	 	当事件类型为7，8，9时，此值为供应商名称；当事件类型为2时，此值为导游证号及姓名 */
 
 
+    /* YUNServiceItem_Query.aspx */
+    public static String TAG_SERVICE_CODE = "ServiceCode";                      /* 服务项目ID (string(2)) */
+    public static String TAG_SERVICE_NAME = "ServiceName";                      /* 服务项目名称(string(32) */
+    public static String TAG_SERVICE_AVAILABLE = "Useable";                     /* 是否启用(CHAR(1)，“1”表示启用，“0”表示禁用 */
+    public static String TAG_SERVICE_CAPACITY = "Capacity";                      /* 通量容量(int)，单个时段内的通行能力，单位为“人次/小时” */
+    public static String TAG_SERVICE_SUB_SECTION = "IfSubsection";              /* 是否分时段(char(1))，“1”表示分时段，“0”表示不分时段 */
+    public static String TAG_BOOKING_ACCEPT = "AppointmentAble";                /* 是否接受预约(char(1),“1”表示接受预约，“0”表示不接受预约 */
+    public static String TAG_SERVICE_BOOKING_RATE = "AppointmentMaxRate";        /* 受理预约的最大比率（int），是指当前服务项目受理预约可占总通量容量的最大比率，单位为百分比 */
 
+    /* YUNServiceTimeSpan_Query.aspx */
+    public static String TAG_SERVICE_DATE = "Date";                         /* 日期(string(8))，格式YYYYMMDD */
+    public static String TAG_TIME_SPAN_INDEX = "TimeSpanIndex";               /* 时段的预号(int)，当天的第一个时段序号为1，第二个时段序号为2，依次类推 */
+    public static String TAG_START_TIME = "StartTime";                    /* 起始时间，char(5)，HH:mm，24小时制 */
+    public static String TAG_END_TIME = "EndTime";                      /* 截止时间，char(5)，HH:mm，24小时制 */
+    public static String TAG_APPO_COUNT = "AppointmentCount";             /* 已受理的预约量，int，其值为“已确认的预约及已成交的预约的和” */
+    public static String TAG_APPO_USER_COUNT = "AppointmentUseCount";          /* 已成交的预约量，Int */
+    public static String TAG_OTHER_USER_COUNT = "OtherUseCount";                 /* 其他占用量，Int，其他占用量包括已占用的时段资源和除预约以外的其他形式的其他形式的预约资源 */
+    public static String TAG_APPO_AVAILABLE = "UseToAppointmentAble";        /* 是否可用于预约，CHAR（1），“1”表示可以，这个值根据系统的规则产生，有余量，不代表可以预约，例如，系统要求提前一天预约，则当天的时段仅可以查看余量，但这些时段都不能用于预约 */
 
 
 
