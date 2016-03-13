@@ -18,9 +18,9 @@ public class AcceptTeamDialog extends DialogFragment {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     public interface AcceptTeamDialogListener {
-        public void onAcceptTeamDialogPositiveClick(DialogFragment dialog);
+        public void onAcceptTeamDialogOK(DialogFragment dialog);
 
-        public void onAcceptTeamDialogNegativeClick(DialogFragment dialog);
+        public void onAcceptTeamDialogCancel(DialogFragment dialog);
     }
 
     // Use this instance of the interface to deliver action events
@@ -49,13 +49,13 @@ public class AcceptTeamDialog extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity
-                        mListener.onAcceptTeamDialogPositiveClick(AcceptTeamDialog.this);
+                        mListener.onAcceptTeamDialogOK(AcceptTeamDialog.this);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the negative button event back to the host activity
-                        mListener.onAcceptTeamDialogNegativeClick(AcceptTeamDialog.this);
+                        mListener.onAcceptTeamDialogCancel(AcceptTeamDialog.this);
                     }
                 });
         return builder.create();

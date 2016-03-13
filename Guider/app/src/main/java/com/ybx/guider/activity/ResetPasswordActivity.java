@@ -29,6 +29,9 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
     private EditText mConfirmPassword;
     private EditText mVerifyCode;
     private CheckBox mRememberPWD;
+    XMLRequest<GetVerifyCodeResponse> mGetVerifyCodeRequest;
+    XMLRequest<ResetPasswordResponse> mResetPWDRequest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +72,9 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
         };
 
         String url = URLUtils.generateURL(param);
-        XMLRequest<GetVerifyCodeResponse> request = new XMLRequest<GetVerifyCodeResponse>(url,  listener, errorListener, new GetVerifyCodeResponse());
-        request.setShouldCache(false);
-        VolleyRequestQueue.getInstance(this).add(request);
+        mGetVerifyCodeRequest = new XMLRequest<GetVerifyCodeResponse>(url,  listener, errorListener, new GetVerifyCodeResponse());
+        mGetVerifyCodeRequest.setShouldCache(false);
+        VolleyRequestQueue.getInstance(this).add(mGetVerifyCodeRequest);
     }
 
     private boolean inputCheck(){
@@ -108,13 +111,27 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
             Param param = new Param(ParamUtils.PAGE_GUIDER_RESET_PASSWORD);
             param.setUser(mGuiderNumber.getText().toString());
             param.setVerifyCode(mVerifyCode.getText().toString());
-            param.setNewPassword(EncryptUtils.md5(mNewPassword.getText().toString()));
+//            param.setNewPassword(EncryptUtils.md5(mNewPassword.getText().toString()));
+            param.setNewPassword(EncryptUtils.md5(mNewPassword.getText().toString()).toUpperCase());
 
             String url = URLUtils.generateURL(param);
-            XMLRequest<ResetPasswordResponse> request = new XMLRequest<ResetPasswordResponse>(url, this, this, new ResetPasswordResponse());
-            request.setShouldCache(false);
-            VolleyRequestQueue.getInstance(this).add(request);
+            mResetPWDRequest = new XMLRequest<ResetPasswordResponse>(url, this, this, new ResetPasswordResponse());
+            mResetPWDRequest.setShouldCache(false);
+            VolleyRequestQueue.getInstance(this).add(mResetPWDRequest);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mResetPWDRequest!=null){
+            mResetPWDRequest.cancel();
+        }
+
+        if(mGetVerifyCodeRequest!=null){
+            mGetVerifyCodeRequest.cancel();
+        }
+
     }
 
     @Override
@@ -128,6 +145,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
             Toast.makeText(this, "重置密码成功！", Toast.LENGTH_LONG).show();
             if(mRememberPWD.isChecked()){
                 PreferencesUtils.setGuiderNumber(this,mGuiderNumber.getText().toString());
+                PreferencesUtils.setPassword(this, mNewPassword.getText().toString());
             }
         } else {
             Toast.makeText(this, response.mReturnMSG, Toast.LENGTH_LONG).show();

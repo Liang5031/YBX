@@ -49,27 +49,24 @@ public class Param {
             }
         });
 
-        try {
-            for (Map.Entry<String, String> entry : paramsList) {
-                encodedParams.append(URLEncoder.encode(entry.getKey(), getParamsEncoding()));
-                encodedParams.append('=');
-                encodedParams.append(URLEncoder.encode(entry.getValue(), getParamsEncoding()));
-                encodedParams.append('&');
-            }
 
-            if (encodedParams.length() > 0) {
-                /* Remove the last '&' */
-                String params = encodedParams.substring(0, encodedParams.length() - 1);
-                if (URLUtils.isDebug) {
-                    Log.d(URLUtils.TAG_DEBUG, "Ordered parameter string: " + params);
-                }
-                return params;
-            }
-
-            return encodedParams.toString();
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("Encoding not supported: " + getParamsEncoding(), uee);
+        for (Map.Entry<String, String> entry : paramsList) {
+            encodedParams.append(entry.getKey());
+            encodedParams.append('=');
+            encodedParams.append(entry.getValue());
+            encodedParams.append('&');
         }
+
+        if (encodedParams.length() > 0) {
+                /* Remove the last '&' */
+            String params = encodedParams.substring(0, encodedParams.length() - 1);
+            if (URLUtils.isDebug) {
+                Log.d(URLUtils.TAG_DEBUG, "Ordered parameter string: " + params);
+            }
+            return params;
+        }
+
+        return encodedParams.toString();
     }
 
     public String getParamString() {
@@ -103,7 +100,7 @@ public class Param {
 
     public void addParam(String key, String value) {
         if (mParams != null && !mParams.containsKey(key)
-                && value !=null && !value.isEmpty()) {
+                && value != null && !value.isEmpty()) {
             mParams.put(key, value);
         }
     }
@@ -121,7 +118,7 @@ public class Param {
         return "";
     }
 
-    public void setPageName(String pageName){
+    public void setPageName(String pageName) {
         mPageName = pageName;
     }
 

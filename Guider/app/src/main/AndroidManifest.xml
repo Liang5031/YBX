@@ -51,8 +51,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.ReservationActivity">
+        <activity android:name=".activity.ReservationActivity"
+            android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".activity.DeptManageActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
     </application>
 
 </manifest>

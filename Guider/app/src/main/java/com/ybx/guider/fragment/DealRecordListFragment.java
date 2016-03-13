@@ -105,6 +105,14 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
         super.onDetach();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mRequest!=null){
+            mRequest.cancel();
+        }
+    }
+
     void requestRealNameInfo(Integer page) {
         Param param = new Param(ParamUtils.PAGE_TEAM_DEAL_QUERY);
         param.setUser(PreferencesUtils.getGuiderNumber(this.getContext()));

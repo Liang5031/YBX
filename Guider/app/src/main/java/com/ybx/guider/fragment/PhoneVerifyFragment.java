@@ -27,6 +27,7 @@ public class PhoneVerifyFragment extends Fragment {
     private EditText mVerifyCode;
     private OnFragmentInteractionListener mListener;
     private String mPhoneNumber;
+    XMLRequest<GetVerifyCodeResponse> mRequest;
 
     public PhoneVerifyFragment() {
 
@@ -127,6 +128,14 @@ public class PhoneVerifyFragment extends Fragment {
         void onPhoneVerified(String phoneNumber, String verifyCode);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mRequest!=null){
+            mRequest.cancel();
+        }
+    }
+
     public void GetVerifyCode() {
         Param param = new Param(ParamUtils.PAGE_GET_CHECK_CODE);
         param.removeParam(ParamUtils.KEY_SIGN_TYPE);
@@ -153,9 +162,9 @@ public class PhoneVerifyFragment extends Fragment {
         };
 
         String url = URLUtils.generateURL(param);
-        XMLRequest<GetVerifyCodeResponse> request = new XMLRequest<GetVerifyCodeResponse>(url, listener, errorListener, new GetVerifyCodeResponse());
-        request.setShouldCache(false);
+        mRequest = new XMLRequest<GetVerifyCodeResponse>(url, listener, errorListener, new GetVerifyCodeResponse());
+        mRequest.setShouldCache(false);
 
-        VolleyRequestQueue.getInstance(PhoneVerifyFragment.this.getContext()).add(request);
+        VolleyRequestQueue.getInstance(PhoneVerifyFragment.this.getContext()).add(mRequest);
     }
 }

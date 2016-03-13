@@ -119,7 +119,9 @@ public class RealNameListFragment extends ListFragment implements Response.Liste
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mRequest.cancel();
+        if(mRequest!=null) {
+            mRequest.cancel();
+        }
     }
 
     @Override

@@ -135,7 +135,9 @@ public class TeamLogListFragment extends ListFragment implements Response.Listen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mRequest.cancel();
+        if(mRequest!=null) {
+            mRequest.cancel();
+        }
     }
 
     void requestTeamLog(Integer page, boolean isRefresh) {

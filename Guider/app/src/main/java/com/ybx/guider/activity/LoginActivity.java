@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     public static String START_TYPE_CHANGE_ACCOUNT = "CHANGE_ACCOUNT";
     public static String START_TYPE_LOGOUT = "LOGOUT";
     public static String START_TYPE_DEFAULT = "DEFAULT";
+    XMLRequest<LoginResponse> mRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,14 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         mGuiderNumber.setText(PreferencesUtils.getGuiderNumber(this));
         mPassword.setText(PreferencesUtils.getPassword(this));
         mIsAutoLogin.setChecked(PreferencesUtils.getIsAutoLogin(this));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mRequest!=null){
+            mRequest.cancel();
+        }
     }
 
     public void onClickForgot(View view) {
@@ -114,8 +123,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         param.setSign(sign);
 
         String url = URLUtils.generateURL(param);
-        XMLRequest<LoginResponse> request = new XMLRequest<LoginResponse>(url, this, this, new LoginResponse());
-        request.setShouldCache(false);
+        mRequest = new XMLRequest<LoginResponse>(url, this, this, new LoginResponse());
+        mRequest.setShouldCache(false);
 
 //        request.setCacheTime(10*60);
 /*
@@ -125,7 +134,11 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 */
 
-        VolleyRequestQueue.getInstance(this).add(request);
+        VolleyRequestQueue.getInstance(this).add(mRequest);
+
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
+//        this.finish();
     }
 
     @Override

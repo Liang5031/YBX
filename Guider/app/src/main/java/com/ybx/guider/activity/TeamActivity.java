@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.ybx.guider.R;
 import com.ybx.guider.dialog.AcceptTeamDialog;
 import com.ybx.guider.dialog.FinishTeamDialog;
@@ -21,10 +23,17 @@ import com.ybx.guider.fragment.RealNameListFragment;
 import com.ybx.guider.fragment.TeamInfoFragment;
 import com.ybx.guider.fragment.TeamLogListFragment;
 import com.ybx.guider.fragment.TeamScheduleFragment;
+import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
+import com.ybx.guider.requests.XMLRequest;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.TeamItem;
 import com.ybx.guider.responses.TeamScheduleItem;
+import com.ybx.guider.responses.XMLResponse;
+import com.ybx.guider.utils.EncryptUtils;
+import com.ybx.guider.utils.PreferencesUtils;
+import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.VolleyRequestQueue;
 
 public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.OnFragmentInteractionListener,
         AcceptTeamDialog.AcceptTeamDialogListener, FinishTeamDialog.FinishTeamDialogListener {
@@ -45,6 +54,9 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     private ImageView mTabTeamDealRecord;
     private ImageView mTabTeamRealName;
     private ImageView mTabTeamLog;
+
+    XMLRequest<XMLResponse> mAcceptRequest;
+    XMLRequest<XMLResponse> mFinishRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,22 +98,23 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     }
 
     @Override
-    public void onAcceptTeamDialogPositiveClick(DialogFragment dialog) {
+    public void onAcceptTeamDialogOK(DialogFragment dialog) {
+        requestAcceptTeam();
+//        Toast.makeText(this, "OK pressed", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onAcceptTeamDialogCancel(DialogFragment dialog) {
+//        Toast.makeText(this, "Cancel pressed", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFinishTeamDialogOK(DialogFragment dialog) {
         Toast.makeText(this, "OK pressed", Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onAcceptTeamDialogNegativeClick(DialogFragment dialog) {
-        Toast.makeText(this, "Cancel pressed", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onFinishTeamDialogPositiveClick(DialogFragment dialog) {
-        Toast.makeText(this, "OK pressed", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onFinishTeamDialogNegativeClick(DialogFragment dialog) {
+    public void onFinishTeamDialogCancel(DialogFragment dialog) {
         Toast.makeText(this, "Cancel pressed", Toast.LENGTH_LONG).show();
     }
 
@@ -244,5 +257,85 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
 
     public void onClickSync(View view){
         Toast.makeText(this, "onClickSync", Toast.LENGTH_LONG).show();
+    }
+
+    void requestAcceptTeam() {
+        Param param = new Param(ParamUtils.PAGE_TEAM_ACCEPT);
+        param.setUser(PreferencesUtils.getGuiderNumber(this));
+        param.setTeamIndex(mTeamItem.TeamIndex);
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
+        param.setSign(sign);
+
+        Response.Listener<XMLResponse> listener = new Response.Listener<XMLResponse>() {
+            @Override
+            public void onResponse(XMLResponse response) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+                    Toast.makeText(TeamActivity.this, "接团成功!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(TeamActivity.this, "接团失败!", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TeamActivity.this, "接团失败!", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mAcceptRequest = new XMLRequest<XMLResponse>(url, listener, errorListener, new XMLResponse());
+        mAcceptRequest.setShouldCache(false);
+
+        VolleyRequestQueue.getInstance(this).add(mAcceptRequest);
+    }
+
+    void requestFinishTeam() {
+        Param param = new Param(ParamUtils.PAGE_TEAM_COMPLETE);
+        param.setUser(PreferencesUtils.getGuiderNumber(this));
+        param.setTeamIndex(mTeamItem.TeamIndex);
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
+        param.setSign(sign);
+
+        Response.Listener<XMLResponse> listener = new Response.Listener<XMLResponse>() {
+            @Override
+            public void onResponse(XMLResponse response) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+                    Toast.makeText(TeamActivity.this, "完成带团成功!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(TeamActivity.this, "完成带团失败!", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TeamActivity.this, "完成带团失败!", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mFinishRequest = new XMLRequest<XMLResponse>(url, listener, errorListener, new XMLResponse());
+        mFinishRequest.setShouldCache(false);
+
+        VolleyRequestQueue.getInstance(this).add(mFinishRequest);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mFinishRequest!=null){
+            mFinishRequest.cancel();
+        }
+
+        if(mAcceptRequest!=null){
+            mAcceptRequest.cancel();
+        }
     }
 }

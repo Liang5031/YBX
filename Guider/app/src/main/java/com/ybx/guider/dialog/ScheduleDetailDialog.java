@@ -41,8 +41,7 @@ public class ScheduleDetailDialog extends DialogFragment {
          * implement this interface in order to receive event callbacks.
          * Each method passes the DialogFragment in case the host needs to query it. */
     public interface ScheduleDetailListener {
-//        public void onFinishTeamDialogPositiveClick(DialogFragment dialog);
-//        public void onFinishTeamDialogNegativeClick(DialogFragment dialog);
+
 
     }
 

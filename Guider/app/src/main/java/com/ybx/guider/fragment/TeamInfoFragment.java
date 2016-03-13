@@ -81,17 +81,23 @@ public class TeamInfoFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        setHasOptionsMenu(true);
+        this.getActivity().setTitle(R.string.title_info);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         final String[] from = new String[]{FIELD_LABEL, FIELD_VALUE};
         final int[] to = new int[]{R.id.label, R.id.value};
-
         TeamItem item = ((TeamActivity) this.getActivity()).mTeamItem;
-
         SimpleAdapter adapter = new SimpleAdapter(
                 this.getActivity(), getData(item),
                 R.layout.team_info_list_item, from, to);
         this.setListAdapter(adapter);
-        setHasOptionsMenu(true);
-        this.getActivity().setTitle(R.string.title_info);
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.ybx.guider.R;
 import com.ybx.guider.activity.ChangePasswordActivity;
+import com.ybx.guider.activity.DeptManageActivity;
 import com.ybx.guider.activity.LoginActivity;
 import com.ybx.guider.adapters.TeamLogListAdapter;
 
@@ -102,6 +103,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
         Intent intent;
         switch(v.getId()){
             case R.id.add_department:
+                intent = new Intent(this.getContext(), DeptManageActivity.class);
+                startActivity(intent);
                 break;
             case R.id.apply_provider:
                 break;

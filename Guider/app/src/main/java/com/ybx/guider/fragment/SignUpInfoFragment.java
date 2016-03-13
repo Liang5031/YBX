@@ -41,6 +41,7 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
     private String mVerifyCode;
     private String mPhoneNumber;
     private ProgressDialog mProgressDialog;
+    XMLRequest<XMLResponse> mRequest;
 
     public SignUpInfoFragment() {
         // Required empty public constructor
@@ -177,6 +178,14 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
         void onSubmit(Uri uri);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mRequest!=null){
+            mRequest.cancel();
+        }
+    }
+
     public void requestSignUp() {
         mProgressDialog = ProgressDialog.show(this.getContext(), "正在登录", "请稍等...", true, false);
 
@@ -193,7 +202,7 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
         param.setPhoneNumber(mPhoneNumber);
         param.setFistLanguage(mFirstLanguage.getText().toString());
         param.setSecondLanguage(mSecondLanguage.getText().toString());
-        String hash = EncryptUtils.md5(mPassword.getText().toString());
+        String hash = EncryptUtils.md5(mPassword.getText().toString()).toUpperCase();
         param.setPassword(hash);
         param.setPhoto(PreferencesUtils.getGuiderNumber(this.getContext()) + ".jpg");
 
@@ -202,10 +211,10 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
 //        param.setSign(sign);
 
         String url = URLUtils.generateURL(param);
-        XMLRequest<XMLResponse> request = new XMLRequest<XMLResponse>(url, this, this, new XMLResponse());
-        request.setShouldCache(false);
+        mRequest = new XMLRequest<XMLResponse>(url, this, this, new XMLResponse());
+        mRequest.setShouldCache(false);
 
-        VolleyRequestQueue.getInstance(this.getContext()).add(request);
+        VolleyRequestQueue.getInstance(this.getContext()).add(mRequest);
     }
 
     @Override

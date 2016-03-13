@@ -1,15 +1,18 @@
 package com.ybx.guider.activity;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
+import com.ybx.guider.dialog.MyDatePickerDialog;
 import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
@@ -34,12 +38,15 @@ import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ReservationActivity extends AppCompatActivity implements Response.Listener<StartAppointmentResponse>, Response.ErrorListener {
     public static String EXTRA_TEAM_ITEM = "team_item";
     public static String EXTRA_TEAM_SCHEDULE_ITEM = "team_schedule_item";
-    String[] mEmptyList = {"无"};
+    String[] mEmptyList = {"没有可预约时段"};
     private Spinner mSpinnerServices;
     private Spinner mSpinnerTimeSlot;
     private ArrayAdapter<String> mServiceAdapter;
@@ -64,6 +71,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     XMLRequest<TimeSlotResponse> mTimeSlotRequest;
     XMLRequest<StartAppointmentResponse> mStartAppoRequest;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +95,6 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
         ((TextView) findViewById(R.id.schedule_Desc)).setText(mTeamScheduleItem.getDesc());
         ((TextView) findViewById(R.id.appoDesc)).setText(mTeamScheduleItem.getAppoDesc());
 
-
         mDate = (EditText) findViewById(R.id.date);
         mCount = (EditText) findViewById(R.id.peopleCount);
         mMemberDesc = (EditText) findViewById(R.id.memberDesc);
@@ -96,7 +103,9 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
         mMemo = (EditText) findViewById(R.id.memo);
 
         if (mTeamScheduleItem != null && mTeamItem != null) {
-            mDate.setText(ResponseUtils.formatDate(mTeamScheduleItem.getDate()));
+            SimpleDateFormat s = new SimpleDateFormat("yyyy/MM/dd");
+            String today = s.format(new Date());
+            mDate.setText(today);
             Integer count = Integer.valueOf(mTeamItem.PepleCount1) + Integer.valueOf(mTeamItem.PepleCount2);
             mCount.setText(count.toString());
             mMemberDesc.setText(mTeamItem.MemberDesc);
@@ -120,10 +129,12 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
                     return;
 
                 for (ServiceItem item : mServiceItemResponse.mItems) {
-                    if (mServiceItems[position].equalsIgnoreCase(item.ServiceName)) {
-                        mSelectedService = item.ServiceCode;
-                        mProgressDialog = ProgressDialog.show(ReservationActivity.this, "正在加载数据", "请稍等...", true, false);
-                        requestTimeSlot(mSelectedService);
+                    if (mServiceItems[position].contains(item.ServiceName)) {
+                        if (item.Useable.equalsIgnoreCase("1") && item.AppointmentAble.equalsIgnoreCase("1")) {
+                            mSelectedService = item.ServiceCode;
+                            mProgressDialog = ProgressDialog.show(ReservationActivity.this, "正在加载数据", "请稍等...", true, false);
+                            requestTimeSlot(mSelectedService);
+                        }
                     }
                 }
             }
@@ -153,10 +164,6 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
             }
         });
 
-        //设置默认值
-//        mSpinnerServices.setVisibility(View.VISIBLE);
-//        mSpinnerTimeSlot.setVisibility(View.VISIBLE);
-
         mProgressDialog = ProgressDialog.show(this, "正在加载数据", "请稍等...", true, false);
         requestServiceItem();
     }
@@ -177,12 +184,12 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
             return false;
         }
 
-        if (mCount == null || mCount.toString().isEmpty()) {
+        if (mCount == null || mCount.getText().toString().isEmpty()) {
             Toast.makeText(this, "人数不能为空！", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if (mPhone1 == null || mPhone1.toString().isEmpty()) {
+        if (mPhone1 == null || mPhone1.getText().toString().isEmpty()) {
             Toast.makeText(this, "随团手机1不能为空！", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -191,7 +198,6 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
             case android.R.id.home:
 //                NavUtils.navigateUpFromSameTask(this);
 //                Intent intent = new Intent(this, TeamActivity.class);
@@ -216,18 +222,24 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
         if (mTimeSlotRequest != null) {
             mTimeSlotRequest.cancel();
         }
+
+        if (mStartAppoRequest != null) {
+            mStartAppoRequest.cancel();
+        }
     }
 
     void updateServiceItem() {
-        ArrayList<String> serviceItems = new ArrayList<String>();
+        ArrayList serviceItems = new ArrayList();
         for (ServiceItem item : mServiceItemResponse.mItems) {
             if (item.Useable.equalsIgnoreCase("1") && item.AppointmentAble.equalsIgnoreCase("1")) {
-                serviceItems.add(item.ServiceName);
+                serviceItems.add(item.ServiceName + " - 允许预约");
+            } else {
+                serviceItems.add(item.ServiceName + " - 禁止预约");
             }
         }
-        mServiceItems = (String[]) serviceItems.toArray();
+
+        mServiceItems = (String[]) serviceItems.toArray(new String[serviceItems.size()]);
         mServiceAdapter = new ArrayAdapter<String>(ReservationActivity.this, R.layout.spinner_item, mServiceItems);
-//        mServiceAdapter = new ArrayAdapter<String>(ReservationActivity.this,R.layout.spinner_item,new String[]{"item1","item2","item3"});
         mServiceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerServices.setAdapter(mServiceAdapter);
     }
@@ -275,59 +287,117 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
         ArrayList<String> timeSlotItems = new ArrayList<String>();
         for (TimeSlotItem item : mTimeSlotResponse.mItems) {
             if (item.AppointmentAble.equalsIgnoreCase("1")) {
-                timeSlotItems.add(item.StartTime + " - " + item.EndTime);
+                int remain = 0;
+                try {
+                    remain = Integer.valueOf(item.Capacity) * Integer.valueOf(item.AppointmentMaxRate) - Integer.valueOf(item.AppointmentCount);
+                } catch (NumberFormatException e) {
+
+                }
+
+                if(item.TimeSpanIndex.length()==1){
+                    item.TimeSpanIndex = "0" + item.TimeSpanIndex;
+                }
+                String timeSlot = String.format("%s时段: (%s-%s)  余:%d", item.TimeSpanIndex, item.StartTime, item.EndTime, remain);
+                timeSlotItems.add(timeSlot);
+//                timeSlotItems.add(item.TimeSpanIndex + "时段: （" + item.StartTime + " - " + item.EndTime + " ） 余: " + remain);
             }
         }
-        mTimeSlotItems = (String[]) timeSlotItems.toArray();
+        mTimeSlotItems = (String[]) timeSlotItems.toArray(new String[timeSlotItems.size()]);
         mTimeSlotAdapter = new ArrayAdapter<String>(ReservationActivity.this, R.layout.spinner_item, mTimeSlotItems);
-//        mTimeSlotAdapter = new ArrayAdapter<String>(ReservationActivity.this,R.layout.spinner_item,new String[]{"item1","item2","item3"});
         mTimeSlotAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerTimeSlot.setAdapter(mTimeSlotAdapter);
     }
 
     void requestTimeSlot(String serviceCode) {
-        Param param = new Param(ParamUtils.PAGE_SERVICE_TIME_SPAN_QUERY);
-        param.setUser(PreferencesUtils.getGuiderNumber(this));
-        param.setProviderId(mTeamScheduleItem.getProviderNumber());
-        param.setServiceId(serviceCode);
-        param.setDate(mDate.getText().toString());
+        if (serviceCode != null && !serviceCode.isEmpty()) {
+            Param param = new Param(ParamUtils.PAGE_SERVICE_TIME_SPAN_QUERY);
+            param.setUser(PreferencesUtils.getGuiderNumber(this));
+            param.setProviderId(mTeamScheduleItem.getProviderNumber());
+            param.setServiceId(serviceCode);
+            param.setDate(ResponseUtils.fromDate(mDate.getText().toString()));
 
-        String orderParams = param.getParamStringInOrder();
-        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
-        param.setSign(sign);
+            String orderParams = param.getParamStringInOrder();
+            String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
+            param.setSign(sign);
 
-        String url = URLUtils.generateURL(param);
+            String url = URLUtils.generateURL(param);
 
-        Response.Listener<TimeSlotResponse> responseListener = new Response.Listener<TimeSlotResponse>() {
+            Response.Listener<TimeSlotResponse> responseListener = new Response.Listener<TimeSlotResponse>() {
 
-            @Override
-            public void onResponse(TimeSlotResponse response) {
-                mProgressDialog.dismiss();
-                if (response.mReturnCode.equalsIgnoreCase(ResponseUtils.RESULT_OK)) {
-                    mTimeSlotResponse = response;
-                    updateTimeSlotItem();
-                } else {
-                    Toast.makeText(ReservationActivity.this, "查询服务项目失败！", Toast.LENGTH_LONG).show();
+                @Override
+                public void onResponse(TimeSlotResponse response) {
+                    mProgressDialog.dismiss();
+                    if (response.mReturnCode.equalsIgnoreCase(ResponseUtils.RESULT_OK)) {
+                        mTimeSlotResponse = response;
+                        updateTimeSlotItem();
+                    } else {
+                        Toast.makeText(ReservationActivity.this, "查询服务时间段失败！", Toast.LENGTH_LONG).show();
+                        if (URLUtils.isDebug) {
+                            Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
+                            Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
+                        }
+
+                        mTimeSlotAdapter = new ArrayAdapter<String>(ReservationActivity.this, R.layout.spinner_item, mEmptyList);
+                        mTimeSlotAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        mSpinnerTimeSlot.setAdapter(mTimeSlotAdapter);
+                    }
                 }
-            }
-        };
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            };
+            Response.ErrorListener errorListener = new Response.ErrorListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
-                Toast.makeText(ReservationActivity.this, "查询服务时间段失败！", Toast.LENGTH_LONG).show();
-            }
-        };
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    mProgressDialog.dismiss();
+                    Toast.makeText(ReservationActivity.this, "查询服务时间段失败！", Toast.LENGTH_LONG).show();
+                    if (URLUtils.isDebug) {
+                        Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
+                    }
 
-        mTimeSlotRequest = new XMLRequest<TimeSlotResponse>(url, responseListener, errorListener, new TimeSlotResponse());
-        mTimeSlotRequest.setShouldCache(false);
+                    mTimeSlotAdapter = new ArrayAdapter<String>(ReservationActivity.this, R.layout.spinner_item, mEmptyList);
+                    mTimeSlotAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    mSpinnerTimeSlot.setAdapter(mTimeSlotAdapter);
+                }
+            };
 
-        VolleyRequestQueue.getInstance(this).add(mTimeSlotRequest);
+            mTimeSlotRequest = new XMLRequest<TimeSlotResponse>(url, responseListener, errorListener, new TimeSlotResponse());
+            mTimeSlotRequest.setShouldCache(false);
+
+            VolleyRequestQueue.getInstance(this).add(mTimeSlotRequest);
+        }
     }
 
-    public void onClickDate(View view){
+    DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            if (year != 0) {
+                String newDate = String.format("%04d/%02d/%02d", year, monthOfYear + 1, dayOfMonth);
 
+                SimpleDateFormat s = new SimpleDateFormat("yyyy/MM/dd");
+                String today = s.format(new Date());
+                if (newDate.compareTo(today) < 0) {
+                    Toast.makeText(ReservationActivity.this, "预约日期不能早于当天！", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (!newDate.equals(mDate.getText().toString())) {
+                    mDate.setText(newDate);
+                    requestTimeSlot(mSelectedService);
+                }
+            }
+        }
+    };
+
+    public void onClickDate(View view) {
+//        MyDatePickerDialog dialog = new MyDatePickerDialog();
+//        dialog.show(getSupportFragmentManager(), "datePicker");
+
+        int year = Integer.valueOf(mDate.getText().toString().substring(0, 4));
+        int month = Integer.valueOf(mDate.getText().toString().substring(5, 7));
+        int day = Integer.valueOf(mDate.getText().toString().substring(8, 10));
+
+        DatePickerDialog dlg = new DatePickerDialog(this, datePickerListener, year, month - 1, day);
+        dlg.setTitle("请选择预约日期");
+        dlg.show();
     }
 
     public void onClickStartAppo(View view) {
@@ -345,7 +415,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
         param.setUser(PreferencesUtils.getGuiderNumber(this));
         param.setTripItemIndex(mTeamScheduleItem.getTripIndex());
         param.setServiceId(mSelectedService);
-        param.setDate(mDate.getText().toString());
+        param.setDate(ResponseUtils.fromDate(mDate.getText().toString()));
         param.setTimeSpanIndex(mSelectedTimeSlot);
         param.setTeamMemberCount(mCount.getText().toString());
 
@@ -363,7 +433,6 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
             param.setReservatinoMemo(mMemo.getText().toString());
         }
 
-
         String orderParams = param.getParamStringInOrder();
         String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
         param.setSign(sign);
@@ -379,6 +448,9 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     public void onErrorResponse(VolleyError error) {
         mProgressDialog.dismiss();
         Toast.makeText(ReservationActivity.this, "预约失败！", Toast.LENGTH_LONG).show();
+        if (URLUtils.isDebug) {
+            Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
+        }
     }
 
     @Override
@@ -387,7 +459,11 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
         if (response.mReturnCode.equalsIgnoreCase(ResponseUtils.RESULT_OK)) {
             Toast.makeText(ReservationActivity.this, "预约成功！", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(ReservationActivity.this, "查询服务项目失败！", Toast.LENGTH_LONG).show();
+            Toast.makeText(ReservationActivity.this, "预约失败！", Toast.LENGTH_LONG).show();
+            if (URLUtils.isDebug) {
+                Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
+                Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
+            }
         }
     }
 }

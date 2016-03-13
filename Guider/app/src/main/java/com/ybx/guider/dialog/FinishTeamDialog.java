@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 
 import com.ybx.guider.R;
-import com.ybx.guider.responses.TeamItem;
 
 /**
  * Created by chenl on 2016/2/18.
@@ -20,9 +19,9 @@ public class FinishTeamDialog extends DialogFragment {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     public interface FinishTeamDialogListener {
-        public void onFinishTeamDialogPositiveClick(DialogFragment dialog);
+        public void onFinishTeamDialogOK(DialogFragment dialog);
 
-        public void onFinishTeamDialogNegativeClick(DialogFragment dialog);
+        public void onFinishTeamDialogCancel(DialogFragment dialog);
     }
 
     // Use this instance of the interface to deliver action events
@@ -53,13 +52,13 @@ public class FinishTeamDialog extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity
-                        mListener.onFinishTeamDialogPositiveClick(FinishTeamDialog.this);
+                        mListener.onFinishTeamDialogOK(FinishTeamDialog.this);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the negative button event back to the host activity
-                        mListener.onFinishTeamDialogNegativeClick(FinishTeamDialog.this);
+                        mListener.onFinishTeamDialogCancel(FinishTeamDialog.this);
                     }
                 });
         return builder.create();

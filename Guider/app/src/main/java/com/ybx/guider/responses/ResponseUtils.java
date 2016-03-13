@@ -129,6 +129,17 @@ public class ResponseUtils {
     }
 
     /**
+     *  YYYY/MM/DD to YYYYMMDD
+     */
+    public static String fromDate(String date) {
+        if (date != null && date.length() == 10) {
+            return date.substring(0, 4) + date.substring(5, 7) +  date.substring(8, 10);
+        }
+        return "";
+    }
+
+
+    /**
      * YYYYMMDDHHMMSS to YYYY/MM/DD HH:MM
      */
     public static String formatDateTime(String dateTime) {

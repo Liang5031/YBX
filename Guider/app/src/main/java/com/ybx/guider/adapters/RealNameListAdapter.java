@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class RealNameListAdapter extends BaseAdapter {
     private Context mContext;
     ArrayList<RealNameItem> mItems;
+    int mIndex = 0;
 
     public RealNameListAdapter(Context context, ArrayList<RealNameItem> items) {
         this.mContext = context;
@@ -49,7 +50,7 @@ public class RealNameListAdapter extends BaseAdapter {
     void initViews(View view, int position) {
         if (mItems != null && mItems.size() > 0) {
             RealNameItem item = mItems.get(position);
-//            ((TextView) view.findViewById(R.id.realNameIdx)).setText(position);
+            ((TextView) view.findViewById(R.id.realNameIdx)).setText(Integer.valueOf(item.Index).toString());
             ((TextView) view.findViewById(R.id.number)).setText(item.Number);
             ((TextView) view.findViewById(R.id.name)).setText(item.Name);
             ((TextView) view.findViewById(R.id.type)).setText(ResponseUtils.getIdentidyType(item.Type));
@@ -61,8 +62,8 @@ public class RealNameListAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(R.layout.real_name_list_item, null);
-            initViews(convertView, position);
         }
+        initViews(convertView, position);
         return convertView;
     }
 }

@@ -67,11 +67,9 @@ public class TeamListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(R.layout.team_list_item_new, null);
+            convertView = inflater.inflate(R.layout.team_list_item, null);
             initViews(convertView, position);
         }
         return convertView;
     }
-
-
 }

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +33,11 @@ import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 /**
  * create an instance of this fragment.
@@ -49,6 +54,8 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
 
     TeamScheduleListAdapter mAdapter;
     ArrayList<TeamScheduleItem> mAllTeamSchduleItems;
+    ArrayList<TeamScheduleItem> mTodayItems;
+    RadioButton mRBToday;
     XMLRequest<TeamScheduleListResponse> mRequest;
 
     TeamItem mTeamItem;
@@ -117,6 +124,7 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         switch (id) {
             case R.id.action_refresh:
                 mAllTeamSchduleItems.clear();
+                mTodayItems.clear();
                 requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, true);
                 return true;
             default:
@@ -129,6 +137,7 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             mAllTeamSchduleItems.clear();
+            mTodayItems.clear();
             requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
         }
     }
@@ -140,6 +149,8 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
             mTeamItem = (TeamItem) getArguments().getSerializable(ARG_TEAM_ITEM);
         }
         mAllTeamSchduleItems = new ArrayList<TeamScheduleItem>();
+        mTodayItems = new ArrayList<TeamScheduleItem>();
+        mAdapter = new TeamScheduleListAdapter(this.getContext());
         setHasOptionsMenu(true);
     }
 
@@ -156,11 +167,40 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         return inflater.inflate(R.layout.fragment_team_schedule, container, false);
     }
 
+    boolean isToday(String date) {
+        SimpleDateFormat s = new SimpleDateFormat("yyyyMMdd");
+        String today = s.format(new Date());
+        return today.equalsIgnoreCase(date);
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAllTeamSchduleItems.clear();
         mEmptyView = (TextView) this.getView().findViewById(R.id.empty);
+        this.setListAdapter(mAdapter);
+
+        this.getView().findViewById(R.id.rbAll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapter.updateData(mAllTeamSchduleItems);
+            }
+        });
+
+        mRBToday = (RadioButton) this.getView().findViewById(R.id.rbToday);
+        mRBToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mTodayItems.size() == 0) {
+                    mEmptyView.setText("当日无行程！");
+                }
+//                mAdapter = new TeamScheduleListAdapter(TeamScheduleFragment.this.getContext(), mTodayItems);
+//                TeamScheduleFragment.this.setListAdapter(mAdapter);
+                mAdapter.updateData(mTodayItems);
+
+            }
+        });
+
         this.getListView().setEmptyView(mEmptyView);
         this.registerForContextMenu(getListView());
 
@@ -184,21 +224,19 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mRequest.cancel();
+        if (mRequest != null) {
+            mRequest.cancel();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(mTeamItem!=null) {
+        if (mTeamItem != null) {
+            mAllTeamSchduleItems.clear();
+            mTodayItems.clear();
             requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
         }
-    }
-
-    void setScheduleCount(int count) {
-//        String scheduleNumber = getResources().getString(R.string.schedule_number);
-//        scheduleNumber = String.format(scheduleNumber, count);
-//        ((TextView) this.getView().findViewById(R.id.scheduleNumber)).setText(scheduleNumber);
     }
 
     void requestTeamScheduleList(String teamIndex, Integer page, boolean isRefresh) {
@@ -217,7 +255,7 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         mRequest.setShouldCache(true);
 
         if (isRefresh) {
-            /* remove cache first */
+            /* remove cache before request */
             VolleyRequestQueue.getInstance(this.getContext()).remove(url);
         }
 
@@ -237,18 +275,24 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         if (response != null && response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
             for (TeamScheduleItem item : response.mItems) {
                 mAllTeamSchduleItems.add(item);
+                if (isToday(item.getDate())) {
+                    mTodayItems.add(item);
+                }
             }
 
             if (1 == response.mIsLastPage) {
-                mAdapter = new TeamScheduleListAdapter(this.getContext(), mAllTeamSchduleItems);
-                this.setListAdapter(mAdapter);
-                setScheduleCount(mAllTeamSchduleItems.size());
+//                mAdapter = new TeamScheduleListAdapter(this.getContext(), mAllTeamSchduleItems);
+//                this.setListAdapter(mAdapter);
+                if (mRBToday.isChecked()) {
+                    mAdapter.updateData(mTodayItems);
+                } else {
+                    mAdapter.updateData(mAllTeamSchduleItems);
+                }
             } else {
                 requestTeamScheduleList(mTeamItem.TeamIndex, response.mPageIndex + 1, false);
             }
         } else {
             mEmptyView.setText(response.mReturnMSG);
-//            Toast.makeText(this.getContext(), "获取团队列表失败！", Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
                 Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);

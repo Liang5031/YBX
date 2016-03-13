@@ -19,9 +19,11 @@ public class RealNameInfoResponse extends XMLResponse {
     public int mIsLastPage;
     public ArrayList<RealNameItem> mItems;
     RealNameItem mItem;
+    int index = 1;
 
     public void startDocument(XmlPullParser parser) throws IOException, XmlPullParserException {
         mItems = new ArrayList<RealNameItem>();
+        index = 1;
     }
 
     public void startTag(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -47,6 +49,7 @@ public class RealNameInfoResponse extends XMLResponse {
     public void endTag(XmlPullParser parser) {
         String TAG = parser.getName();
         if (ResponseUtils.TAG_ITEM.equalsIgnoreCase(TAG)) {
+            mItem.Index = index++;
             mItems.add(mItem);
         }
     }

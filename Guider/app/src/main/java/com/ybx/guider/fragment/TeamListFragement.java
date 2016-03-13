@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -48,6 +49,8 @@ public class TeamListFragement extends ListFragment implements Response.Listener
     XMLRequest<TeamListResponse> mRequest;
     TeamListAdapter mAdapter;
     int mTeamStatus;
+    private View mLoadMoreView;
+    int mPageIndex;
 
     public static TeamListFragement newInstance(int teamStatus) {
         TeamListFragement fragment = new TeamListFragement();
@@ -118,6 +121,16 @@ public class TeamListFragement extends ListFragment implements Response.Listener
         mEmptyView = (TextView) this.getView().findViewById(R.id.empty);
         this.getListView().setEmptyView(mEmptyView);
 
+
+        mLoadMoreView = getActivity().getLayoutInflater().inflate(R.layout.team_list_footer, null);
+        Button loadMoreButton = (Button)mLoadMoreView.findViewById(R.id.btnLoadMore);
+        loadMoreButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                requestTeamList(mTeamStatus, mPageIndex + 1, false);
+            }
+        });
     }
 
     @Override
@@ -169,12 +182,17 @@ public class TeamListFragement extends ListFragment implements Response.Listener
             for (TeamItem item : response.mItems) {
                 mAllTeamItems.add(item);
             }
+            mPageIndex = response.mPageIndex;
 
             if (1 == response.mIsLastPage) {
                 mAdapter = new TeamListAdapter(this.getContext(), mAllTeamItems);
+                this.getListView().removeFooterView(mLoadMoreView);
                 this.setListAdapter(mAdapter);
             } else {
-                requestTeamList(mTeamStatus, response.mPageIndex + 1, false);
+                mAdapter = new TeamListAdapter(this.getContext(), mAllTeamItems);
+                this.getListView().removeFooterView(mLoadMoreView);
+                this.getListView().addFooterView(mLoadMoreView);
+                this.setListAdapter(mAdapter);
             }
         } else {
             mEmptyView.setText(response.mReturnMSG);

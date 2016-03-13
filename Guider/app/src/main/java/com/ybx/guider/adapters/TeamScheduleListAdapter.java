@@ -24,10 +24,14 @@ public class TeamScheduleListAdapter extends BaseAdapter {
     private int mLastVisibility;
     private ArrayList<TeamScheduleItem> mAllItems;
 
-    public TeamScheduleListAdapter(Context context, ArrayList<TeamScheduleItem> items) {
+    public TeamScheduleListAdapter(Context context) {
         this.mContext = context;
         mLastPosition = -1;
+    }
+
+    public void updateData(ArrayList<TeamScheduleItem> items){
         mAllItems = items;
+        notifyDataSetChanged();
     }
 
     @Override
