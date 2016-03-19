@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -80,17 +81,20 @@ public class TeamListFragement extends ListFragment implements Response.Listener
         inflater.inflate(R.menu.team_info_fragment_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
+*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.team_info_accept:
+            case R.id.main_refresh:
+                mAllTeamItems.clear();
+                requestTeamList(mTeamStatus, ParamUtils.VALUE_FIRST_PAGE_INDEX, true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }*/
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -22,6 +22,7 @@ import com.ybx.guider.responses.XMLResponse;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
 public class ChangePasswordActivity extends AppCompatActivity implements Response.Listener<XMLResponse>, Response.ErrorListener{
@@ -108,6 +109,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements Respons
     @Override
     public void onErrorResponse(VolleyError error) {
         Toast.makeText(this, "修改密码失败！", Toast.LENGTH_LONG).show();
+
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
         }

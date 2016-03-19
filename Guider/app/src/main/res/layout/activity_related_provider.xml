@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <ListView
-        android:id="@+id/dept_list"
+        android:id="@+id/provider_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
@@ -24,7 +24,7 @@
         android:layout_height="0dp"
         android:layout_weight="5"
         android:gravity="center"
-        android:text="尚未关联旅行社和部门"
+        android:text="未开通供应商预约"
         android:visibility="gone" />
 
     <LinearLayout
@@ -42,7 +42,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="15dp"
             android:onClick="onClickAdd"
-            android:text="添加新的旅行社或部门" />
+            android:text="发出新的预约申请" />
 
     </LinearLayout>
 

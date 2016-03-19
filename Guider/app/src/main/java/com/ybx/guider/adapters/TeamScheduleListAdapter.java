@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ybx.guider.R;
 import com.ybx.guider.responses.ResponseUtils;
+import com.ybx.guider.responses.TeamItem;
 import com.ybx.guider.responses.TeamScheduleItem;
 
 import java.util.ArrayList;
@@ -23,10 +24,12 @@ public class TeamScheduleListAdapter extends BaseAdapter {
     private int mLastPosition;
     private int mLastVisibility;
     private ArrayList<TeamScheduleItem> mAllItems;
+    TeamItem mTeamItem;
 
-    public TeamScheduleListAdapter(Context context) {
+    public TeamScheduleListAdapter(Context context, TeamItem item) {
         this.mContext = context;
         mLastPosition = -1;
+        mTeamItem = item;
     }
 
     public void updateData(ArrayList<TeamScheduleItem> items){
@@ -66,6 +69,11 @@ public class TeamScheduleListAdapter extends BaseAdapter {
 
     void setButtonVisibility(TeamScheduleItem item, View view) {
         hideAllButton(view);
+
+        if(!mTeamItem.Status.equals("4")){
+            return;
+        }
+
         int status = item.getStatus();
 
         switch (status) {
@@ -93,13 +101,13 @@ public class TeamScheduleListAdapter extends BaseAdapter {
                 }
                 break;
 
-            case TeamScheduleItem.TRIP_STATUS_DONE:/* fall through */
-            case TeamScheduleItem.TRIP_STATUS_TRIP_CANCEL:
-                view.findViewById(R.id.btnFinish).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.btnFinish).setTag(item);
-                view.findViewById(R.id.btnCancelSchedule).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.btnCancelSchedule).setTag(item);
-                break;
+//            case TeamScheduleItem.TRIP_STATUS_DONE:/* fall through */
+//            case TeamScheduleItem.TRIP_STATUS_TRIP_CANCEL:
+//                view.findViewById(R.id.btnFinish).setVisibility(View.VISIBLE);
+//                view.findViewById(R.id.btnFinish).setTag(item);
+//                view.findViewById(R.id.btnCancelSchedule).setVisibility(View.VISIBLE);
+//                view.findViewById(R.id.btnCancelSchedule).setTag(item);
+//                break;
             default:
                 break;
         }

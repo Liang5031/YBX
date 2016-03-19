@@ -102,9 +102,17 @@ public class ResponseUtils {
     public static String TAG_APPO_AVAILABLE = "UseToAppointmentAble";        /* 是否可用于预约，CHAR（1），“1”表示可以，这个值根据系统的规则产生，有余量，不代表可以预约，例如，系统要求提前一天预约，则当天的时段仅可以查看余量，但这些时段都不能用于预约 */
 
 
+    /* YUNRelationObjects_Query.aspx */
+    public static String TAG_CUSTOMER_ID = "customerid";            /* 旅行社/部门id */
+    public static String TAG_CUSTOMER_TYPE = "customertype";        /* ”1”旅行社，“2”部门 */
+    public static String TAG_CUSTOMER_NAME = "customername";        /* 旅行社/部门的名称 */
+    public static String TAG_YYXCXK  = "YYXCXK";                   /* 导游允许旅行社(或部门)预约行程	YYXCXK	Char(1)	NOT NULL	‘1’表示允许，‘0’表示不允许。此项仅允许导游设置。初始值为“1” */
+    public static String TAG_WPTDXK  = "WPTDXK";                   /* 导游允许旅行社(或部门)委派团队	WPTDXK	Char(1)	NOT NULL	‘1’表示允许，‘0’表示不允许。此项仅允许导游设置。初始值为“1” */
+    public static String TAG_CJTDXK = "CJTDXK";                     /* 旅行社(或部门)允许导游创建团队 */
+    public static String TAG_RQSJ = "RQSJ";                         /* 关联的建立时间 */
 
-
-
+    public static String TAG_DEPT_TYPE = "Type";        /* ”1”客户单位，“2”部门 */
+    public static String TAG_DEPT_STATUS = "status";        /* ”1”启用，“0”禁用 */
 
 
     public static String RESULT_OK = "0";

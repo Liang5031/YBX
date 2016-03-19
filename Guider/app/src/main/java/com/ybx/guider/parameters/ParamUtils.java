@@ -26,11 +26,13 @@ public class ParamUtils {
     public static String PAGE_GUIDER_UPDATE_INFO = "YUNGuider_Update.aspx";
     public static String PAGE_DEPT_QUERY = "YUNRelationObjects_Query.aspx";
     public static String PAGE_DEPT_ADD = "YUNRelationObjects_Add.aspx";
+    public static String PAGE_DEPT_DELETE = "YUNRelationObjects_Del.aspx";
     public static String PAGE_PROVIDER_QUERY = "YUNProvider_Query.aspx";
     public static String PAGE_CUSTOMER_QUERY = "YUNCustomer_Query.aspx";
     public static String PAGE_SERVICE_ITEM_QUERY = "YUNServiceItem_Query.aspx";
     public static String PAGE_SERVICE_TIME_SPAN_QUERY = "YUNServiceTimeSpan_Query.aspx";
     public static String PAGE_START_APPOINTMENT = "YUNAppointment_Add.aspx";
+
 
     /* 签名方式 -- String(8) 取值：MD5，默认：MD5 暂时只支持MD5 */
     public static String KEY_SIGN_TYPE = "sign_type";
@@ -116,6 +118,15 @@ public class ParamUtils {
     public static String KEY_QQ = "sQQ";
     /* 微信  -- String(20) */
     public static String KEY_WECHAT = "sWeChart";
+
+    /* YUNCustomer_Query.aspx */
+    public static String KEY_CUSTOMER_NAME = "sCustomerName";   /* 客户单位名称 */
+    public static String KEY_INDEX_CODE = "sIndexcode";         /* 检索码 */
+    public static String KEY_CUSTOMER_TYPE = "sCustomerType";   /* 单位类型 */
+    public static String KEY_CUSTOMER_ID = "nCustomerID";   /* 客户ID */
+    public static String KEY_YYXCXK = "sYYXCXK";   /* 导游允许旅行社(或部门)预约行程 */
+    public static String KEY_WPTDXK = "sWPTDXK";   /* 导游允许旅行社(或部门)委派团队 */
+
 
 
     public static String VALUE_SIGN_TYPE_MD5 = "MD5";

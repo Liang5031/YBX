@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -46,6 +47,11 @@ import java.util.Date;
 public class ReservationActivity extends AppCompatActivity implements Response.Listener<StartAppointmentResponse>, Response.ErrorListener {
     public static String EXTRA_TEAM_ITEM = "team_item";
     public static String EXTRA_TEAM_SCHEDULE_ITEM = "team_schedule_item";
+    public static String EXTRA_RESERVATION_TYPE ="reservation_type";
+    public static int TYPE_START = 1;
+    public static int TYPE_CHANGE = 2;
+
+    int mReservationType;
     String[] mEmptyList = {"没有可预约时段"};
     private Spinner mSpinnerServices;
     private Spinner mSpinnerTimeSlot;
@@ -81,10 +87,17 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setHomeButtonEnabled(true);
 
-        setTitle("发起预约");
         Intent i = getIntent();
+        mReservationType = i.getIntExtra(EXTRA_RESERVATION_TYPE, TYPE_START);
         mTeamItem = (TeamItem) i.getSerializableExtra(EXTRA_TEAM_ITEM);
         mTeamScheduleItem = (TeamScheduleItem) i.getSerializableExtra(EXTRA_TEAM_SCHEDULE_ITEM);
+
+
+        setTitle("发起预约");
+        if(mReservationType==TYPE_CHANGE){
+            setTitle("改签预约");
+            ((Button) findViewById(R.id.startAppo)).setText("改签预约");
+        }
 
         ((TextView) findViewById(R.id.schedule_TranType)).setText(mTeamScheduleItem.getTranTypeValue());
         ((TextView) findViewById(R.id.schedule_date)).setText(ResponseUtils.formatDate(mTeamScheduleItem.getDate()));
@@ -411,7 +424,12 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 
 
     void requestStartAppointment() {
-        Param param = new Param(ParamUtils.PAGE_START_APPOINTMENT);
+        String page = ParamUtils.PAGE_START_APPOINTMENT;
+        if(mReservationType == TYPE_CHANGE){
+            page = ParamUtils.PAGE_APPOINTMENT_CHANGE;
+        }
+
+        Param param = new Param(page);
         param.setUser(PreferencesUtils.getGuiderNumber(this));
         param.setTripItemIndex(mTeamScheduleItem.getTripIndex());
         param.setServiceId(mSelectedService);
@@ -431,6 +449,10 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 
         if (!mMemo.getText().toString().isEmpty()) {
             param.setReservatinoMemo(mMemo.getText().toString());
+        }
+
+        if(mReservationType == TYPE_CHANGE){
+            param.addParam(ParamUtils.KEY_RESERVATION_NUMBER, mTeamScheduleItem.getAppoNumber());
         }
 
         String orderParams = param.getParamStringInOrder();

@@ -62,6 +62,21 @@ public class TeamInfoFragment extends ListFragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        TeamItem item = ((TeamActivity) this.getActivity()).mTeamItem;
+        if(item.Status.equals("3")) {
+            menu.removeItem(R.id.team_info_finish);
+        } else if(item.Status.equals("4")){
+            menu.removeItem(R.id.team_info_accept);
+        } else {
+            menu.removeItem(R.id.team_info_accept);
+            menu.removeItem(R.id.team_info_finish);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
@@ -81,8 +96,6 @@ public class TeamInfoFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setHasOptionsMenu(true);
         this.getActivity().setTitle(R.string.title_info);
     }

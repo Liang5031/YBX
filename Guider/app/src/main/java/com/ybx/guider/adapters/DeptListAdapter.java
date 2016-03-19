@@ -8,8 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ybx.guider.R;
-import com.ybx.guider.responses.RealNameItem;
-import com.ybx.guider.responses.ResponseUtils;
+import com.ybx.guider.responses.BindingDeptItem;
+import com.ybx.guider.responses.DeptItem;
 
 import java.util.ArrayList;
 
@@ -18,15 +18,15 @@ import java.util.ArrayList;
  */
 public class DeptListAdapter extends BaseAdapter {
     private Context mContext;
-    ArrayList<RealNameItem> mItems;
-    int mIndex = 0;
+    ArrayList<DeptItem> mItems;
 
     public DeptListAdapter(Context context) {
         this.mContext = context;
     }
 
-    public void update(ArrayList<RealNameItem> items){
+    public void update(ArrayList<DeptItem> items) {
         mItems = items;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class DeptListAdapter extends BaseAdapter {
         if (mItems != null) {
             return mItems.size();
         }
-        return 5;
+        return 0;
     }
 
     @Override
@@ -52,11 +52,9 @@ public class DeptListAdapter extends BaseAdapter {
 
     void initViews(View view, int position) {
         if (mItems != null && mItems.size() > 0) {
-            RealNameItem item = mItems.get(position);
-//            ((TextView) view.findViewById(R.id.realNameIdx)).setText(Integer.valueOf(item.Index).toString());
-//            ((TextView) view.findViewById(R.id.number)).setText(item.Number);
-//            ((TextView) view.findViewById(R.id.name)).setText(item.Name);
-//            ((TextView) view.findViewById(R.id.type)).setText(ResponseUtils.getIdentidyType(item.Type));
+            DeptItem item = mItems.get(position);
+            ((TextView) view.findViewById(R.id.deptId)).setText(item.customerid);
+            ((TextView) view.findViewById(R.id.deptName)).setText(item.customername);
         }
     }
 

@@ -80,38 +80,6 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         return fragment;
     }
 
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        menu.add(0, MENU_ITEM_CANCEL_SCHEDULE, Menu.NONE, R.string.menu_cancel_schedule);
-//        menu.add(0, MENU_ITEM_FINISH_SCHEDULE, Menu.NONE, R.string.menu_finish_schedule);
-//        menu.add(0, MENU_ITEM_CHANGE_RESERVATION, Menu.NONE, R.string.menu_cancel_reservation);
-//        menu.add(0, MENU_ITEM_MAKE_RESERVATION, Menu.NONE, R.string.menu_make_reservation);
-//        menu.add(0, MENU_ITEM_CANCEL_RESERVATION, Menu.NONE, R.string.menu_cancel_reservation);
-//    }
-//
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case 1:
-//                // do something
-//                break;
-//            case 2:
-//                // do something
-//                break;
-//            case 3:
-//                // do something
-//                break;
-//            case 4:
-//                // do something
-//                break;
-//            default:
-//                return super.onContextItemSelected(item);
-//        }
-//        return true;
-//    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.refresh_menu, menu);
@@ -150,7 +118,7 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         }
         mAllTeamSchduleItems = new ArrayList<TeamScheduleItem>();
         mTodayItems = new ArrayList<TeamScheduleItem>();
-        mAdapter = new TeamScheduleListAdapter(this.getContext());
+        mAdapter = new TeamScheduleListAdapter(this.getContext(), mTeamItem);
         setHasOptionsMenu(true);
     }
 

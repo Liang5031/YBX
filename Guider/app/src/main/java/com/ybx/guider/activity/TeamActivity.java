@@ -57,6 +57,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
 
     XMLRequest<XMLResponse> mAcceptRequest;
     XMLRequest<XMLResponse> mFinishRequest;
+    XMLRequest<XMLResponse> mCancelAppoRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +111,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
 
     @Override
     public void onFinishTeamDialogOK(DialogFragment dialog) {
+        requestFinishTeam();
         Toast.makeText(this, "OK pressed", Toast.LENGTH_LONG).show();
     }
 
@@ -239,20 +241,27 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         TeamScheduleItem item = (TeamScheduleItem)view.getTag();
         Intent intent = new Intent(this, ReservationActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putInt(ReservationActivity.EXTRA_RESERVATION_TYPE, ReservationActivity.TYPE_START);
         bundle.putSerializable(ReservationActivity.EXTRA_TEAM_ITEM, mTeamItem);
         bundle.putSerializable(ReservationActivity.EXTRA_TEAM_SCHEDULE_ITEM, item);
         intent.putExtras(bundle);
         startActivity(intent);
-
-//        Toast.makeText(this, "onClickStartAppo", Toast.LENGTH_LONG).show();
     }
 
     public void onClickCancelAppo(View view){
-        Toast.makeText(this, "onClickCancelAppo", Toast.LENGTH_LONG).show();
+        TeamScheduleItem item = (TeamScheduleItem)view.getTag();
+        requestCancelAppo(item);
     }
 
     public void onClickChangeAppo(View view){
-        Toast.makeText(this, "onClickChangeAppo", Toast.LENGTH_LONG).show();
+        TeamScheduleItem item = (TeamScheduleItem)view.getTag();
+        Intent intent = new Intent(this, ReservationActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(ReservationActivity.EXTRA_RESERVATION_TYPE, ReservationActivity.TYPE_CHANGE);
+        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_ITEM, mTeamItem);
+        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_SCHEDULE_ITEM, item);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     public void onClickSync(View view){
@@ -273,6 +282,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
             public void onResponse(XMLResponse response) {
                 if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
                     Toast.makeText(TeamActivity.this, "接团成功!", Toast.LENGTH_LONG).show();
+                    TeamActivity.this.finish();
                 } else {
                     Toast.makeText(TeamActivity.this, "接团失败!", Toast.LENGTH_LONG).show();
                 }
@@ -307,6 +317,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
             public void onResponse(XMLResponse response) {
                 if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
                     Toast.makeText(TeamActivity.this, "完成带团成功!", Toast.LENGTH_LONG).show();
+                    TeamActivity.this.finish();
                 } else {
                     Toast.makeText(TeamActivity.this, "完成带团失败!", Toast.LENGTH_LONG).show();
                 }
@@ -337,5 +348,45 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         if(mAcceptRequest!=null){
             mAcceptRequest.cancel();
         }
+
+        if(mCancelAppoRequest!=null){
+            mCancelAppoRequest.cancel();
+        }
+    }
+
+    void requestCancelAppo(TeamScheduleItem item){
+        Param param = new Param(ParamUtils.PAGE_APPOINTMENT_CANCEL);
+        param.setUser(PreferencesUtils.getGuiderNumber(this));
+        param.setTripItemIndex(item.getTripIndex());
+        param.addParam(ParamUtils.KEY_RESERVATION_NUMBER, item.getAppoNumber());
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
+        param.setSign(sign);
+
+        Response.Listener<XMLResponse> listener = new Response.Listener<XMLResponse>() {
+            @Override
+            public void onResponse(XMLResponse response) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+                    Toast.makeText(TeamActivity.this, "预约已取消!", Toast.LENGTH_LONG).show();
+                    TeamActivity.this.finish();
+                } else {
+                    Toast.makeText(TeamActivity.this, "取消预约失败!", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TeamActivity.this, "取消预约失败!", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mCancelAppoRequest = new XMLRequest<XMLResponse>(url, listener, errorListener, new XMLResponse());
+        mCancelAppoRequest.setShouldCache(false);
+
+        VolleyRequestQueue.getInstance(this).add(mCancelAppoRequest);
     }
 }

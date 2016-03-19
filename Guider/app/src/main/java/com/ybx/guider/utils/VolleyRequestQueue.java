@@ -1,7 +1,10 @@
 package com.ybx.guider.utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
@@ -56,15 +59,17 @@ public class VolleyRequestQueue {
         getRequestQueue().add(req);
     }
 
-    public void remove(String key){
+    public void remove(String key) {
         getRequestQueue().getCache().remove(key);
     }
 
-    public void invalidate(String key,boolean fullExpire){
+    public void invalidate(String key, boolean fullExpire) {
         getRequestQueue().getCache().invalidate(key, fullExpire);
     }
 
-    public void clear(){
+    public void clear() {
         getRequestQueue().getCache().clear();
     }
+
+
 }

@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
                 startActivity(intent);
                 this.finish();
                 return true;
-            case R.id.main_refresh:
-                Toast.makeText(this, "main_refresh pressed", Toast.LENGTH_LONG).show();
-                return true;
+//            case R.id.main_refresh:
+//                Toast.makeText(this, "main_refresh pressed", Toast.LENGTH_LONG).show();
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

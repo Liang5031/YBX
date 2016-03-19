@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.ybx.guider.requests.XMLRequest;
 import com.ybx.guider.responses.GetVerifyCodeResponse;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
 public class PhoneVerifyFragment extends Fragment {
@@ -157,7 +159,11 @@ public class PhoneVerifyFragment extends Fragment {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(PhoneVerifyFragment.this.getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(PhoneVerifyFragment.this.getContext(), "手机验证失败！", Toast.LENGTH_LONG).show();
+
+                if (URLUtils.isDebug) {
+                    Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
+                }
             }
         };
 

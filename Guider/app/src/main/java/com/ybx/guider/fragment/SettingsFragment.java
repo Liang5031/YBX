@@ -61,6 +61,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.removeItem(R.id.main_refresh);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -107,6 +113,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.apply_provider:
+
                 break;
             case R.id.change_user_info:
                 break;

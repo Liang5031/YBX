@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,11 +25,14 @@ import com.ybx.guider.responses.TeamItem;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * create an instance of this fragment.
@@ -39,6 +44,8 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
     TextView mEmptyView;
     XMLRequest<DealRecordResponse> mRequest;
     ArrayList<DealRecordItem> mAllItems;
+    ArrayList<DealRecordItem> mTodayItems;
+    RadioButton mRBToday;
 
     public DealRecordListFragment() {
         // Required empty public constructor
@@ -66,6 +73,9 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
         }
 
         mAllItems = new ArrayList<DealRecordItem>();
+        mTodayItems = new ArrayList<DealRecordItem>();
+        mAdapter = new DealRecordListAdapter(this.getContext(), mAllItems);
+        this.setListAdapter(mAdapter);
     }
 
     @Override
@@ -84,6 +94,27 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
         setCount(mAllItems.size());
         mEmptyView = (TextView) this.getView().findViewById(R.id.empty);
         this.getListView().setEmptyView(mEmptyView);
+
+        this.getView().findViewById(R.id.rbAll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapter.update(mAllItems);
+            }
+        });
+
+        mRBToday = (RadioButton) this.getView().findViewById(R.id.rbToday);
+        mRBToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mTodayItems.size() == 0) {
+                    mEmptyView.setText("当日无成交记录！");
+                }
+//                mAdapter = new TeamScheduleListAdapter(TeamScheduleFragment.this.getContext(), mTodayItems);
+//                TeamScheduleFragment.this.setListAdapter(mAdapter);
+                mAdapter.update(mTodayItems);
+
+            }
+        });
     }
 
     @Override
@@ -91,6 +122,7 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             mAllItems.clear();
+            mTodayItems.clear();
             requestRealNameInfo(ParamUtils.VALUE_FIRST_PAGE_INDEX);
         }
     }
@@ -133,10 +165,21 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
     @Override
     public void onErrorResponse(VolleyError error) {
         setCount(0);
-        mEmptyView.setText("请求失败！");
+        if(!Utils.isNetworkAvailable(this.getContext())){
+            mEmptyView.setText("请检查网络连接是否可用！");
+        } else {
+            mEmptyView.setText("请求失败！");
+        }
+
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
         }
+    }
+
+    boolean isToday(String date) {
+        SimpleDateFormat s = new SimpleDateFormat("yyyyMMdd");
+        String today = s.format(new Date());
+        return today.equalsIgnoreCase(date);
     }
 
     @Override
@@ -144,11 +187,17 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
         if (response != null && response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
             for (DealRecordItem item : response.mItems) {
                 mAllItems.add(item);
+                if (isToday(item.recDate)) {
+                    mTodayItems.add(item);
+                }
             }
 
             if (1 == response.mIsLastPage) {
-                mAdapter = new DealRecordListAdapter(this.getContext(), mAllItems);
-                this.setListAdapter(mAdapter);
+                if (mRBToday.isChecked()) {
+                    mAdapter.update(mTodayItems);
+                } else {
+                    mAdapter.update(mAllItems);
+                }
                 mEmptyView.setText("");
                 setCount(mAllItems.size());
             } else {

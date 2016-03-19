@@ -25,6 +25,8 @@ public class TeamListAdapter extends BaseAdapter {
         mTeamItems = teamItems;
     }
 
+
+
     @Override
     public int getCount() {
         if (mTeamItems != null) {

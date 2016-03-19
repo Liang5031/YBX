@@ -22,6 +22,7 @@ import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<LoginResponse>, Response.ErrorListener {
@@ -41,6 +42,14 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        mIsAutoLogin = (CheckBox) findViewById(R.id.isAutoLogin);
+        mPassword = (EditText) findViewById(R.id.password);
+        mGuiderNumber = (EditText) findViewById(R.id.guiderNumber);
+
+        mGuiderNumber.setText(PreferencesUtils.getGuiderNumber(this));
+        mPassword.setText(PreferencesUtils.getPassword(this));
+        mIsAutoLogin.setChecked(PreferencesUtils.getIsAutoLogin(this));
+
         Intent intent = getIntent();
         String loginType = intent.getStringExtra(EXTRA_START_TYPE);
         if (loginType != null && loginType.equals(START_TYPE_LOGOUT)) {
@@ -50,14 +59,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 //            this.finish();
             return;
         }
-
-        mIsAutoLogin = (CheckBox) findViewById(R.id.isAutoLogin);
-        mPassword = (EditText) findViewById(R.id.password);
-        mGuiderNumber = (EditText) findViewById(R.id.guiderNumber);
-
-        mGuiderNumber.setText(PreferencesUtils.getGuiderNumber(this));
-        mPassword.setText(PreferencesUtils.getPassword(this));
-        mIsAutoLogin.setChecked(PreferencesUtils.getIsAutoLogin(this));
     }
 
     @Override
@@ -88,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     }
 
     public void onClickAutoLogin(View view) {
-//        setIsAutoLogin(mIsAutoLogin.isChecked());
+        PreferencesUtils.setIsAutoLogin(this,mIsAutoLogin.isChecked());
     }
 
     private boolean inputCheck() {
@@ -126,9 +127,8 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         mRequest = new XMLRequest<LoginResponse>(url, this, this, new LoginResponse());
         mRequest.setShouldCache(false);
 
-//        request.setCacheTime(10*60);
 /*
-        request.setRetryPolicy(new DefaultRetryPolicy(
+        mRequest.setRetryPolicy(new DefaultRetryPolicy(
                 5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
@@ -146,7 +146,9 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
-        Toast.makeText(this, "登录失败！请检查网络连接是否可用", Toast.LENGTH_LONG).show();
+
+        Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
+
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
         }
@@ -174,7 +176,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
                 Toast.makeText(this, "注册审核未通过！", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this, "登录失败！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, response.mReturnMSG, Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
                 Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
