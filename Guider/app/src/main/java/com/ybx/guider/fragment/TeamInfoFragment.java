@@ -66,9 +66,9 @@ public class TeamInfoFragment extends ListFragment {
         super.onPrepareOptionsMenu(menu);
 
         TeamItem item = ((TeamActivity) this.getActivity()).mTeamItem;
-        if(item.Status.equals("3")) {
+        if (item.Status.equals("3")) {
             menu.removeItem(R.id.team_info_finish);
-        } else if(item.Status.equals("4")){
+        } else if (item.Status.equals("4")) {
             menu.removeItem(R.id.team_info_accept);
         } else {
             menu.removeItem(R.id.team_info_accept);

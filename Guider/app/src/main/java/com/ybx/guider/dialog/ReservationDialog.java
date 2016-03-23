@@ -33,7 +33,7 @@ public class ReservationDialog extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mItem = (TeamScheduleItem)getArguments().getSerializable(ARG_TEAM_SCHEDULE_ITEM);
+            mItem = (TeamScheduleItem) getArguments().getSerializable(ARG_TEAM_SCHEDULE_ITEM);
         }
 
     }

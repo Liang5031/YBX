@@ -2,13 +2,13 @@ package com.ybx.guider.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -58,6 +58,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     XMLRequest<XMLResponse> mAcceptRequest;
     XMLRequest<XMLResponse> mFinishRequest;
     XMLRequest<XMLResponse> mCancelAppoRequest;
+    XMLRequest<XMLResponse> mSyncAppoRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         Intent i = getIntent();
         mTeamItem = (TeamItem) i.getSerializableExtra(EXTRA_TEAM_ITEM);
 
-        mPageAdapter = new PageAdapter(getSupportFragmentManager(),mTeamItem);
+        mPageAdapter = new PageAdapter(getSupportFragmentManager(), mTeamItem);
         mPager = (ViewPager) findViewById(R.id.viewpager);
 //        mPager.setOffscreenPageLimit();
         mPager.addOnPageChangeListener(
@@ -88,7 +89,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                             setSelectedItem(PAGE_TEAM_REAL_NAME);
                         } else if (position == 3) {
                             setSelectedItem(PAGE_TEAM_DEAL_RECORD);
-                        }else if (position == 4) {
+                        } else if (position == 4) {
                             setSelectedItem(PAGE_TEAM_LOG);
                         }
                     }
@@ -229,16 +230,16 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         }
     }
 
-    public void onClickFinish(View view){
+    public void onClickFinish(View view) {
         Toast.makeText(this, "onClickFinish", Toast.LENGTH_LONG).show();
     }
 
-    public void onClickCancelSchedule(View view){
+    public void onClickCancelSchedule(View view) {
         Toast.makeText(this, "onClickCancelSchedule", Toast.LENGTH_LONG).show();
     }
 
-    public void onClickStartAppo(View view){
-        TeamScheduleItem item = (TeamScheduleItem)view.getTag();
+    public void onClickStartAppo(View view) {
+        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
         Intent intent = new Intent(this, ReservationActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(ReservationActivity.EXTRA_RESERVATION_TYPE, ReservationActivity.TYPE_START);
@@ -248,13 +249,13 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         startActivity(intent);
     }
 
-    public void onClickCancelAppo(View view){
-        TeamScheduleItem item = (TeamScheduleItem)view.getTag();
+    public void onClickCancelAppo(View view) {
+        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
         requestCancelAppo(item);
     }
 
-    public void onClickChangeAppo(View view){
-        TeamScheduleItem item = (TeamScheduleItem)view.getTag();
+    public void onClickChangeAppo(View view) {
+        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
         Intent intent = new Intent(this, ReservationActivity.class);
         Bundle bundle = new Bundle();
         bundle.putInt(ReservationActivity.EXTRA_RESERVATION_TYPE, ReservationActivity.TYPE_CHANGE);
@@ -264,7 +265,10 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         startActivity(intent);
     }
 
-    public void onClickSync(View view){
+    public void onClickSync(View view) {
+        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
+        reqeustSync(item);
+        reqeustSync2(item);
         Toast.makeText(this, "onClickSync", Toast.LENGTH_LONG).show();
     }
 
@@ -341,20 +345,20 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mFinishRequest!=null){
+        if (mFinishRequest != null) {
             mFinishRequest.cancel();
         }
 
-        if(mAcceptRequest!=null){
+        if (mAcceptRequest != null) {
             mAcceptRequest.cancel();
         }
 
-        if(mCancelAppoRequest!=null){
+        if (mCancelAppoRequest != null) {
             mCancelAppoRequest.cancel();
         }
     }
 
-    void requestCancelAppo(TeamScheduleItem item){
+    void requestCancelAppo(TeamScheduleItem item) {
         Param param = new Param(ParamUtils.PAGE_APPOINTMENT_CANCEL);
         param.setUser(PreferencesUtils.getGuiderNumber(this));
         param.setTripItemIndex(item.getTripIndex());
@@ -388,5 +392,76 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         mCancelAppoRequest.setShouldCache(false);
 
         VolleyRequestQueue.getInstance(this).add(mCancelAppoRequest);
+    }
+
+    void reqeustSync(TeamScheduleItem item){
+        Param param = new Param(ParamUtils.PAGE_APPOINTMENT_QUERY);
+
+        param.setUser(PreferencesUtils.getGuiderNumber(this));
+        param.setTripItemIndex(item.getTripIndex());
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
+        param.setSign(sign);
+
+        Response.Listener<XMLResponse> listener = new Response.Listener<XMLResponse>() {
+            @Override
+            public void onResponse(XMLResponse response) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+//                    Toast.makeText(TeamActivity.this, "同步完成!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TeamActivity.this, "同步失败!", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mSyncAppoRequest = new XMLRequest<XMLResponse>(url, listener, errorListener, new XMLResponse());
+        mSyncAppoRequest.setShouldCache(false);
+
+        VolleyRequestQueue.getInstance(this).add(mSyncAppoRequest);
+    }
+
+    void reqeustSync2(TeamScheduleItem item){
+        Param param = new Param(ParamUtils.PAGE_DEAL_INFO_QUERY);
+
+        param.setUser(PreferencesUtils.getGuiderNumber(this));
+        param.setTripItemIndex(item.getTripIndex());
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
+        param.setSign(sign);
+
+        Response.Listener<XMLResponse> listener = new Response.Listener<XMLResponse>() {
+            @Override
+            public void onResponse(XMLResponse response) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+                    Toast.makeText(TeamActivity.this, "同步完成!", Toast.LENGTH_LONG).show();
+//                    TeamActivity.this.finish();
+                } else {
+                    Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TeamActivity.this, "同步失败!", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mSyncAppoRequest = new XMLRequest<XMLResponse>(url, listener, errorListener, new XMLResponse());
+        mSyncAppoRequest.setShouldCache(false);
+
+        VolleyRequestQueue.getInstance(this).add(mSyncAppoRequest);
     }
 }

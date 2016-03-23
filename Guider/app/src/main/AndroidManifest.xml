@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -48,7 +48,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.ChangePasswordActivity">
+        <activity
+            android:name=".activity.ChangePasswordActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
@@ -63,12 +65,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.BindDeptActivity">
+        <activity
+            android:name=".activity.BindDeptActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.DeptManageActivity" />
         </activity>
-        <activity android:name=".activity.RelatedProviderActivity"></activity>
+        <activity
+            android:name=".activity.RelatedProviderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ChangeUserInfoActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.ApplyProviderActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
     </application>
 
 </manifest>

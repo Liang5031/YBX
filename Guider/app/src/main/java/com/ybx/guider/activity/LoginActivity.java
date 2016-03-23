@@ -22,7 +22,6 @@ import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
-import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
 public class LoginActivity extends AppCompatActivity implements Response.Listener<LoginResponse>, Response.ErrorListener {
@@ -64,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mRequest!=null){
+        if (mRequest != null) {
             mRequest.cancel();
         }
     }
@@ -89,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
     }
 
     public void onClickAutoLogin(View view) {
-        PreferencesUtils.setIsAutoLogin(this,mIsAutoLogin.isChecked());
+        PreferencesUtils.setIsAutoLogin(this, mIsAutoLogin.isChecked());
     }
 
     private boolean inputCheck() {
@@ -160,7 +159,7 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
             mProgressDialog.dismiss();
         }
 
-        if (response.mReturnCode.equals(ResponseUtils.RESULT_OK) && response.mAccountStatus!=null) {
+        if (response.mReturnCode.equals(ResponseUtils.RESULT_OK) && response.mAccountStatus != null) {
             /* clear cache after login */
             VolleyRequestQueue.getInstance(this).clear();
 

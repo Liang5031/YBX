@@ -8,23 +8,23 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ybx.guider.R;
-import com.ybx.guider.responses.DealRecordItem;
+import com.ybx.guider.responses.DeptItem;
+import com.ybx.guider.responses.ProviderItem;
 
 import java.util.ArrayList;
 
 /**
  * Created by chenl on 2016/2/26.
  */
-public class DealRecordListAdapter extends BaseAdapter {
+public class ProviderListAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<DealRecordItem> mItems;
+    ArrayList<ProviderItem> mItems;
 
-    public DealRecordListAdapter(Context context, ArrayList<DealRecordItem> items) {
+    public ProviderListAdapter(Context context) {
         this.mContext = context;
-        mItems = items;
     }
 
-    public void update(ArrayList<DealRecordItem> items) {
+    public void update(ArrayList<ProviderItem> items) {
         mItems = items;
         notifyDataSetChanged();
     }
@@ -52,12 +52,9 @@ public class DealRecordListAdapter extends BaseAdapter {
 
     void initViews(View view, int position) {
         if (mItems != null && mItems.size() > 0) {
-            DealRecordItem item = mItems.get(position);
-            ((TextView) view.findViewById(R.id.product_name)).setText(item.productName);
-            ((TextView) view.findViewById(R.id.dealTime)).setText(item.recDate);
-            ((TextView) view.findViewById(R.id.price)).setText(item.price);
-            ((TextView) view.findViewById(R.id.count)).setText(item.count);
-            ((TextView) view.findViewById(R.id.deal_sum)).setText(item.count);
+            ProviderItem item = mItems.get(position);
+//            ((TextView) view.findViewById(R.id.deptId)).setText(item.customerid);
+//            ((TextView) view.findViewById(R.id.deptName)).setText(item.customername);
         }
     }
 
@@ -65,9 +62,9 @@ public class DealRecordListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(R.layout.deal_record_list_item, null);
-            initViews(convertView, position);
+            convertView = inflater.inflate(R.layout.dept_list_item, null);
         }
+        initViews(convertView, position);
         return convertView;
     }
 }

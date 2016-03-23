@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ybx.guider.R;
-import com.ybx.guider.responses.BindingDeptItem;
 import com.ybx.guider.responses.DeptItem;
 
 import java.util.ArrayList;

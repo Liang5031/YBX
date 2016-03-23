@@ -7,18 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.ybx.guider.R;
 import com.ybx.guider.fragment.AccountVerifyFragment;
@@ -26,9 +20,6 @@ import com.ybx.guider.fragment.SettingsFragment;
 import com.ybx.guider.fragment.TeamListFragement;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.utils.PreferencesUtils;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class MainActivity extends AppCompatActivity implements AccountVerifyFragment.OnFragmentInteractionListener {
     private final static int NUM_ITEMS_MAIN = 4;
@@ -112,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
 
         Intent i = getIntent();
         String status = i.getStringExtra(EXTRA_ACCOUNT_STATUS);
-        if( status == null ){
+        if (status == null) {
             findViewById(R.id.tabs).setVisibility(View.VISIBLE);
             setTitle(R.string.app_name_short);
             mPager.setAdapter(mMainAdapter);
@@ -201,22 +192,22 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     }
 
     public void onClickOngoingTab(View view) {
-        mPager.setCurrentItem(PAGE_ONGOING,false);
+        mPager.setCurrentItem(PAGE_ONGOING, false);
         setSelectedItem(PAGE_ONGOING);
     }
 
     public void onClickWaitingTab(View view) {
-        mPager.setCurrentItem(PAGE_WAITING,false);
+        mPager.setCurrentItem(PAGE_WAITING, false);
         setSelectedItem(PAGE_WAITING);
     }
 
     public void onClickFinishTab(View view) {
-        mPager.setCurrentItem(PAGE_FINISH,false);
+        mPager.setCurrentItem(PAGE_FINISH, false);
         setSelectedItem(PAGE_FINISH);
     }
 
     public void onClickSettingsTab(View view) {
-        mPager.setCurrentItem(PAGE_SETTING,false);
+        mPager.setCurrentItem(PAGE_SETTING, false);
         setSelectedItem(PAGE_SETTING);
     }
 

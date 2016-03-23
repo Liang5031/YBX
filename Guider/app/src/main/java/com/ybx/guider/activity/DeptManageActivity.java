@@ -25,7 +25,6 @@ import com.ybx.guider.responses.XMLResponse;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
-import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
 import java.util.ArrayList;
@@ -65,15 +64,15 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mDeptListRequest != null){
+        if (mDeptListRequest != null) {
             mDeptListRequest.cancel();
         }
 
-        if(mDeptChangeRequest != null){
+        if (mDeptChangeRequest != null) {
             mDeptChangeRequest.cancel();
         }
 
-        if(mDeptDeleteRequest != null){
+        if (mDeptDeleteRequest != null) {
             mDeptDeleteRequest.cancel();
         }
 
@@ -159,15 +158,15 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
         String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
         param.setSign(sign);
 
-        Response.Listener<XMLResponse> resListener = new Response.Listener<XMLResponse>(){
+        Response.Listener<XMLResponse> resListener = new Response.Listener<XMLResponse>() {
 
             @Override
             public void onResponse(XMLResponse response) {
                 mProgressDialog.dismiss();
-                if(response.mReturnCode.equals(ResponseUtils.RESULT_OK)){
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
                     mAllItems.clear();
                     requestBindingDeptList(0);
-                }else {
+                } else {
                     Toast.makeText(DeptManageActivity.this, "修改部门信息失败！", Toast.LENGTH_LONG).show();
                     if (URLUtils.isDebug) {
                         Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
@@ -177,7 +176,7 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener(){
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -206,12 +205,12 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
         String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
         param.setSign(sign);
 
-        Response.Listener<XMLResponse> resListener = new Response.Listener<XMLResponse>(){
+        Response.Listener<XMLResponse> resListener = new Response.Listener<XMLResponse>() {
 
             @Override
             public void onResponse(XMLResponse response) {
                 mProgressDialog.dismiss();
-                if(response.mReturnCode.equals(ResponseUtils.RESULT_OK)){
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
                     mAllItems.clear();
                     requestBindingDeptList(0);
                 } else {
@@ -224,7 +223,7 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener(){
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -243,7 +242,7 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
         VolleyRequestQueue.getInstance(this).add(mDeptDeleteRequest);
     }
 
-    public void onClickAdd(View view){
+    public void onClickAdd(View view) {
         Intent intent = new Intent(this, BindDeptActivity.class);
         startActivity(intent);
 //        this.finish();

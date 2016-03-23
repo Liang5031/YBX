@@ -37,7 +37,7 @@ public class DeptListResponse extends XMLResponse {
             mItem.type = parser.nextText();
         } else if (ResponseUtils.TAG_CUSTOMER_NAME.equalsIgnoreCase(TAG)) {
             mItem.customername = parser.nextText();
-        }  else if (ResponseUtils.TAG_DEPT_STATUS.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_DEPT_STATUS.equalsIgnoreCase(TAG)) {
             mItem.status = parser.nextText();
         }
     }

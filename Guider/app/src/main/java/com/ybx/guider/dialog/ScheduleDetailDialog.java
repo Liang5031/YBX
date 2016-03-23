@@ -2,7 +2,6 @@ package com.ybx.guider.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -32,7 +31,7 @@ public class ScheduleDetailDialog extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mItem = (TeamItem)getArguments().getSerializable(ARG_TEAM_ITEM);
+            mItem = (TeamItem) getArguments().getSerializable(ARG_TEAM_ITEM);
         }
 
     }

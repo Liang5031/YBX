@@ -21,7 +21,6 @@ import com.ybx.guider.requests.XMLRequest;
 import com.ybx.guider.responses.GetVerifyCodeResponse;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.utils.URLUtils;
-import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
 public class PhoneVerifyFragment extends Fragment {
@@ -133,7 +132,7 @@ public class PhoneVerifyFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRequest!=null){
+        if (mRequest != null) {
             mRequest.cancel();
         }
     }

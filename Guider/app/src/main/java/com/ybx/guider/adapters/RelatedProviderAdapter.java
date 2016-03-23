@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ybx.guider.R;
-import com.ybx.guider.responses.BindingDeptItem;
+import com.ybx.guider.responses.RelatedProviderItem;
 
 import java.util.ArrayList;
 
@@ -17,13 +17,13 @@ import java.util.ArrayList;
  */
 public class RelatedProviderAdapter extends BaseAdapter {
     private Context mContext;
-    ArrayList<BindingDeptItem> mItems;
+    ArrayList<RelatedProviderItem> mItems;
 
     public RelatedProviderAdapter(Context context) {
         this.mContext = context;
     }
 
-    public void update(ArrayList<BindingDeptItem> items) {
+    public void update(ArrayList<RelatedProviderItem> items) {
         mItems = items;
         notifyDataSetChanged();
     }
@@ -51,10 +51,11 @@ public class RelatedProviderAdapter extends BaseAdapter {
 
     void initViews(View view, int position) {
         if (mItems != null && mItems.size() > 0) {
-            BindingDeptItem item = mItems.get(position);
-            ((TextView) view.findViewById(R.id.deptName)).setText(item.customername);
-            ((TextView) view.findViewById(R.id.YYXCXK)).setText(item.getAllowAppointment());
-            ((TextView) view.findViewById(R.id.WPTDXK)).setText(item.getAllowAssignTeam());
+            RelatedProviderItem item = mItems.get(position);
+            ((TextView) view.findViewById(R.id.providerName)).setText(item.providername);
+            ((TextView) view.findViewById(R.id.status)).setText(item.status);
+            ((TextView) view.findViewById(R.id.startDate)).setText(item.disstartdate);
+            ((TextView) view.findViewById(R.id.endDate)).setText(item.disenddate);
         }
     }
 

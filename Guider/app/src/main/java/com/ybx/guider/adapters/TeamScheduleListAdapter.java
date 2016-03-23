@@ -32,7 +32,7 @@ public class TeamScheduleListAdapter extends BaseAdapter {
         mTeamItem = item;
     }
 
-    public void updateData(ArrayList<TeamScheduleItem> items){
+    public void updateData(ArrayList<TeamScheduleItem> items) {
         mAllItems = items;
         notifyDataSetChanged();
     }
@@ -70,7 +70,7 @@ public class TeamScheduleListAdapter extends BaseAdapter {
     void setButtonVisibility(TeamScheduleItem item, View view) {
         hideAllButton(view);
 
-        if(!mTeamItem.Status.equals("4")){
+        if (!mTeamItem.Status.equals("4")) {
             return;
         }
 

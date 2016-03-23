@@ -27,15 +27,15 @@ public class ServiceItemResponse extends XMLResponse {
             mItem.ServiceCode = parser.nextText();
         } else if (ResponseUtils.TAG_SERVICE_NAME.equalsIgnoreCase(TAG)) {
             mItem.ServiceName = parser.nextText();
-        }else if (ResponseUtils.TAG_SERVICE_AVAILABLE.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_SERVICE_AVAILABLE.equalsIgnoreCase(TAG)) {
             mItem.Useable = parser.nextText();
-        }else if (ResponseUtils.TAG_SERVICE_CAPACITY.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_SERVICE_CAPACITY.equalsIgnoreCase(TAG)) {
             mItem.Capacity = parser.nextText();
-        }else if (ResponseUtils.TAG_SERVICE_SUB_SECTION.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_SERVICE_SUB_SECTION.equalsIgnoreCase(TAG)) {
             mItem.IfSubsection = parser.nextText();
-        }else if (ResponseUtils.TAG_BOOKING_ACCEPT.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_BOOKING_ACCEPT.equalsIgnoreCase(TAG)) {
             mItem.AppointmentAble = parser.nextText();
-        }else if (ResponseUtils.TAG_SERVICE_BOOKING_RATE.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_SERVICE_BOOKING_RATE.equalsIgnoreCase(TAG)) {
             mItem.AppointmentMaxRate = parser.nextText();
         }
     }

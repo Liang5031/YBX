@@ -13,6 +13,7 @@ public class ParamUtils {
     public static String PAGE_GUIDER_REGISTER = "YUNGuider_Register.aspx";
     public static String PAGE_APPOINTMENT_CHANGE = "YUNAppointment_Change.aspx";
     public static String PAGE_APPOINTMENT_CANCEL = "YUNAppointment_Cancel.aspx";
+    public static String PAGE_APPOINTMENT_QUERY = "YUNAppointment_Query.aspx";
     public static String PAGE_APPOINTMENT_PERMISSION_QUERY = "YUNAppointmentPermision_Query.aspx";
     public static String PAGE_DEAL_INFO_QUERY = "YUNDealInfo_Query.aspx";
     public static String PAGE_GUIDER_QUERY = "YUNGuider_Query.aspx";
@@ -32,6 +33,8 @@ public class ParamUtils {
     public static String PAGE_SERVICE_ITEM_QUERY = "YUNServiceItem_Query.aspx";
     public static String PAGE_SERVICE_TIME_SPAN_QUERY = "YUNServiceTimeSpan_Query.aspx";
     public static String PAGE_START_APPOINTMENT = "YUNAppointment_Add.aspx";
+    public static String PAGE_PROVIDER_RELATED_QUERY = "YUNProviderRelated_Query.aspx";
+    public static String PAGE_APPOINTMENT_PERMISSION_REQUEST = "YUNAppointmentPermision_Request.aspx";
 
 
     /* 签名方式 -- String(8) 取值：MD5，默认：MD5 暂时只支持MD5 */
@@ -39,9 +42,9 @@ public class ParamUtils {
     /* 接口版本 -- String(8) 默认为1.0 */
     public static String KEY_SERVICE_VERSION = "service_version";
     /* 字符集 -- String(8) 默认 UTF-8*/
-    public static String KEY_INPUT_CHARSET ="input_charset";
+    public static String KEY_INPUT_CHARSET = "input_charset";
     /* 手机验证码的明文 */
-    public static String KEY_VERIFY_CODE ="sSMSCode";
+    public static String KEY_VERIFY_CODE = "sSMSCode";
     /* 签名 -- String(32) */
     public static String KEY_SIGN = "sign";
     /* 用户名 -- String(64) 导游证号 */
@@ -127,6 +130,8 @@ public class ParamUtils {
     public static String KEY_YYXCXK = "sYYXCXK";   /* 导游允许旅行社(或部门)预约行程 */
     public static String KEY_WPTDXK = "sWPTDXK";   /* 导游允许旅行社(或部门)委派团队 */
 
+    public static String KEY_PROVIDER_TYPE = "sProvidertype";
+    public static String KEY_PROVIDER_NAME = "sProviderName";
 
 
     public static String VALUE_SIGN_TYPE_MD5 = "MD5";

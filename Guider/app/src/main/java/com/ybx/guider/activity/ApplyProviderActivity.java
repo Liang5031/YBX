@@ -19,14 +19,16 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
-import com.ybx.guider.adapters.DeptListAdapter;
+import com.ybx.guider.adapters.ProviderListAdapter;
 import com.ybx.guider.dialog.AddDeptDialog;
+import com.ybx.guider.dialog.ApplyProviderDialog;
 import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
 import com.ybx.guider.responses.BindingDeptItem;
 import com.ybx.guider.responses.DeptItem;
-import com.ybx.guider.responses.DeptListResponse;
+import com.ybx.guider.responses.ProviderItem;
+import com.ybx.guider.responses.ProviderListResponse;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.XMLResponse;
 import com.ybx.guider.utils.EncryptUtils;
@@ -39,23 +41,24 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BindDeptActivity extends AppCompatActivity implements Response.Listener<DeptListResponse>, Response.ErrorListener,
-        AdapterView.OnItemClickListener, AddDeptDialog.DeptItemDialogListener {
-    private Spinner mSpinnerDeptType;
-    private ArrayAdapter<String> mDeptTypeAdapter;
-    XMLRequest<DeptListResponse> mRequest;
-    XMLRequest<XMLResponse> mDeptAddRequest;
-    String[] mDeptTypeList = {"旅行社", "部门"};
+public class ApplyProviderActivity extends AppCompatActivity implements Response.Listener<ProviderListResponse>, Response.ErrorListener,
+        AdapterView.OnItemClickListener, ApplyProviderDialog.ApplyProviderDialogListener {
+    private Spinner mSpinnerProviderType;
+    private ArrayAdapter<String> mProviderTypeAdapter;
+    XMLRequest<ProviderListResponse> mRequest;
+    XMLRequest<XMLResponse> mApplyProviderRequest;
+
+    String[] mProviderTypeList = {"吃", "住", "行", "游", "购", "娱"};
     ListView mListView;
-    DeptListAdapter mAdapter;
+    ProviderListAdapter mAdapter;
     ProgressDialog mProgressDialog;
-    ArrayList<DeptItem> mAllItems;
+    ArrayList<ProviderItem> mAllItems;
     EditText mKeyWord;
     int mLastPosition;
     int mPageIndex;
     String mIndexCode = "";
     String mIndexName = "";
-    String mCustomerType = "1";
+    String mProviderType = "1";
     boolean isLoadFinished = false;
 
     static String regEx = "[\u4e00-\u9fa5]";
@@ -72,13 +75,12 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bind_dept);
-        setTitle("添加部门");
-        mAllItems = new ArrayList<DeptItem>();
+        setContentView(R.layout.activity_apply_provider);
+        setTitle("供应商预约申请");
+        mAllItems = new ArrayList<ProviderItem>();
 
-        mListView = (ListView) findViewById(R.id.deptList);
-//        mListView.setEmptyView(findViewById(R.id.empty));
-        mAdapter = new DeptListAdapter(this);
+        mListView = (ListView) findViewById(R.id.providerList);
+        mAdapter = new ProviderListAdapter(this);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
@@ -86,8 +88,8 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (mLastPosition == mAllItems.size() - 1 && !isLoadFinished) {
-                    Toast.makeText(BindDeptActivity.this, "Loading ...", Toast.LENGTH_LONG).show();
-                    requestDeptList(mPageIndex);
+                    Toast.makeText(ApplyProviderActivity.this, "Loading ...", Toast.LENGTH_LONG).show();
+                    requestProviderList(mPageIndex);
                 }
             }
 
@@ -99,18 +101,33 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
 
         mKeyWord = (EditText) findViewById(R.id.keyword);
 
-        mSpinnerDeptType = (Spinner) findViewById(R.id.spinnerType);
-        mDeptTypeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, mDeptTypeList);
-        mDeptTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerDeptType.setAdapter(mDeptTypeAdapter);
-        mSpinnerDeptType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpinnerProviderType = (Spinner) findViewById(R.id.spinnerType);
+        mProviderTypeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, mProviderTypeList);
+        mProviderTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerProviderType.setAdapter(mProviderTypeAdapter);
+        mSpinnerProviderType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    mCustomerType = "1";
-                } else {
-                    mCustomerType = "2";
+                switch(position){
+                    case 0:
+                        mProviderType = "100000";
+                        break;
+                    case 1:
+                        mProviderType = "010000";
+                        break;
+                    case 2:
+                        mProviderType = "001000";
+                        break;
+                    case 3:
+                        mProviderType = "000100";
+                        break;
+                    case 4:
+                        mProviderType = "000010";
+                        break;
+                    case 5:
+                        mProviderType = "000001";
+                        break;
                 }
             }
 
@@ -128,8 +145,8 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
             mRequest.cancel();
         }
 
-        if (mDeptAddRequest != null) {
-            mDeptAddRequest.cancel();
+        if (mApplyProviderRequest != null) {
+            mApplyProviderRequest.cancel();
         }
     }
 
@@ -145,7 +162,7 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
 //        int id = item.getItemId();
 //        switch (id) {
 //            case R.id.action_refresh:
-////                Toast.makeText(this, "refresh pressed", Toast.LENGTH_LONG).show();
+//                Toast.makeText(this, "refresh pressed", Toast.LENGTH_LONG).show();
 //                return true;
 //            default:
 //                return super.onOptionsItemSelected(item);
@@ -158,22 +175,18 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
             mPageIndex = 0;
             isLoadFinished = false;
             mProgressDialog = ProgressDialog.show(this, "正在加载数据", "请稍等...", true, false);
-            requestDeptList(0);
+            requestProviderList(0);
         }
 
     }
 
     boolean inputCheck() {
         if (mKeyWord.getText().toString().isEmpty()) {
-            Toast.makeText(this, "关键字不能为空！", Toast.LENGTH_LONG).show();
-            return false;
+            return true;
         }
 
         String keyword = mKeyWord.getText().toString();
-        if (keyword.length() < 3) {
-            Toast.makeText(this, "关键字长度不能小于3", Toast.LENGTH_LONG).show();
-            return false;
-        } else if (isContainsChinese(keyword)) {
+        if (isContainsChinese(keyword)) {
             mIndexName = keyword;
             mIndexCode = "";
         } else {
@@ -181,28 +194,29 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
             mIndexName = "";
         }
 
-
         return true;
     }
 
-    void requestDeptList(Integer pageIndex) {
-        Param param = new Param(ParamUtils.PAGE_CUSTOMER_QUERY);
+    void requestProviderList(Integer pageIndex) {
+        Param param = new Param(ParamUtils.PAGE_PROVIDER_QUERY);
+
         param.setUser(PreferencesUtils.getGuiderNumber(this));
-        param.setPageIndex(pageIndex.toString());
+        param.addParam(ParamUtils.KEY_PROVIDER_TYPE,mProviderType);
+
         if (!mIndexName.isEmpty()) {
-            param.addParam(ParamUtils.KEY_CUSTOMER_NAME, mIndexName);
-        } else if (!mIndexCode.isEmpty()) {
+            param.addParam(ParamUtils.KEY_PROVIDER_NAME, mIndexName);
+        }else if (!mIndexCode.isEmpty()) {
             param.addParam(ParamUtils.KEY_INDEX_CODE, mIndexCode);
         }
+        param.setPageIndex(pageIndex.toString());
 
-        param.addParam(ParamUtils.KEY_CUSTOMER_TYPE, mCustomerType);
 
         String orderParams = param.getParamStringInOrder();
         String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
         param.setSign(sign);
 
         String url = URLUtils.generateURL(param);
-        mRequest = new XMLRequest<DeptListResponse>(url, this, this, new DeptListResponse());
+        mRequest = new XMLRequest<ProviderListResponse>(url, this, this, new ProviderListResponse());
         mRequest.setShouldCache(false);
         VolleyRequestQueue.getInstance(this).add(mRequest);
 
@@ -211,7 +225,7 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
     @Override
     public void onErrorResponse(VolleyError error) {
         mProgressDialog.dismiss();
-        Toast.makeText(this, "查询部门失败！", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "查询供应商信息失败！", Toast.LENGTH_LONG).show();
 
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
@@ -219,10 +233,10 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
     }
 
     @Override
-    public void onResponse(DeptListResponse response) {
+    public void onResponse(ProviderListResponse response) {
         mProgressDialog.dismiss();
         if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
-            for (DeptItem item : response.mItems) {
+            for (ProviderItem item : response.mItems) {
                 mAllItems.add(item);
             }
 
@@ -232,12 +246,12 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
             if (1 == response.mIsLastPage) {
                 isLoadFinished = true;
                 if (mAllItems.size() == 0) {
-                    Toast.makeText(this, "未查询到符合条件的旅行社或部门！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "未查询到符合条件的供应商！", Toast.LENGTH_LONG).show();
                 }
             }
 
         } else {
-            Toast.makeText(this, "查询部门失败！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, response.mReturnMSG, Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
                 Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
@@ -247,36 +261,17 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        DeptItem item = (DeptItem) mAdapter.getItem(position);
-        BindingDeptItem bindItem = new BindingDeptItem();
-        bindItem.customerid = item.customerid;
-        bindItem.customername = item.customername;
-        bindItem.customertype = item.type;
-
+        ProviderItem item = (ProviderItem) mAdapter.getItem(position);
         if (item != null) {
-            AddDeptDialog dlg = AddDeptDialog.newInstance(bindItem);
+            ApplyProviderDialog dlg = ApplyProviderDialog.newInstance(item);
             dlg.show(getSupportFragmentManager(), "dept");
         }
     }
 
-    @Override
-    public void onDeptAdd(BindingDeptItem item) {
-        mProgressDialog = ProgressDialog.show(this, "正在添加", "请稍等...", true, false);
-        requestAddDept(item);
-    }
-
-    @Override
-    public void onDeptCancel(BindingDeptItem item) {
-
-    }
-
-    void requestAddDept(final BindingDeptItem item) {
-        Param param = new Param(ParamUtils.PAGE_DEPT_ADD);
-        param.setUser(PreferencesUtils.getGuiderNumber(this));
-        param.addParam(ParamUtils.KEY_CUSTOMER_TYPE, item.customertype);
-        param.addParam(ParamUtils.KEY_CUSTOMER_ID, item.customerid);
-        param.addParam(ParamUtils.KEY_YYXCXK, item.YYXCXK);
-        param.addParam(ParamUtils.KEY_WPTDXK, item.WPTDXK);
+     void requestApplyProvider(final ProviderItem item) {
+        Param param = new Param(ParamUtils.PAGE_APPOINTMENT_PERMISSION_REQUEST);
+         param.setUser(PreferencesUtils.getGuiderNumber(this));
+        param.addParam(ParamUtils.KEY_PROVIDER_ID, item.providerid);
 
         String orderParams = param.getParamStringInOrder();
         String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
@@ -288,12 +283,9 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
             public void onResponse(XMLResponse response) {
                 mProgressDialog.dismiss();
                 if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
-                    Toast.makeText(BindDeptActivity.this, "添加部门成功！", Toast.LENGTH_LONG).show();
-//                    mAllItems.remove(item);
-                    remove(item);
-                    mAdapter.update(mAllItems);
+                    Toast.makeText(ApplyProviderActivity.this, "已申请开通供应商预约！", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(BindDeptActivity.this, "添加部门失败！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ApplyProviderActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                     if (URLUtils.isDebug) {
                         Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                         Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
@@ -307,7 +299,7 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgressDialog.dismiss();
-                Toast.makeText(BindDeptActivity.this, "添加部门失败！", Toast.LENGTH_LONG).show();
+                Toast.makeText(ApplyProviderActivity.this, "申请失败！", Toast.LENGTH_LONG).show();
 
                 if (URLUtils.isDebug) {
                     Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
@@ -316,18 +308,23 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
         };
 
         String url = URLUtils.generateURL(param);
-        mDeptAddRequest = new XMLRequest<XMLResponse>(url, resListener, errorListener, new XMLResponse());
-        mDeptAddRequest.setShouldCache(false);
-        VolleyRequestQueue.getInstance(this).add(mDeptAddRequest);
+        mApplyProviderRequest = new XMLRequest<XMLResponse>(url, resListener, errorListener, new XMLResponse());
+        mApplyProviderRequest.setShouldCache(false);
+        VolleyRequestQueue.getInstance(this).add(mApplyProviderRequest);
     }
 
-    void remove(BindingDeptItem item) {
+    void remove(ProviderItem item) {
         Iterator iter = mAllItems.iterator();
         while (iter.hasNext()) {
-            DeptItem i = (DeptItem) iter.next();
-            if (i.customerid.equals(item.customerid)) {
+            ProviderItem i = (ProviderItem) iter.next();
+            if (i.providerid.equals(item.providerid)) {
                 iter.remove();
             }
         }
+    }
+
+    @Override
+    public void onApply(ProviderItem item) {
+        requestApplyProvider(item);
     }
 }

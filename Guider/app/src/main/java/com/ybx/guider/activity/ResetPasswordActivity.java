@@ -38,22 +38,22 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
         setContentView(R.layout.activity_reset_passward);
         this.setTitle(R.string.reset_password);
 
-        mRememberPWD = (CheckBox)findViewById(R.id.remember_password);
-        mVerifyCode = (EditText)findViewById(R.id.verifyCode);
-        mNewPassword = (EditText)findViewById(R.id.newPassword);
-        mConfirmPassword = (EditText)findViewById(R.id.confirmPassword);
-        mGuiderNumber = (EditText)findViewById(R.id.guiderNumber);
+        mRememberPWD = (CheckBox) findViewById(R.id.remember_password);
+        mVerifyCode = (EditText) findViewById(R.id.verifyCode);
+        mNewPassword = (EditText) findViewById(R.id.newPassword);
+        mConfirmPassword = (EditText) findViewById(R.id.confirmPassword);
+        mGuiderNumber = (EditText) findViewById(R.id.guiderNumber);
         mGuiderNumber.setText(PreferencesUtils.getGuiderNumber(this));
     }
 
     public void onClickGetVerifyCode(View view) {
-        if(mGuiderNumber.getText().toString().isEmpty()){
-            Toast.makeText(this,"导游证号不能为空！", Toast.LENGTH_LONG).show();
+        if (mGuiderNumber.getText().toString().isEmpty()) {
+            Toast.makeText(this, "导游证号不能为空！", Toast.LENGTH_LONG).show();
         }
 
         Param param = new Param(ParamUtils.PAGE_GET_CHECK_CODE);
         param.setGuiderNumber(mGuiderNumber.getText().toString());
-        Response.Listener<GetVerifyCodeResponse> listener = new Response.Listener<GetVerifyCodeResponse>(){
+        Response.Listener<GetVerifyCodeResponse> listener = new Response.Listener<GetVerifyCodeResponse>() {
             @Override
             public void onResponse(GetVerifyCodeResponse response) {
                 if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
@@ -64,20 +64,20 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener(){
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(ResetPasswordActivity.this,"获取验证码失败!",Toast.LENGTH_LONG).show();
+                Toast.makeText(ResetPasswordActivity.this, "获取验证码失败!", Toast.LENGTH_LONG).show();
             }
         };
 
         String url = URLUtils.generateURL(param);
-        mGetVerifyCodeRequest = new XMLRequest<GetVerifyCodeResponse>(url,  listener, errorListener, new GetVerifyCodeResponse());
+        mGetVerifyCodeRequest = new XMLRequest<GetVerifyCodeResponse>(url, listener, errorListener, new GetVerifyCodeResponse());
         mGetVerifyCodeRequest.setShouldCache(false);
         VolleyRequestQueue.getInstance(this).add(mGetVerifyCodeRequest);
     }
 
-    private boolean inputCheck(){
+    private boolean inputCheck() {
         if (mGuiderNumber == null || mGuiderNumber.getText().toString().isEmpty()) {
             Toast.makeText(this, "导游证号不能为空！", Toast.LENGTH_LONG).show();
             return false;
@@ -106,8 +106,9 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
 
         return true;
     }
+
     public void onClickResetPassword(View view) {
-        if(inputCheck()) {
+        if (inputCheck()) {
             Param param = new Param(ParamUtils.PAGE_GUIDER_RESET_PASSWORD);
             param.setUser(mGuiderNumber.getText().toString());
             param.setVerifyCode(mVerifyCode.getText().toString());
@@ -124,11 +125,11 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mResetPWDRequest!=null){
+        if (mResetPWDRequest != null) {
             mResetPWDRequest.cancel();
         }
 
-        if(mGetVerifyCodeRequest!=null){
+        if (mGetVerifyCodeRequest != null) {
             mGetVerifyCodeRequest.cancel();
         }
 
@@ -136,15 +137,15 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Toast.makeText(this,error.getMessage(),Toast.LENGTH_LONG).show();
+        Toast.makeText(this, error.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onResponse(ResetPasswordResponse response) {
         if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
             Toast.makeText(this, "重置密码成功！", Toast.LENGTH_LONG).show();
-            if(mRememberPWD.isChecked()){
-                PreferencesUtils.setGuiderNumber(this,mGuiderNumber.getText().toString());
+            if (mRememberPWD.isChecked()) {
+                PreferencesUtils.setGuiderNumber(this, mGuiderNumber.getText().toString());
                 PreferencesUtils.setPassword(this, mNewPassword.getText().toString());
             }
         } else {

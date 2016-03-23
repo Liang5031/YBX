@@ -17,52 +17,52 @@ public class BindingDeptItem implements Serializable {
     public static String NOT_ALLOW = "否";
 
 
-    public boolean isAllowAppointment(){
-        if(YYXCXK!=null) {
+    public boolean isAllowAppointment() {
+        if (YYXCXK != null) {
             return YYXCXK.equals("1");
         }
         return true;
     }
 
-    public String getAllowAppointment(){
-        if(YYXCXK == null){
+    public String getAllowAppointment() {
+        if (YYXCXK == null) {
             return ALLOW;
         }
-        if( YYXCXK.equals("1")){
+        if (YYXCXK.equals("1")) {
             return ALLOW;
         } else {
             return NOT_ALLOW;
         }
     }
 
-    public void setAllowAppointment(boolean allow){
-        if(allow){
+    public void setAllowAppointment(boolean allow) {
+        if (allow) {
             YYXCXK = "1";
         } else {
             YYXCXK = "0";
         }
     }
 
-    public boolean isAllowAssignTeam(){
-        if(WPTDXK!=null) {
+    public boolean isAllowAssignTeam() {
+        if (WPTDXK != null) {
             return WPTDXK.equals("1");
         }
         return true;
     }
 
-    public String getAllowAssignTeam(){
-        if(WPTDXK == null){
+    public String getAllowAssignTeam() {
+        if (WPTDXK == null) {
             return ALLOW;
         }
-        if( WPTDXK.equals("1")){
+        if (WPTDXK.equals("1")) {
             return ALLOW;
         } else {
             return NOT_ALLOW;
         }
     }
 
-    public void setAllowAssignTeam(boolean allow){
-        if(allow){
+    public void setAllowAssignTeam(boolean allow) {
+        if (allow) {
             WPTDXK = "1";
         } else {
             WPTDXK = "0";

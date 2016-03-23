@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Created by chenlia1 on 2016/2/4.
+ * Created by chenl on 2016/2/4.
  */
 public class TeamListResponse extends XMLResponse {
     public int mPageCount;

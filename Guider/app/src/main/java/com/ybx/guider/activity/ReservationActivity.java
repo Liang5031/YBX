@@ -2,7 +2,6 @@ package com.ybx.guider.activity;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
-import com.ybx.guider.dialog.MyDatePickerDialog;
 import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
@@ -41,13 +39,12 @@ import com.ybx.guider.utils.VolleyRequestQueue;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class ReservationActivity extends AppCompatActivity implements Response.Listener<StartAppointmentResponse>, Response.ErrorListener {
     public static String EXTRA_TEAM_ITEM = "team_item";
     public static String EXTRA_TEAM_SCHEDULE_ITEM = "team_schedule_item";
-    public static String EXTRA_RESERVATION_TYPE ="reservation_type";
+    public static String EXTRA_RESERVATION_TYPE = "reservation_type";
     public static int TYPE_START = 1;
     public static int TYPE_CHANGE = 2;
 
@@ -92,9 +89,8 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
         mTeamItem = (TeamItem) i.getSerializableExtra(EXTRA_TEAM_ITEM);
         mTeamScheduleItem = (TeamScheduleItem) i.getSerializableExtra(EXTRA_TEAM_SCHEDULE_ITEM);
 
-
         setTitle("发起预约");
-        if(mReservationType==TYPE_CHANGE){
+        if (mReservationType == TYPE_CHANGE) {
             setTitle("改签预约");
             ((Button) findViewById(R.id.startAppo)).setText("改签预约");
         }
@@ -220,7 +216,6 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 //                NavUtils.navigateUpTo(this, intent);
                 this.finish();
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -307,7 +302,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 
                 }
 
-                if(item.TimeSpanIndex.length()==1){
+                if (item.TimeSpanIndex.length() == 1) {
                     item.TimeSpanIndex = "0" + item.TimeSpanIndex;
                 }
                 String timeSlot = String.format("%s时段: (%s-%s)  余:%d", item.TimeSpanIndex, item.StartTime, item.EndTime, remain);
@@ -425,7 +420,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 
     void requestStartAppointment() {
         String page = ParamUtils.PAGE_START_APPOINTMENT;
-        if(mReservationType == TYPE_CHANGE){
+        if (mReservationType == TYPE_CHANGE) {
             page = ParamUtils.PAGE_APPOINTMENT_CHANGE;
         }
 
@@ -451,7 +446,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
             param.setReservatinoMemo(mMemo.getText().toString());
         }
 
-        if(mReservationType == TYPE_CHANGE){
+        if (mReservationType == TYPE_CHANGE) {
             param.addParam(ParamUtils.KEY_RESERVATION_NUMBER, mTeamScheduleItem.getAppoNumber());
         }
 
@@ -469,7 +464,11 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     @Override
     public void onErrorResponse(VolleyError error) {
         mProgressDialog.dismiss();
-        Toast.makeText(ReservationActivity.this, "预约失败！", Toast.LENGTH_LONG).show();
+        if (mReservationType == TYPE_CHANGE) {
+            Toast.makeText(ReservationActivity.this, "改签失败！", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(ReservationActivity.this, "预约失败！", Toast.LENGTH_LONG).show();
+        }
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
         }
@@ -479,9 +478,17 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     public void onResponse(StartAppointmentResponse response) {
         mProgressDialog.dismiss();
         if (response.mReturnCode.equalsIgnoreCase(ResponseUtils.RESULT_OK)) {
-            Toast.makeText(ReservationActivity.this, "预约成功！", Toast.LENGTH_LONG).show();
+            if (mReservationType == TYPE_CHANGE) {
+                Toast.makeText(ReservationActivity.this, "改签成功！", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(ReservationActivity.this, "预约成功！", Toast.LENGTH_LONG).show();
+            }
         } else {
-            Toast.makeText(ReservationActivity.this, "预约失败！", Toast.LENGTH_LONG).show();
+            if (mReservationType == TYPE_CHANGE) {
+                Toast.makeText(ReservationActivity.this, "改签失败！", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(ReservationActivity.this, "预约失败！", Toast.LENGTH_LONG).show();
+            }
             if (URLUtils.isDebug) {
                 Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);

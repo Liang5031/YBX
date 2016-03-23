@@ -120,15 +120,15 @@ public class AccountVerifyFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch(id){
+        switch (id) {
             case R.id.verify_fragment_refresh:
-                Toast.makeText(this.getContext(),"verify_fragment_refresh pressed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getContext(), "verify_fragment_refresh pressed", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.verify_fragment_sign_up:
-                Toast.makeText(this.getContext(),"verify_fragment_sign_up pressed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getContext(), "verify_fragment_sign_up pressed", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.verify_fragment_change_account:
-                Toast.makeText(this.getContext(),"verify_fragment_change_account pressed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getContext(), "verify_fragment_change_account pressed", Toast.LENGTH_LONG).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

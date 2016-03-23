@@ -106,13 +106,22 @@ public class ResponseUtils {
     public static String TAG_CUSTOMER_ID = "customerid";            /* 旅行社/部门id */
     public static String TAG_CUSTOMER_TYPE = "customertype";        /* ”1”旅行社，“2”部门 */
     public static String TAG_CUSTOMER_NAME = "customername";        /* 旅行社/部门的名称 */
-    public static String TAG_YYXCXK  = "YYXCXK";                   /* 导游允许旅行社(或部门)预约行程	YYXCXK	Char(1)	NOT NULL	‘1’表示允许，‘0’表示不允许。此项仅允许导游设置。初始值为“1” */
-    public static String TAG_WPTDXK  = "WPTDXK";                   /* 导游允许旅行社(或部门)委派团队	WPTDXK	Char(1)	NOT NULL	‘1’表示允许，‘0’表示不允许。此项仅允许导游设置。初始值为“1” */
+    public static String TAG_YYXCXK = "YYXCXK";                   /* 导游允许旅行社(或部门)预约行程	YYXCXK	Char(1)	NOT NULL	‘1’表示允许，‘0’表示不允许。此项仅允许导游设置。初始值为“1” */
+    public static String TAG_WPTDXK = "WPTDXK";                   /* 导游允许旅行社(或部门)委派团队	WPTDXK	Char(1)	NOT NULL	‘1’表示允许，‘0’表示不允许。此项仅允许导游设置。初始值为“1” */
     public static String TAG_CJTDXK = "CJTDXK";                     /* 旅行社(或部门)允许导游创建团队 */
     public static String TAG_RQSJ = "RQSJ";                         /* 关联的建立时间 */
 
     public static String TAG_DEPT_TYPE = "Type";        /* ”1”客户单位，“2”部门 */
     public static String TAG_DEPT_STATUS = "status";        /* ”1”启用，“0”禁用 */
+
+
+
+
+
+
+
+
+
 
 
     public static String RESULT_OK = "0";
@@ -137,11 +146,11 @@ public class ResponseUtils {
     }
 
     /**
-     *  YYYY/MM/DD to YYYYMMDD
+     * YYYY/MM/DD to YYYYMMDD
      */
     public static String fromDate(String date) {
         if (date != null && date.length() == 10) {
-            return date.substring(0, 4) + date.substring(5, 7) +  date.substring(8, 10);
+            return date.substring(0, 4) + date.substring(5, 7) + date.substring(8, 10);
         }
         return "";
     }
@@ -152,7 +161,7 @@ public class ResponseUtils {
      */
     public static String formatDateTime(String dateTime) {
         if (dateTime != null && dateTime.length() == 14) {
-            return dateTime.substring(0, 4) + "/" + dateTime.substring(4, 6) + "/" + dateTime.substring(6, 8) + " " + dateTime.substring(8,10) + ":" + dateTime.substring(10,12);
+            return dateTime.substring(0, 4) + "/" + dateTime.substring(4, 6) + "/" + dateTime.substring(6, 8) + " " + dateTime.substring(8, 10) + ":" + dateTime.substring(10, 12);
         }
         return "";
     }

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -27,8 +26,6 @@ import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
 import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -140,7 +137,7 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRequest!=null){
+        if (mRequest != null) {
             mRequest.cancel();
         }
     }
@@ -165,7 +162,7 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
     @Override
     public void onErrorResponse(VolleyError error) {
         setCount(0);
-        if(!Utils.isNetworkAvailable(this.getContext())){
+        if (!Utils.isNetworkAvailable(this.getContext())) {
             mEmptyView.setText("请检查网络连接是否可用！");
         } else {
             mEmptyView.setText("请求失败！");

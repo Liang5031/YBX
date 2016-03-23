@@ -5,11 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,8 +19,6 @@ import com.android.volley.VolleyError;
 import com.ybx.guider.R;
 import com.ybx.guider.activity.TeamActivity;
 import com.ybx.guider.adapters.TeamListAdapter;
-import com.ybx.guider.dialog.AcceptTeamDialog;
-import com.ybx.guider.dialog.FinishTeamDialog;
 import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
@@ -45,13 +42,16 @@ public class TeamListFragement extends ListFragment implements Response.Listener
     public static int TEAM_STATUS_WAITING = 3;  /* 3 -- 已委派待接团 */
     public static int TEAM_STATUS_FINISHED = 5; /* 5 - 带团完成待结算 */
     public ArrayList<TeamItem> mAllTeamItems;
+    int mLastPosition;
+    boolean isLoadFinished = false;
+    int mPageIndex;
 
     TextView mEmptyView;
     XMLRequest<TeamListResponse> mRequest;
     TeamListAdapter mAdapter;
     int mTeamStatus;
     private View mLoadMoreView;
-    int mPageIndex;
+
 
     public static TeamListFragement newInstance(int teamStatus) {
         TeamListFragement fragment = new TeamListFragement();
@@ -104,6 +104,8 @@ public class TeamListFragement extends ListFragment implements Response.Listener
         }
         setHasOptionsMenu(true);
         mAllTeamItems = new ArrayList<TeamItem>();
+        mAdapter = new TeamListAdapter(this.getContext(), mAllTeamItems);
+        this.setListAdapter(mAdapter);
     }
 
     public void onListItemClick(ListView parent, View v,
@@ -124,23 +126,36 @@ public class TeamListFragement extends ListFragment implements Response.Listener
 
         mEmptyView = (TextView) this.getView().findViewById(R.id.empty);
         this.getListView().setEmptyView(mEmptyView);
-
-
-        mLoadMoreView = getActivity().getLayoutInflater().inflate(R.layout.team_list_footer, null);
-        Button loadMoreButton = (Button)mLoadMoreView.findViewById(R.id.btnLoadMore);
-        loadMoreButton.setOnClickListener(new View.OnClickListener() {
+        this.getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (mLastPosition == mAllTeamItems.size() - 1 && !isLoadFinished) {
+                    Toast.makeText(TeamListFragement.this.getContext(), "Loading ...", Toast.LENGTH_LONG).show();
+                    requestTeamList(mTeamStatus, mPageIndex, false);
+                }
+            }
 
             @Override
-            public void onClick(View v) {
-                requestTeamList(mTeamStatus, mPageIndex + 1, false);
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                mLastPosition = TeamListFragement.this.getListView().getLastVisiblePosition();
             }
         });
+
+//        mLoadMoreView = getActivity().getLayoutInflater().inflate(R.layout.team_list_footer, null);
+//        Button loadMoreButton = (Button) mLoadMoreView.findViewById(R.id.btnLoadMore);
+//        loadMoreButton.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                requestTeamList(mTeamStatus, mPageIndex + 1, false);
+//            }
+//        });
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRequest!=null) {
+        if (mRequest != null) {
             mRequest.cancel();
         }
     }
@@ -186,17 +201,15 @@ public class TeamListFragement extends ListFragment implements Response.Listener
             for (TeamItem item : response.mItems) {
                 mAllTeamItems.add(item);
             }
-            mPageIndex = response.mPageIndex;
+
+            mAdapter.update(mAllTeamItems);
+            mPageIndex = response.mPageIndex + 1;
 
             if (1 == response.mIsLastPage) {
-                mAdapter = new TeamListAdapter(this.getContext(), mAllTeamItems);
-                this.getListView().removeFooterView(mLoadMoreView);
-                this.setListAdapter(mAdapter);
-            } else {
-                mAdapter = new TeamListAdapter(this.getContext(), mAllTeamItems);
-                this.getListView().removeFooterView(mLoadMoreView);
-                this.getListView().addFooterView(mLoadMoreView);
-                this.setListAdapter(mAdapter);
+                isLoadFinished = true;
+                if (mAllTeamItems.size() == 0) {
+                    mEmptyView.setText("未查询到符合条件的旅行社或部门！");
+                }
             }
         } else {
             mEmptyView.setText(response.mReturnMSG);

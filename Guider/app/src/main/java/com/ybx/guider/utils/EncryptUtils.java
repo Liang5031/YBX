@@ -7,8 +7,6 @@ import android.util.Base64;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -35,9 +33,8 @@ public class EncryptUtils {
     /// <param name="strKey">原始密钥字符串</param>
     /// <returns></returns>
     public static String Encrypt3DES(String value, String key) throws Exception {
-        if (key.length() < 24)
-        {
-            key+="000000000000000000000000000000000";
+        if (key.length() < 24) {
+            key += "000000000000000000000000000000000";
         }
         key = key.substring(0, 24);
 

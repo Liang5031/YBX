@@ -31,23 +31,23 @@ public class DealRecordResponse extends XMLResponse {
             mIsLastPage = Integer.valueOf(parser.nextText());
         } else if (ResponseUtils.TAG_ITEM.equalsIgnoreCase(TAG)) {
             mItem = new DealRecordItem();
-        } else if(ResponseUtils.TAG_REC_NUMBER.equalsIgnoreCase(TAG)){
+        } else if (ResponseUtils.TAG_REC_NUMBER.equalsIgnoreCase(TAG)) {
             mItem.recordNumber = parser.nextText();
-        }else if(ResponseUtils.TAG_PROVIDER_ID.equalsIgnoreCase(TAG)){
+        } else if (ResponseUtils.TAG_PROVIDER_ID.equalsIgnoreCase(TAG)) {
             mItem.providerId = parser.nextText();
-        }else if(ResponseUtils.TAG_BILL_NUMBER.equalsIgnoreCase(TAG)){
+        } else if (ResponseUtils.TAG_BILL_NUMBER.equalsIgnoreCase(TAG)) {
             mItem.billNumber = parser.nextText();
-        }else if(ResponseUtils.TAG_APPO_NUM.equalsIgnoreCase(TAG)){
+        } else if (ResponseUtils.TAG_APPO_NUM.equalsIgnoreCase(TAG)) {
             mItem.appointmentNum = parser.nextText();
-        }else if(ResponseUtils.TAG_PRODUCT_NAME.equalsIgnoreCase(TAG)){
+        } else if (ResponseUtils.TAG_PRODUCT_NAME.equalsIgnoreCase(TAG)) {
             mItem.productName = parser.nextText();
-        }else if(ResponseUtils.TAG_PRODUCT_ID.equalsIgnoreCase(TAG)){
+        } else if (ResponseUtils.TAG_PRODUCT_ID.equalsIgnoreCase(TAG)) {
             mItem.productId = parser.nextText();
-        }else if(ResponseUtils.TAG_PRICE.equalsIgnoreCase(TAG)){
+        } else if (ResponseUtils.TAG_PRICE.equalsIgnoreCase(TAG)) {
             mItem.price = parser.nextText();
-        }else if(ResponseUtils.TAG_COUNT.equalsIgnoreCase(TAG)){
+        } else if (ResponseUtils.TAG_COUNT.equalsIgnoreCase(TAG)) {
             mItem.count = parser.nextText();
-        }else if(ResponseUtils.TAG_REC_DATE.equalsIgnoreCase(TAG)){
+        } else if (ResponseUtils.TAG_REC_DATE.equalsIgnoreCase(TAG)) {
             mItem.recDate = parser.nextText();
         }
     }

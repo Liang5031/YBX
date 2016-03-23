@@ -4,25 +4,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ybx.guider.R;
 import com.ybx.guider.activity.ChangePasswordActivity;
+import com.ybx.guider.activity.ChangeUserInfoActivity;
 import com.ybx.guider.activity.DeptManageActivity;
 import com.ybx.guider.activity.LoginActivity;
+import com.ybx.guider.activity.RelatedProviderActivity;
 import com.ybx.guider.adapters.TeamLogListAdapter;
 
 /**
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment implements View.OnClickListener{
+public class SettingsFragment extends Fragment implements View.OnClickListener {
     private TeamLogListAdapter mAdapter;
 
     public SettingsFragment() {
@@ -107,15 +106,18 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         Intent intent;
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.add_department:
                 intent = new Intent(this.getContext(), DeptManageActivity.class);
                 startActivity(intent);
                 break;
             case R.id.apply_provider:
-
+                intent = new Intent(this.getContext(), RelatedProviderActivity.class);
+                startActivity(intent);
                 break;
             case R.id.change_user_info:
+                intent = new Intent(this.getContext(), ChangeUserInfoActivity.class);
+                startActivity(intent);
                 break;
             case R.id.change_password:
                 intent = new Intent(this.getContext(), ChangePasswordActivity.class);

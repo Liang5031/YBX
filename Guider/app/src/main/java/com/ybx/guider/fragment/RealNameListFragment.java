@@ -69,7 +69,7 @@ public class RealNameListFragment extends ListFragment implements Response.Liste
 //        this.getListView().addHeaderView(inflater.inflate(R.layout.real_name_list_header, null));
 //        ((TextView) this.getView().findViewById(R.id.teamIndex)).setText(mTeamIndex);
         if (mTeamItem != null) {
-            ((TextView) this.getView().findViewById(R.id.duration)).setText(ResponseUtils.getDuration(mTeamItem.StartDate,mTeamItem.EndDate));
+            ((TextView) this.getView().findViewById(R.id.duration)).setText(ResponseUtils.getDuration(mTeamItem.StartDate, mTeamItem.EndDate));
             ((TextView) this.getView().findViewById(R.id.teamOrderNumber)).setText(ResponseUtils.getTeamOrderNumber(mTeamItem.TeamOrderNumber));
         }
 
@@ -119,7 +119,7 @@ public class RealNameListFragment extends ListFragment implements Response.Liste
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRequest!=null) {
+        if (mRequest != null) {
             mRequest.cancel();
         }
     }

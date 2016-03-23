@@ -181,7 +181,7 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRequest!=null){
+        if (mRequest != null) {
             mRequest.cancel();
         }
     }
@@ -195,7 +195,7 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
         param.setVerifyCode(mVerifyCode);
         param.setGuiderNumber(PreferencesUtils.getGuiderNumber(this.getContext()));
         param.setGuiderName(mUserName.getText().toString());
-        if(!mUserId.getText().toString().isEmpty()) {
+        if (!mUserId.getText().toString().isEmpty()) {
             param.setGuiderIdentity(mUserId.getText().toString());
         }
         param.setGuiderNumber(PreferencesUtils.getGuiderNumber(this.getContext()));

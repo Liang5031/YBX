@@ -1,10 +1,7 @@
 package com.ybx.guider.utils;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;

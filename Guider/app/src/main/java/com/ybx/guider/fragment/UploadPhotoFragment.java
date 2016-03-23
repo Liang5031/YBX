@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,16 +18,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.ybx.guider.utils.FileImageUpload;
 import com.ybx.guider.R;
+import com.ybx.guider.utils.FileImageUpload;
 import com.ybx.guider.utils.PreferencesUtils;
-import com.ybx.guider.utils.URLUtils;
 
 public class UploadPhotoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_GUIDER_NUMBER = "guider_number";
-//    private static final String ARG_PARAM2 = "param2";
+    //    private static final String ARG_PARAM2 = "param2";
     private static final int PICK_PHOTO = 1;
     private static final int TAKE_PHOTO = 2;
     private static final int CROP_PHOTO = 3;
@@ -145,11 +143,11 @@ public class UploadPhotoFragment extends Fragment {
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             mProgressDialog.dismiss();
-            boolean ret = (boolean)msg.obj;
-            if(ret){
+            boolean ret = (boolean) msg.obj;
+            if (ret) {
                 Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传完成！", Toast.LENGTH_LONG).show();
                 PreferencesUtils.setGuiderNumber(UploadPhotoFragment.this.getContext(), mETGuiderNumber.getText().toString());
-            }else {
+            } else {
                 Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传失败！", Toast.LENGTH_LONG).show();
                 PreferencesUtils.setGuiderNumber(UploadPhotoFragment.this.getContext(), mETGuiderNumber.getText().toString());
             }
@@ -164,8 +162,8 @@ public class UploadPhotoFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mETGuiderNumber = (EditText)this.getActivity().findViewById(R.id.guiderNumber);
-        if(mGuiderNumber!=null && !mGuiderNumber.isEmpty()) {
+        mETGuiderNumber = (EditText) this.getActivity().findViewById(R.id.guiderNumber);
+        if (mGuiderNumber != null && !mGuiderNumber.isEmpty()) {
             mETGuiderNumber.setText(mGuiderNumber);
         }
         mImageView = (ImageView) this.getActivity().findViewById(R.id.photo);
@@ -173,12 +171,12 @@ public class UploadPhotoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final String number = mETGuiderNumber.getText().toString();
-                if(number.isEmpty()){
+                if (number.isEmpty()) {
                     Toast.makeText(UploadPhotoFragment.this.getContext(), "导游证号不能为空！", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                if(mImageUri == null){
+                if (mImageUri == null) {
                     Toast.makeText(UploadPhotoFragment.this.getContext(), "请先选择照片！", Toast.LENGTH_LONG).show();
                     return;
                 }

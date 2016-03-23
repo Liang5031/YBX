@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ybx.guider.activity.ChangeUserInfoActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="导游证号:" />
+
+                <EditText
+                    android:id="@+id/guiderNumber"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:editable="false"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="@string/user_name" />
+
+                <EditText
+                    android:id="@+id/userName"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="身份证号:" />
+
+                <EditText
+                    android:id="@+id/userIdentity"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="手机号:" />
+
+                <EditText
+                    android:id="@+id/userMobile"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="主要语种:" />
+
+                <EditText
+                    android:id="@+id/firstLanguage"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="次要语种:" />
+
+                <EditText
+                    android:id="@+id/secondLanguage"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="户籍地址:" />
+
+                <EditText
+                    android:id="@+id/userAddress1"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="户口所在地行政区划" />
+
+                <EditText
+                    android:id="@+id/addrZone1"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="常住地址:" />
+
+                <EditText
+                    android:id="@+id/userAddress2"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="常住地行政区划:" />
+
+                <EditText
+                    android:id="@+id/addrZone2"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="学历:" />
+
+                <EditText
+                    android:id="@+id/education"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="毕业时间:" />
+
+                <EditText
+                    android:id="@+id/graduation"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="电话:" />
+
+                <EditText
+                    android:id="@+id/userPhone"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="QQ:" />
+
+                <EditText
+                    android:id="@+id/userQQ"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="2"
+                    android:text="微信:" />
+
+                <EditText
+                    android:id="@+id/userWeChat"
+                    style="@style/EditNormal"
+                    android:layout_width="0dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="7" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        style="@style/BottonNormal"
+        android:layout_width="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:onClick="onClickUpdate"
+        android:text="更新" />
+</LinearLayout>

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Created by chenlia1 on 2016/2/4.
+ * Created by chenl on 2016/2/4.
  */
 public class TimeSlotResponse extends XMLResponse {
 
@@ -27,25 +27,25 @@ public class TimeSlotResponse extends XMLResponse {
             mItem.ServiceCode = parser.nextText();
         } else if (ResponseUtils.TAG_SERVICE_DATE.equalsIgnoreCase(TAG)) {
             mItem.Date = parser.nextText();
-        }else if (ResponseUtils.TAG_TIME_SPAN_INDEX.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_TIME_SPAN_INDEX.equalsIgnoreCase(TAG)) {
             mItem.TimeSpanIndex = parser.nextText();
-        }else if (ResponseUtils.TAG_START_TIME.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_START_TIME.equalsIgnoreCase(TAG)) {
             mItem.StartTime = parser.nextText();
-        }else if (ResponseUtils.TAG_END_TIME.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_END_TIME.equalsIgnoreCase(TAG)) {
             mItem.EndTime = parser.nextText();
-        }else if (ResponseUtils.TAG_SERVICE_CAPACITY.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_SERVICE_CAPACITY.equalsIgnoreCase(TAG)) {
             mItem.Capacity = parser.nextText();
-        }else if (ResponseUtils.TAG_BOOKING_ACCEPT.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_BOOKING_ACCEPT.equalsIgnoreCase(TAG)) {
             mItem.AppointmentAble = parser.nextText();
-        }else if (ResponseUtils.TAG_SERVICE_BOOKING_RATE.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_SERVICE_BOOKING_RATE.equalsIgnoreCase(TAG)) {
             mItem.AppointmentMaxRate = parser.nextText();
-        }else if (ResponseUtils.TAG_APPO_COUNT.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_APPO_COUNT.equalsIgnoreCase(TAG)) {
             mItem.AppointmentCount = parser.nextText();
-        }else if (ResponseUtils.TAG_APPO_USER_COUNT.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_APPO_USER_COUNT.equalsIgnoreCase(TAG)) {
             mItem.AppointmentUseCount = parser.nextText();
-        }else if (ResponseUtils.TAG_OTHER_USER_COUNT.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_OTHER_USER_COUNT.equalsIgnoreCase(TAG)) {
             mItem.OtherUseCount = parser.nextText();
-        }else if (ResponseUtils.TAG_APPO_AVAILABLE.equalsIgnoreCase(TAG)) {
+        } else if (ResponseUtils.TAG_APPO_AVAILABLE.equalsIgnoreCase(TAG)) {
             mItem.UseToAppointmentAble = parser.nextText();
         }
     }

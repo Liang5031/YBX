@@ -20,5 +20,4 @@ public class TimeSlotItem implements Serializable {
     public String UseToAppointmentAble;
 
 
-
 }

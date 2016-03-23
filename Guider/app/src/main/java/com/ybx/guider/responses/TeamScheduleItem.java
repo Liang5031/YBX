@@ -55,7 +55,6 @@ public class TeamScheduleItem implements Serializable {
     public static final String PROVIDER_APP_MODE_VALUE_UNKNOW = "";
 
 
-
     int TripType;
     int TranType;
     int Status;
@@ -71,24 +70,24 @@ public class TeamScheduleItem implements Serializable {
     String AppoDesc;
 
 
-    public String getDate(){
+    public String getDate() {
         return Date;
     }
 
-    public String getTripIndex(){
+    public String getTripIndex() {
         return TripIndex;
     }
 
-    public String getTimeRequire(){
+    public String getTimeRequire() {
         return TimeRequire;
     }
 
-    public int getTripType(){
+    public int getTripType() {
         return TripType;
     }
 
-    public String getTripTypeValue(){
-        switch(TripType){
+    public String getTripTypeValue() {
+        switch (TripType) {
             case TRIP_TYPE_IN_SCHEDULE:
                 return TRIP_TYPE_VALUE_IN_SCHEDULE;
             case TRIP_TYPE_ADDED:
@@ -98,12 +97,12 @@ public class TeamScheduleItem implements Serializable {
         }
     }
 
-    public int getTranType(){
+    public int getTranType() {
         return TranType;
     }
 
-    public String getTranTypeValue(){
-        switch(TranType){
+    public String getTranTypeValue() {
+        switch (TranType) {
             case TRAN_TYPE_EAT:
                 return TRAN_TYPE_VALUE_EAT;
             case TRAN_TYPE_LIVE:
@@ -121,28 +120,28 @@ public class TeamScheduleItem implements Serializable {
         }
     }
 
-    public String getTranName(){
+    public String getTranName() {
         return TranName;
     }
 
-    public String getProviderNumber(){
+    public String getProviderNumber() {
         return ProviderNumber;
     }
 
-    public String getProviderName(){
+    public String getProviderName() {
         return ProviderName;
     }
 
-    public String getDesc(){
+    public String getDesc() {
         return Desc;
     }
 
-    public int getStatus(){
+    public int getStatus() {
         return Status;
     }
 
-    public String getStatusValue(){
-        switch(Status){
+    public String getStatusValue() {
+        switch (Status) {
             case TRIP_STATUS_INIT:
                 return STATUS_VALUE_INIT;
             case TRIP_STATUS_BOOKING:
@@ -160,20 +159,20 @@ public class TeamScheduleItem implements Serializable {
         }
     }
 
-    public String getAppoNumber(){
+    public String getAppoNumber() {
         return AppoNumber;
     }
 
-    public String getAppoDesc(){
+    public String getAppoDesc() {
         return AppoDesc;
     }
 
-    public int getProviderAppMode(){
+    public int getProviderAppMode() {
         return ProviderAppMode;
     }
 
-    public String getProviderAppModeValue(){
-          switch(ProviderAppMode){
+    public String getProviderAppModeValue() {
+        switch (ProviderAppMode) {
             case PROVIDER_APP_MODE_NOT_SUPPORT:
             case PROVIDER_APP_MODE_CLOUD:
                 return PROVIDER_APP_MODE_VALUE_NOT_SUPPORT;
@@ -185,7 +184,7 @@ public class TeamScheduleItem implements Serializable {
         }
     }
 
-    public String geTranName(){
+    public String geTranName() {
         return TranName;
     }
 }

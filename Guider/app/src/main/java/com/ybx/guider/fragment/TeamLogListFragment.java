@@ -15,12 +15,10 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
-import com.ybx.guider.adapters.RealNameListAdapter;
 import com.ybx.guider.adapters.TeamLogListAdapter;
 import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
-import com.ybx.guider.responses.RealNameItem;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.TeamItem;
 import com.ybx.guider.responses.TeamLogItem;
@@ -135,7 +133,7 @@ public class TeamLogListFragment extends ListFragment implements Response.Listen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRequest!=null) {
+        if (mRequest != null) {
             mRequest.cancel();
         }
     }

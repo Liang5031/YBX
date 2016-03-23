@@ -25,7 +25,10 @@ public class TeamListAdapter extends BaseAdapter {
         mTeamItems = teamItems;
     }
 
-
+    public void update(ArrayList<TeamItem> teamItems){
+        mTeamItems = teamItems;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {

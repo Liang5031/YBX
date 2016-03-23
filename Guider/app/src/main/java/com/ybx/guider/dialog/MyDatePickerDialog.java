@@ -13,7 +13,6 @@ import android.widget.DatePicker;
 import com.ybx.guider.R;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by chenl on 2016/3/12.
@@ -48,7 +47,7 @@ public class MyDatePickerDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_date_picker, null);
-        mDatePicker = (DatePicker)view.findViewById(R.id.datePicker);
+        mDatePicker = (DatePicker) view.findViewById(R.id.datePicker);
         Calendar ca = Calendar.getInstance();
         int year = ca.get(Calendar.YEAR);
         int month = ca.get(Calendar.MONTH);
@@ -70,7 +69,7 @@ public class MyDatePickerDialog extends DialogFragment {
         builder.setMessage("请选择预约日期")
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDateSelected(mYear,mMonth,mDay);
+                        mListener.onDateSelected(mYear, mMonth, mDay);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
