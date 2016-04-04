@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,8 +33,8 @@ public class UploadPhotoFragment extends Fragment {
     private static final int CROP_PHOTO = 3;
     private static final int CROP_OUTPUT_X = 300;
     private static final int CROP_OUTPUT_Y = 240;
-    private static final String IMAGE_FILE_LOCATION = "file:////sdcard/test.jpg";//temp file
-    //    private Uri mImageUri = Uri.parse(IMAGE_FILE_LOCATION);//The Uri to store the big bitmap
+    private static final String IMAGE_FILE_LOCATION = "file:///sdcard/temp.jpg";//temp file
+    private Uri mOutputImageUri = Uri.parse(IMAGE_FILE_LOCATION);//The Uri to store the big bitmap
     private Uri mImageUri;
     private ImageView mImageView;
     private ProgressDialog mProgressDialog;
@@ -120,20 +121,34 @@ public class UploadPhotoFragment extends Fragment {
         if (resultCode == getActivity().RESULT_OK) {
             switch (requestCode) {
                 case TAKE_PHOTO:
-                    cropImage(data.getData(), CROP_OUTPUT_X, CROP_OUTPUT_Y);
+//                    Toast.makeText(UploadPhotoFragment.this.getContext(), "拍照完成！开始剪切", Toast.LENGTH_LONG).show();
+//                    cropImage(data.getData(), CROP_OUTPUT_X, CROP_OUTPUT_Y);
+//                    cropImageUri(mOutputImageUri);
+                    if (mImageView != null) {
+                        mImageUri = data.getData();
+                        mImageView.setImageURI(null);
+                        mImageView.setImageURI(mImageUri);
+                    }
                     break;
 
                 case PICK_PHOTO:
+//                    Toast.makeText(UploadPhotoFragment.this.getContext(), "选择照片完成", Toast.LENGTH_LONG).show();
                     if (mImageView != null) {
                         mImageUri = data.getData();
+                        mImageView.setImageURI(null);
                         mImageView.setImageURI(mImageUri);
                     }
                     break;
 
                 case CROP_PHOTO:
+//                    Toast.makeText(UploadPhotoFragment.this.getContext(), "剪切完成！", Toast.LENGTH_LONG).show();
+//                    if (mImageView != null) {
+//                        mImageUri = data.getData();
+//                        mImageView.setImageURI(mImageUri);
+//                    }
                     if (mImageView != null) {
-                        mImageUri = data.getData();
-                        mImageView.setImageURI(mImageUri);
+                        mImageView.setImageURI(mOutputImageUri);
+                        mImageView.invalidate();
                     }
                     break;
             }
@@ -143,16 +158,15 @@ public class UploadPhotoFragment extends Fragment {
     Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             mProgressDialog.dismiss();
-            boolean ret = (boolean) msg.obj;
-            if (ret) {
-                Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传完成！", Toast.LENGTH_LONG).show();
-                PreferencesUtils.setGuiderNumber(UploadPhotoFragment.this.getContext(), mETGuiderNumber.getText().toString());
-            } else {
-                Toast.makeText(UploadPhotoFragment.this.getContext(), "照片上传失败！", Toast.LENGTH_LONG).show();
-                PreferencesUtils.setGuiderNumber(UploadPhotoFragment.this.getContext(), mETGuiderNumber.getText().toString());
+            String retMsg = (String) msg.obj;
+            Toast.makeText(UploadPhotoFragment.this.getContext(), retMsg, Toast.LENGTH_LONG).show();
+            PreferencesUtils.setGuiderNumber(UploadPhotoFragment.this.getContext(), mETGuiderNumber.getText().toString());
+            boolean ret = false;
+            if(retMsg.equals("上传成功")){
+                ret = true;
             }
-            super.handleMessage(msg);
 
+            super.handleMessage(msg);
             if (mListener != null) {
                 mListener.onPhotoUploaded(ret);
             }
@@ -185,7 +199,7 @@ public class UploadPhotoFragment extends Fragment {
                 new Thread() {
                     @Override
                     public void run() {
-                        boolean ret = FileImageUpload.callWebService(UploadPhotoFragment.this.getActivity().getApplicationContext()
+                        String ret = FileImageUpload.callWebService(UploadPhotoFragment.this.getActivity().getApplicationContext()
                                 , mImageUri, number);
 
                         Message message = new Message();
@@ -213,6 +227,7 @@ public class UploadPhotoFragment extends Fragment {
         });
     }
 
+/*
     private String getRealPathFromURI(Uri contentUri) {
         String path = "";
         Cursor cursor = null;
@@ -229,32 +244,64 @@ public class UploadPhotoFragment extends Fragment {
             }
         }
     }
+*/
 
     private void getImageFromAlbum() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
         intent.setType("image/*");
         intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", CROP_OUTPUT_X);
-        intent.putExtra("outputY", CROP_OUTPUT_Y);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        intent.putExtra("aspectX", 1);
+//        intent.putExtra("aspectY", 1);
+//        intent.putExtra("outputX", CROP_OUTPUT_X);
+//        intent.putExtra("outputY", CROP_OUTPUT_Y);
+        intent.putExtra("return-data", false);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true);
         startActivityForResult(intent, PICK_PHOTO);
     }
 
     private void getImageFromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, mOutputImageUri);
         startActivityForResult(intent, TAKE_PHOTO);
     }
 
     private void cropImage(Uri uri, int outputX, int outputY) {
+//        Intent intent = new Intent("com.android.camera.action.CROP");
+//        intent.setDataAndType(uri, "image/*");
+//        intent.putExtra("crop", "true");
+//        intent.putExtra("aspectX", 1);
+//        intent.putExtra("aspectY", 1);
+//        intent.putExtra("outputX", outputX);
+//        intent.putExtra("outputY", outputY);
+//        startActivityForResult(intent, CROP_PHOTO);
+
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", outputX);
-        intent.putExtra("outputY", outputY);
+        intent.putExtra("outputX", CROP_OUTPUT_X);
+        intent.putExtra("outputY", CROP_OUTPUT_Y);
+        intent.putExtra("return-data", false);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true);
+        startActivityForResult(intent, CROP_PHOTO);
+    }
+
+    private void cropImageUri(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", CROP_OUTPUT_X);
+        intent.putExtra("outputY", CROP_OUTPUT_Y);
+        intent.putExtra("scale", true);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        intent.putExtra("return-data", false);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true); // no face detection
         startActivityForResult(intent, CROP_PHOTO);
     }
 }

@@ -96,6 +96,7 @@ public class ChangeUserInfoActivity extends AppCompatActivity implements Respons
         param.addParam(ParamUtils.KEY_GUIDER_NAME, mUserName.getText().toString());
         param.addParam(ParamUtils.KEY_PHONE_NUMBER, mUserMobile.getText().toString());
         param.addParam(ParamUtils.KEY_FIRST_LANGUAGE, mFirstLanguage.getText().toString());
+        param.addParam(ParamUtils.KEY_PHOTO, PreferencesUtils.getGuiderNumber(this) + ".jpg" );
 
         String identidy = ((EditText)findViewById(R.id.userIdentity)).getText().toString();
         if(!identidy.isEmpty()){

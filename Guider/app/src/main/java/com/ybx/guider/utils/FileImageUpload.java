@@ -178,8 +178,8 @@ public class FileImageUpload {
         return Base64EncodedStr;
     }
 
-    public static boolean callWebService(Context ctx, Uri srcUri, String filename) {
-        boolean result = false;
+    public static String callWebService(Context ctx, Uri srcUri, String filename) {
+        String result = "照片上传完成！";
         // 命名空间
         String nameSpace = "http://DigitalScience.WebService";
         // 调用的方法名称
@@ -208,10 +208,10 @@ public class FileImageUpload {
             // 调用WebService
             transport.call(soapAction, envelope);
             Object ret = envelope.getResponse();
-            result = true;
+            result = (String) ret;
         } catch (Exception e) {
             e.printStackTrace();
-            result = false;
+            result = "照片上传失败！";
         }
         return result;
     }
