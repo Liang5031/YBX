@@ -3,12 +3,15 @@ package com.ybx.guider.utils;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.kobjects.base64.Base64;
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
@@ -207,8 +210,13 @@ public class FileImageUpload {
         try {
             // 调用WebService
             transport.call(soapAction, envelope);
-            Object ret = envelope.getResponse();
-            result = (String) ret;
+            if(!(envelope.bodyIn instanceof SoapFault)) {
+                SoapObject soResult = (SoapObject) envelope.bodyIn;
+                SoapPrimitive detail = (SoapPrimitive) soResult.getProperty("UploadFileByBase64Result");
+                result = detail.toString();
+            } else {
+                result = "照片上传失败！";
+            }
         } catch (Exception e) {
             e.printStackTrace();
             result = "照片上传失败！";

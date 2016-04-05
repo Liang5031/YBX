@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -22,6 +23,12 @@ import android.widget.Toast;
 import com.ybx.guider.R;
 import com.ybx.guider.utils.FileImageUpload;
 import com.ybx.guider.utils.PreferencesUtils;
+import com.ybx.guider.utils.UserPicture;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class UploadPhotoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -30,17 +37,20 @@ public class UploadPhotoFragment extends Fragment {
     //    private static final String ARG_PARAM2 = "param2";
     private static final int PICK_PHOTO = 1;
     private static final int TAKE_PHOTO = 2;
+
     private static final int CROP_PHOTO = 3;
     private static final int CROP_OUTPUT_X = 300;
     private static final int CROP_OUTPUT_Y = 240;
-    private static final String IMAGE_FILE_LOCATION = "file:///sdcard/temp.jpg";//temp file
-    private Uri mOutputImageUri = Uri.parse(IMAGE_FILE_LOCATION);//The Uri to store the big bitmap
-    private Uri mImageUri;
+    public static final String IMAGE_TYPE = "image/*";
+    private Uri mTakePhotoImageUri;
+    private Uri mPickPhotoImageUri;
+    private Uri mUploadImageUri;
     private ImageView mImageView;
     private ProgressDialog mProgressDialog;
     private EditText mETGuiderNumber;
     private String mGuiderNumber;
     private OnFragmentInteractionListener mListener;
+    private int mActionType;
 
     public UploadPhotoFragment() {
 
@@ -114,42 +124,37 @@ public class UploadPhotoFragment extends Fragment {
         void onPhotoUploaded(boolean isUploaded);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == getActivity().RESULT_OK) {
             switch (requestCode) {
                 case TAKE_PHOTO:
-//                    Toast.makeText(UploadPhotoFragment.this.getContext(), "拍照完成！开始剪切", Toast.LENGTH_LONG).show();
-//                    cropImage(data.getData(), CROP_OUTPUT_X, CROP_OUTPUT_Y);
-//                    cropImageUri(mOutputImageUri);
-                    if (mImageView != null) {
-                        mImageUri = data.getData();
-                        mImageView.setImageURI(null);
-                        mImageView.setImageURI(mImageUri);
+                    mActionType = TAKE_PHOTO;
+                    if (mImageView != null && mTakePhotoImageUri !=null) {
+                        try {
+                            mImageView.setImageBitmap(new UserPicture(mTakePhotoImageUri, getActivity().getContentResolver()).getBitmap());
+                        } catch (IOException e) {
+                        }
                     }
                     break;
 
                 case PICK_PHOTO:
-//                    Toast.makeText(UploadPhotoFragment.this.getContext(), "选择照片完成", Toast.LENGTH_LONG).show();
+                    mActionType = PICK_PHOTO;
                     if (mImageView != null) {
-                        mImageUri = data.getData();
-                        mImageView.setImageURI(null);
-                        mImageView.setImageURI(mImageUri);
+                        mPickPhotoImageUri = data.getData();
+                        try {
+                            mImageView.setImageBitmap(new UserPicture(mPickPhotoImageUri, getActivity().getContentResolver()).getBitmap());
+                        } catch (IOException e) {
+                        }
                     }
                     break;
 
                 case CROP_PHOTO:
-//                    Toast.makeText(UploadPhotoFragment.this.getContext(), "剪切完成！", Toast.LENGTH_LONG).show();
 //                    if (mImageView != null) {
-//                        mImageUri = data.getData();
-//                        mImageView.setImageURI(mImageUri);
+//                        mPickPhotoImageUri = data.getData();
+//                        mImageView.setImageURI(mPickPhotoImageUri);
 //                    }
-                    if (mImageView != null) {
-                        mImageView.setImageURI(mOutputImageUri);
-                        mImageView.invalidate();
-                    }
                     break;
             }
         }
@@ -190,8 +195,20 @@ public class UploadPhotoFragment extends Fragment {
                     return;
                 }
 
-                if (mImageUri == null) {
+                if(mActionType==TAKE_PHOTO){
+                    mUploadImageUri = mTakePhotoImageUri;
+                } else if(mActionType==PICK_PHOTO){
+                    mUploadImageUri = mPickPhotoImageUri;
+                }
+
+                if (mUploadImageUri == null) {
                     Toast.makeText(UploadPhotoFragment.this.getContext(), "请先选择照片！", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                long size = getFileSize(mUploadImageUri);
+                if (size > 2 * 1024 * 1024) {
+                    Toast.makeText(UploadPhotoFragment.this.getContext(), "照片大小不能超过2M", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -200,7 +217,7 @@ public class UploadPhotoFragment extends Fragment {
                     @Override
                     public void run() {
                         String ret = FileImageUpload.callWebService(UploadPhotoFragment.this.getActivity().getApplicationContext()
-                                , mImageUri, number);
+                                , mUploadImageUri, number);
 
                         Message message = new Message();
                         message.obj = ret;
@@ -227,55 +244,93 @@ public class UploadPhotoFragment extends Fragment {
         });
     }
 
-/*
-    private String getRealPathFromURI(Uri contentUri) {
-        String path = "";
-        Cursor cursor = null;
-        try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
-            cursor.moveToFirst();
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            path = cursor.getString(column_index);
-            return path;
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
+    /**
+     * helper to retrieve the path of an image URI
+     */
+    public String getPath(Uri uri) {
+        if( uri == null ) {
+            return null;
         }
+
+        // try to retrieve the image from the media store first
+        // this will only work for images selected from gallery
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getActivity().managedQuery(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        // this is our fallback here, thanks to the answer from @mad indicating this is needed for
+        // working code based on images selected using other file managers
+        return uri.getPath();
     }
-*/
+
+    /**
+     * helper to retrieve the size of an image URI
+     */
+    public long getFileSize(Uri uri) {
+        if( uri == null ) {
+            return 0;
+        }
+
+        long size = 0;
+        if(uri.toString().startsWith("content://")) {
+            // try to retrieve the image from the media store first
+            // this will only work for images selected from gallery
+            String[] projection = {MediaStore.Images.Media.SIZE};
+            Cursor cursor = getActivity().managedQuery(uri, projection, null, null, null);
+            if (cursor != null) {
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE);
+                cursor.moveToFirst();
+                size = cursor.getLong(column_index);
+            }
+        } else if(uri.toString().startsWith("file:///")){
+            File file = new File(uri.getPath());
+            size = file.length();
+//            if (file.exists()) {
+//                FileInputStream fis = null;
+//                try {
+//                    fis = new FileInputStream(file);
+//                    size = fis.available();
+////                    fis.close();
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+        }
+        // this is our fallback here, thanks to the answer from @mad indicating this is needed for
+        // working code based on images selected using other file managers
+        return size;
+    }
+
+
 
     private void getImageFromAlbum() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-        intent.setType("image/*");
-        intent.putExtra("crop", "true");
-//        intent.putExtra("aspectX", 1);
-//        intent.putExtra("aspectY", 1);
-//        intent.putExtra("outputX", CROP_OUTPUT_X);
-//        intent.putExtra("outputY", CROP_OUTPUT_Y);
-        intent.putExtra("return-data", false);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        intent.putExtra("noFaceDetection", true);
-        startActivityForResult(intent, PICK_PHOTO);
+        Intent intent = new Intent();
+        intent.setType(IMAGE_TYPE);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "选择照片"), PICK_PHOTO);
     }
 
     private void getImageFromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, mOutputImageUri);
+        mTakePhotoImageUri = getmOutputImageUri();
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mTakePhotoImageUri);
         startActivityForResult(intent, TAKE_PHOTO);
     }
 
-    private void cropImage(Uri uri, int outputX, int outputY) {
-//        Intent intent = new Intent("com.android.camera.action.CROP");
-//        intent.setDataAndType(uri, "image/*");
-//        intent.putExtra("crop", "true");
-//        intent.putExtra("aspectX", 1);
-//        intent.putExtra("aspectY", 1);
-//        intent.putExtra("outputX", outputX);
-//        intent.putExtra("outputY", outputY);
-//        startActivityForResult(intent, CROP_PHOTO);
+    Uri getmOutputImageUri(){
+        File file = new File(Environment.getExternalStorageDirectory() + "/", "temp.jpg");
+        if(file.exists()){
+            file.delete();
+        }
+        return Uri.fromFile(file);
+    }
 
+    private void cropImage(Uri uri, int outputX, int outputY) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");
