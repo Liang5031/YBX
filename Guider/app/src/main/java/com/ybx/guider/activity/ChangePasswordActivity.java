@@ -120,7 +120,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements Respons
                 PreferencesUtils.setPassword(this, mNewPWD.getText().toString());
             }
         } else {
-            Toast.makeText(this, "修改密码失败！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, response.mReturnMSG, Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
                 Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);

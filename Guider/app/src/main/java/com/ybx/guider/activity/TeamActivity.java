@@ -113,12 +113,11 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     @Override
     public void onFinishTeamDialogOK(DialogFragment dialog) {
         requestFinishTeam();
-        Toast.makeText(this, "OK pressed", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onFinishTeamDialogCancel(DialogFragment dialog) {
-        Toast.makeText(this, "Cancel pressed", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -288,7 +287,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                     Toast.makeText(TeamActivity.this, "接团成功!", Toast.LENGTH_LONG).show();
                     TeamActivity.this.finish();
                 } else {
-                    Toast.makeText(TeamActivity.this, "接团失败!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -323,7 +322,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                     Toast.makeText(TeamActivity.this, "完成带团成功!", Toast.LENGTH_LONG).show();
                     TeamActivity.this.finish();
                 } else {
-                    Toast.makeText(TeamActivity.this, "完成带团失败!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -375,7 +374,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                     Toast.makeText(TeamActivity.this, "预约已取消!", Toast.LENGTH_LONG).show();
                     TeamActivity.this.finish();
                 } else {
-                    Toast.makeText(TeamActivity.this, "取消预约失败!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                 }
             }
         };

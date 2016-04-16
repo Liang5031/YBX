@@ -1,5 +1,6 @@
 package com.ybx.guider.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -59,7 +60,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
                 if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
                     Toast.makeText(ResetPasswordActivity.this, "获取验证码成功!", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(ResetPasswordActivity.this, "获取验证码失败!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ResetPasswordActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -112,7 +113,6 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
             Param param = new Param(ParamUtils.PAGE_GUIDER_RESET_PASSWORD);
             param.setUser(mGuiderNumber.getText().toString());
             param.setVerifyCode(mVerifyCode.getText().toString());
-//            param.setNewPassword(EncryptUtils.md5(mNewPassword.getText().toString()));
             param.setNewPassword(EncryptUtils.md5(mNewPassword.getText().toString()).toUpperCase());
 
             String url = URLUtils.generateURL(param);
@@ -148,6 +148,11 @@ public class ResetPasswordActivity extends AppCompatActivity implements Response
                 PreferencesUtils.setGuiderNumber(this, mGuiderNumber.getText().toString());
                 PreferencesUtils.setPassword(this, mNewPassword.getText().toString());
             }
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra(LoginActivity.EXTRA_START_TYPE, LoginActivity.START_TYPE_CHANGE_ACCOUNT);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         } else {
             Toast.makeText(this, response.mReturnMSG, Toast.LENGTH_LONG).show();
         }

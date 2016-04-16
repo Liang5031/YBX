@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
@@ -177,6 +178,12 @@ public class TeamListFragement extends ListFragment implements Response.Listener
 
         String url = URLUtils.generateURL(param);
         mRequest = new XMLRequest<TeamListResponse>(url, this, this, new TeamListResponse());
+
+/*        mRequest.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+
         mRequest.setShouldCache(true);
         if (isRefresh) {
             /* remove cache first */
@@ -190,6 +197,7 @@ public class TeamListFragement extends ListFragment implements Response.Listener
     public void onErrorResponse(VolleyError error) {
 //        Toast.makeText(this.getContext(), "获取团队列表失败！", Toast.LENGTH_LONG).show();
         mEmptyView.setText("请求失败！");
+//        mEmptyView.setText(error.toString());
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
         }
@@ -208,7 +216,13 @@ public class TeamListFragement extends ListFragment implements Response.Listener
             if (1 == response.mIsLastPage) {
                 isLoadFinished = true;
                 if (mAllTeamItems.size() == 0) {
-                    mEmptyView.setText("未查询到符合条件的旅行社或部门！");
+                    if(mTeamStatus == TEAM_STATUS_ONGOING) {
+                        mEmptyView.setText("您当前没有正在带的团队！");
+                    } else if(mTeamStatus == TEAM_STATUS_WAITING){
+                        mEmptyView.setText("您当前没有等待中的团队！");
+                    } else if(mTeamStatus == TEAM_STATUS_FINISHED){
+                        mEmptyView.setText("您当前没有已完成的团队！");
+                    }
                 }
             }
         } else {

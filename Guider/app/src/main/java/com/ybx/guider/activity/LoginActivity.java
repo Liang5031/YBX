@@ -134,10 +134,6 @@ public class LoginActivity extends AppCompatActivity implements Response.Listene
 */
 
         VolleyRequestQueue.getInstance(this).add(mRequest);
-
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
-//        this.finish();
     }
 
     @Override

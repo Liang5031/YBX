@@ -2,6 +2,7 @@ package com.ybx.guider.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
+import com.ybx.guider.activity.LoginActivity;
 import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
@@ -222,8 +224,12 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
         mProgressDialog.dismiss();
         if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
             Toast.makeText(this.getContext(), "注册成功！", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this.getContext(), LoginActivity.class);
+            intent.putExtra(LoginActivity.EXTRA_START_TYPE, LoginActivity.START_TYPE_CHANGE_ACCOUNT);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         } else {
-            Toast.makeText(this.getContext(), "注册失败！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(), response.mReturnMSG, Toast.LENGTH_LONG).show();
         }
     }
 

@@ -1,9 +1,12 @@
 package com.ybx.guider.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.ybx.guider.R;
+import com.ybx.guider.activity.LoginActivity;
+import com.ybx.guider.activity.MainActivity;
+import com.ybx.guider.activity.SignUpActivity;
+import com.ybx.guider.parameters.Param;
+import com.ybx.guider.parameters.ParamUtils;
+import com.ybx.guider.requests.XMLRequest;
+import com.ybx.guider.responses.LoginResponse;
+import com.ybx.guider.responses.ResponseUtils;
+import com.ybx.guider.utils.EncryptUtils;
+import com.ybx.guider.utils.PreferencesUtils;
+import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.VolleyRequestQueue;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,7 +39,7 @@ import com.ybx.guider.R;
  * Use the {@link AccountVerifyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccountVerifyFragment extends Fragment {
+public class AccountVerifyFragment extends Fragment implements Response.Listener<LoginResponse>, Response.ErrorListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,6 +48,9 @@ public class AccountVerifyFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    XMLRequest<LoginResponse> mRequest;
+    private ProgressDialog mProgressDialog;
 
     private OnFragmentInteractionListener mListener;
 
@@ -122,16 +142,98 @@ public class AccountVerifyFragment extends Fragment {
         int id = item.getItemId();
         switch (id) {
             case R.id.verify_fragment_refresh:
-                Toast.makeText(this.getContext(), "verify_fragment_refresh pressed", Toast.LENGTH_LONG).show();
+                reqeustLogin(PreferencesUtils.getGuiderNumber(this.getContext()), PreferencesUtils.getPassword(this.getContext()));
                 return true;
             case R.id.verify_fragment_sign_up:
-                Toast.makeText(this.getContext(), "verify_fragment_sign_up pressed", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this.getContext(), SignUpActivity.class);
+                startActivity(intent);
+                this.getActivity().finish();
                 return true;
             case R.id.verify_fragment_change_account:
-                Toast.makeText(this.getContext(), "verify_fragment_change_account pressed", Toast.LENGTH_LONG).show();
+                intent = new Intent(this.getContext(), LoginActivity.class);
+                intent.putExtra(LoginActivity.EXTRA_START_TYPE, LoginActivity.START_TYPE_CHANGE_ACCOUNT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                this.getActivity().finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mRequest!=null){
+            mRequest.cancel();
+        }
+    }
+
+    private void reqeustLogin(String guiderNumber, String password) {
+        if (guiderNumber == null || guiderNumber.isEmpty()) {
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            return;
+        }
+
+        mProgressDialog = ProgressDialog.show(this.getContext(), "正在刷新", "请稍等...", true, false);
+
+        Param param = new Param(ParamUtils.PAGE_GUIDER_LOGIN);
+        param.setUser(guiderNumber);
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, password);
+        param.setSign(sign);
+
+        String url = URLUtils.generateURL(param);
+        mRequest = new XMLRequest<LoginResponse>(url, this, this, new LoginResponse());
+        mRequest.setShouldCache(false);
+
+        VolleyRequestQueue.getInstance(this.getActivity()).add(mRequest);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+
+        Toast.makeText(this.getContext(), "刷新失败！", Toast.LENGTH_LONG).show();
+
+        if (URLUtils.isDebug) {
+            Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
+        }
+    }
+
+    @Override
+    public void onResponse(LoginResponse response) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+
+        if (response.mReturnCode.equals(ResponseUtils.RESULT_OK) && response.mAccountStatus != null) {
+            /* clear cache after login */
+            VolleyRequestQueue.getInstance(this.getContext()).clear();
+
+            if (response.mAccountStatus.equalsIgnoreCase(ResponseUtils.ACCOUNT_STATUS_INACTIVE)) {
+                Toast.makeText(this.getContext(), "账号已禁用！", Toast.LENGTH_LONG).show();
+            } else if (response.mAccountStatus.equalsIgnoreCase(ResponseUtils.ACCOUNT_STATUS_CHECKING)) {
+                Toast.makeText(this.getContext(), "账号审核中，请耐心等待！", Toast.LENGTH_LONG).show();
+            } else if (response.mAccountStatus.equalsIgnoreCase(ResponseUtils.ACCOUNT_STATUS_ACTIVE)) {
+                Intent intent = new Intent(this.getContext(), MainActivity.class);
+                intent.putExtra(MainActivity.EXTRA_ACCOUNT_STATUS, response.mAccountStatus);
+                startActivity(intent);
+                this.getActivity().finish();
+            } else {
+                Toast.makeText(this.getContext(), "注册审核未通过！", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(this.getContext(), response.mReturnMSG, Toast.LENGTH_LONG).show();
+            if (URLUtils.isDebug) {
+                Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
+                Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
+            }
         }
     }
 }

@@ -73,7 +73,7 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_dept);
-        setTitle("添加部门");
+        setTitle("添加旅行社\\部门");
         mAllItems = new ArrayList<DeptItem>();
 
         mListView = (ListView) findViewById(R.id.deptList);
@@ -211,7 +211,7 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
     @Override
     public void onErrorResponse(VolleyError error) {
         mProgressDialog.dismiss();
-        Toast.makeText(this, "查询部门失败！", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "查询旅行社\\部门失败！", Toast.LENGTH_LONG).show();
 
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
@@ -237,7 +237,7 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
             }
 
         } else {
-            Toast.makeText(this, "查询部门失败！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, response.mReturnMSG, Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
                 Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
@@ -293,7 +293,7 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
                     remove(item);
                     mAdapter.update(mAllItems);
                 } else {
-                    Toast.makeText(BindDeptActivity.this, "添加部门失败！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BindDeptActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                     if (URLUtils.isDebug) {
                         Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                         Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);

@@ -85,11 +85,6 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        ActionBar ab = getSupportActionBar();
-//        // Enable the Up button
-//        ab.setDisplayHomeAsUpEnabled(true);
-//        ab.setHomeButtonEnabled(true);
-
         mTabOngoing = (ImageView) findViewById(R.id.tabOngoing);
         mTabWaiting = (ImageView) findViewById(R.id.tabWaiting);
         mTabFinish = (ImageView) findViewById(R.id.tabFinish);

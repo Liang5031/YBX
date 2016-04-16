@@ -46,16 +46,19 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_department_manage);
-        this.setTitle("旅行社/部门列表");
+        this.setTitle("添加旅行社\\部门");
 
         mListView = (ListView) findViewById(R.id.dept_list);
         mAdapter = new BindingDeptListAdapter(this);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
-
         mListView.setEmptyView(findViewById(R.id.empty));
-
         mAllItems = new ArrayList<BindingDeptItem>();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mAllItems.clear();
         mProgressDialog = ProgressDialog.show(this, "正在查询部门数据", "请稍等...", true, false);
         requestBindingDeptList(0);
@@ -96,7 +99,7 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
     @Override
     public void onErrorResponse(VolleyError error) {
         mProgressDialog.dismiss();
-        Toast.makeText(this, "查询部门失败！", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "查询旅行社\\部门失败！", Toast.LENGTH_LONG).show();
 
         if (URLUtils.isDebug) {
             Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
@@ -117,7 +120,7 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
                 requestBindingDeptList(response.mPageIndex + 1);
             }
         } else {
-            Toast.makeText(this, "查询部门失败！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, response.mReturnMSG, Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
                 Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
@@ -167,7 +170,7 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
                     mAllItems.clear();
                     requestBindingDeptList(0);
                 } else {
-                    Toast.makeText(DeptManageActivity.this, "修改部门信息失败！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(DeptManageActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                     if (URLUtils.isDebug) {
                         Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                         Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
@@ -214,7 +217,7 @@ public class DeptManageActivity extends AppCompatActivity implements Response.Li
                     mAllItems.clear();
                     requestBindingDeptList(0);
                 } else {
-                    Toast.makeText(DeptManageActivity.this, "取消部门关联失败！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(DeptManageActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                     if (URLUtils.isDebug) {
                         Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                         Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);

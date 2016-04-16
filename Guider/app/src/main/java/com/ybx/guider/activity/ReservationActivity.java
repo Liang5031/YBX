@@ -271,7 +271,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
                     mServiceItemResponse = response;
                     updateServiceItem();
                 } else {
-                    Toast.makeText(ReservationActivity.this, "查询服务项目失败！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ReservationActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -339,7 +339,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
                         mTimeSlotResponse = response;
                         updateTimeSlotItem();
                     } else {
-                        Toast.makeText(ReservationActivity.this, "查询服务时间段失败！", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ReservationActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                         if (URLUtils.isDebug) {
                             Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                             Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
@@ -484,11 +484,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
                 Toast.makeText(ReservationActivity.this, "预约成功！", Toast.LENGTH_LONG).show();
             }
         } else {
-            if (mReservationType == TYPE_CHANGE) {
-                Toast.makeText(ReservationActivity.this, "改签失败！", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(ReservationActivity.this, "预约失败！", Toast.LENGTH_LONG).show();
-            }
+            Toast.makeText(ReservationActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
             if (URLUtils.isDebug) {
                 Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
