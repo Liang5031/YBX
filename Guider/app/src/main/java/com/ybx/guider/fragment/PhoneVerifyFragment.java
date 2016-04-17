@@ -21,6 +21,7 @@ import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
 import com.ybx.guider.responses.GetVerifyCodeResponse;
 import com.ybx.guider.responses.ResponseUtils;
+import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
@@ -88,6 +89,7 @@ public class PhoneVerifyFragment extends Fragment {
                     Toast.makeText(PhoneVerifyFragment.this.getContext(), "请输入有效的手机号码！", Toast.LENGTH_SHORT).show();
                 }else{
                     mPhoneNumber = mETPhoneNumber.getText().toString();
+                    PreferencesUtils.setPhoneNumber(PhoneVerifyFragment.this.getContext(),mPhoneNumber);
                     GetVerifyCode();
                 }
             }

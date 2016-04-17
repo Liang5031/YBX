@@ -60,6 +60,14 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:text="请输入供应商名称或其拼音声母首字母,至少输入三个字符或汉字"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <ListView
         android:id="@+id/providerList"
         android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ybx.guider.R;
 import com.ybx.guider.responses.RelatedProviderItem;
+import com.ybx.guider.responses.ResponseUtils;
 
 import java.util.ArrayList;
 
@@ -53,9 +54,9 @@ public class RelatedProviderAdapter extends BaseAdapter {
         if (mItems != null && mItems.size() > 0) {
             RelatedProviderItem item = mItems.get(position);
             ((TextView) view.findViewById(R.id.providerName)).setText(item.providername);
-            ((TextView) view.findViewById(R.id.status)).setText(item.status);
-            ((TextView) view.findViewById(R.id.startDate)).setText(item.disstartdate);
-            ((TextView) view.findViewById(R.id.endDate)).setText(item.disenddate);
+            ((TextView) view.findViewById(R.id.status)).setText(item.getStatus());
+            ((TextView) view.findViewById(R.id.startDate)).setText(ResponseUtils.fromDate(item.disstartdate));
+            ((TextView) view.findViewById(R.id.endDate)).setText(ResponseUtils.fromDate(item.disenddate));
         }
     }
 

@@ -102,17 +102,22 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     @Override
     public void onAcceptTeamDialogOK(DialogFragment dialog) {
         requestAcceptTeam();
-//        Toast.makeText(this, "OK pressed", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onAcceptTeamDialogCancel(DialogFragment dialog) {
-//        Toast.makeText(this, "Cancel pressed", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onFinishTeamDialogOK(DialogFragment dialog) {
-        requestFinishTeam();
+        if(dialog instanceof FinishTeamDialog) {
+            FinishTeamDialog d = (FinishTeamDialog)dialog;
+            if(d.mConfirmation.getText().toString().isEmpty() || !d.mConfirmation.getText().toString().equalsIgnoreCase("OK")){
+                Toast.makeText(this, "请先输入OK！", Toast.LENGTH_LONG).show();
+            } else {
+                requestFinishTeam();
+            }
+        }
     }
 
     @Override
@@ -230,11 +235,11 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     }
 
     public void onClickFinish(View view) {
-        Toast.makeText(this, "onClickFinish", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "onClickFinish", Toast.LENGTH_LONG).show();
     }
 
     public void onClickCancelSchedule(View view) {
-        Toast.makeText(this, "onClickCancelSchedule", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "onClickCancelSchedule", Toast.LENGTH_LONG).show();
     }
 
     public void onClickStartAppo(View view) {
@@ -268,7 +273,6 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         TeamScheduleItem item = (TeamScheduleItem) view.getTag();
         reqeustSync(item);
         reqeustSync2(item);
-        Toast.makeText(this, "onClickSync", Toast.LENGTH_LONG).show();
     }
 
     void requestAcceptTeam() {
@@ -372,7 +376,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
             public void onResponse(XMLResponse response) {
                 if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
                     Toast.makeText(TeamActivity.this, "预约已取消!", Toast.LENGTH_LONG).show();
-                    TeamActivity.this.finish();
+//                    TeamActivity.this.finish();
                 } else {
                     Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                 }

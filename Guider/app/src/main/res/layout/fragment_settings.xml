@@ -5,13 +5,51 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        style="@style/TextLarge"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="个人设置" />
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/TextLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="姓名: " />
+
+        <TextView
+            android:id="@+id/guiderName"
+            style="@style/TextLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="导游证号: " />
+
+        <TextView
+            android:id="@+id/guiderNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="" />
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/add_department"
@@ -66,7 +104,7 @@
         style="@style/TextSmall"
         android:layout_width="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/company_name" />
 
     <TextView

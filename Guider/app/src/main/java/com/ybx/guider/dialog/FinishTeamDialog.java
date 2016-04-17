@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
 import com.ybx.guider.R;
 
@@ -14,7 +16,7 @@ import com.ybx.guider.R;
  * Created by chenl on 2016/2/18.
  */
 public class FinishTeamDialog extends DialogFragment {
-
+    public EditText mConfirmation;
     /* The activity that creates an instance of this dialog fragment must
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
@@ -46,9 +48,10 @@ public class FinishTeamDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Build the dialog and set up the button click handlers
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
+        View view = inflater.inflate(R.layout.dialog_finish_team, null);
+        mConfirmation = (EditText)view.findViewById(R.id.confirmation);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(inflater.inflate(R.layout.dialog_finish_team, null))
+        builder.setView(view)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Send the positive button event back to the host activity

@@ -1,6 +1,7 @@
 package com.ybx.guider.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -13,10 +14,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.ybx.guider.R;
+import com.ybx.guider.activity.ReservationActivity;
 import com.ybx.guider.adapters.TeamScheduleListAdapter;
 import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
@@ -25,6 +28,7 @@ import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.TeamItem;
 import com.ybx.guider.responses.TeamScheduleItem;
 import com.ybx.guider.responses.TeamScheduleListResponse;
+import com.ybx.guider.responses.XMLResponse;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
@@ -37,7 +41,7 @@ import java.util.Date;
 /**
  * create an instance of this fragment.
  */
-public class TeamScheduleFragment extends ListFragment implements Response.Listener<TeamScheduleListResponse>, Response.ErrorListener {
+public class TeamScheduleFragment extends ListFragment implements View.OnClickListener,Response.Listener<TeamScheduleListResponse>, Response.ErrorListener {
     static final int MENU_ITEM_SYNC = 1;
     static final int MENU_ITEM_CANCEL_SCHEDULE = 2;
     static final int MENU_ITEM_FINISH_SCHEDULE = 3;
@@ -52,6 +56,9 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
     ArrayList<TeamScheduleItem> mTodayItems;
     RadioButton mRBToday;
     XMLRequest<TeamScheduleListResponse> mRequest;
+
+    XMLRequest<XMLResponse> mCancelAppoRequest;
+    XMLRequest<XMLResponse> mSyncAppoRequest;
 
     TeamItem mTeamItem;
     TextView mEmptyView;
@@ -86,13 +93,17 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         int id = item.getItemId();
         switch (id) {
             case R.id.action_refresh:
-                mAllTeamSchduleItems.clear();
-                mTodayItems.clear();
-                requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, true);
+                refreshList();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void refreshList(){
+        mAllTeamSchduleItems.clear();
+        mTodayItems.clear();
+        requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, true);
     }
 
     @Override
@@ -115,12 +126,18 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
         mTodayItems = new ArrayList<TeamScheduleItem>();
         mAdapter = new TeamScheduleListAdapter(this.getContext(), mTeamItem);
         setHasOptionsMenu(true);
+//        ListView list = this.getListView();
+
+
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         mAdapter.changeVisibility(v, position);
-//        mAdapter.notifyDataSetChanged();
+        v.findViewById(R.id.btnStartAppo).setOnClickListener(this);
+        v.findViewById(R.id.btnCancelAppo).setOnClickListener(this);
+        v.findViewById(R.id.btnChangeAppo).setOnClickListener(this);
+        v.findViewById(R.id.btnSync).setOnClickListener(this);
     }
 
     @Override
@@ -196,9 +213,7 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
     public void onResume() {
         super.onResume();
         if (mTeamItem != null) {
-            mAllTeamSchduleItems.clear();
-            mTodayItems.clear();
-            requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, false);
+            refreshList();
         }
     }
 
@@ -244,8 +259,6 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
             }
 
             if (1 == response.mIsLastPage) {
-//                mAdapter = new TeamScheduleListAdapter(this.getContext(), mAllTeamSchduleItems);
-//                this.setListAdapter(mAdapter);
                 if (mRBToday.isChecked()) {
                     mAdapter.updateData(mTodayItems);
                 } else {
@@ -261,5 +274,158 @@ public class TeamScheduleFragment extends ListFragment implements Response.Liste
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
             }
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btnStartAppo ){
+            onClickStartAppo(v);
+        } else if(v.getId() == R.id.btnCancelAppo){
+            onClickCancelAppo(v);
+        }else if(v.getId() == R.id.btnChangeAppo){
+            onClickChangeAppo(v);
+        }else if(v.getId() == R.id.btnSync){
+            onClickSync(v);
+        }
+    }
+
+    public void onClickStartAppo(View view) {
+        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
+        Intent intent = new Intent(this.getContext(), ReservationActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(ReservationActivity.EXTRA_RESERVATION_TYPE, ReservationActivity.TYPE_START);
+        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_ITEM, mTeamItem);
+        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_SCHEDULE_ITEM, item);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void onClickCancelAppo(View view) {
+        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
+        requestCancelAppo(item);
+    }
+
+    public void onClickChangeAppo(View view) {
+        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
+        Intent intent = new Intent(TeamScheduleFragment.this.getContext(), ReservationActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(ReservationActivity.EXTRA_RESERVATION_TYPE, ReservationActivity.TYPE_CHANGE);
+        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_ITEM, mTeamItem);
+        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_SCHEDULE_ITEM, item);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void onClickSync(View view) {
+        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
+        reqeustSync(item);
+        reqeustSync2(item);
+    }
+
+    void requestCancelAppo(TeamScheduleItem item) {
+        Param param = new Param(ParamUtils.PAGE_APPOINTMENT_CANCEL);
+        param.setUser(PreferencesUtils.getGuiderNumber(TeamScheduleFragment.this.getContext()));
+        param.setTripItemIndex(item.getTripIndex());
+        param.addParam(ParamUtils.KEY_RESERVATION_NUMBER, item.getAppoNumber());
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(TeamScheduleFragment.this.getContext()));
+        param.setSign(sign);
+
+        Response.Listener<XMLResponse> listener = new Response.Listener<XMLResponse>() {
+            @Override
+            public void onResponse(XMLResponse response) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+                    Toast.makeText(TeamScheduleFragment.this.getContext(), "预约已取消!", Toast.LENGTH_LONG).show();
+                    refreshList();
+                } else {
+                    Toast.makeText(TeamScheduleFragment.this.getContext(), response.mReturnMSG, Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TeamScheduleFragment.this.getContext(), "取消预约失败!", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mCancelAppoRequest = new XMLRequest<XMLResponse>(url, listener, errorListener, new XMLResponse());
+        mCancelAppoRequest.setShouldCache(false);
+
+        VolleyRequestQueue.getInstance(TeamScheduleFragment.this.getContext()).add(mCancelAppoRequest);
+    }
+
+    void reqeustSync(TeamScheduleItem item){
+        Param param = new Param(ParamUtils.PAGE_APPOINTMENT_QUERY);
+
+        param.setUser(PreferencesUtils.getGuiderNumber(TeamScheduleFragment.this.getContext()));
+        param.setTripItemIndex(item.getTripIndex());
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(TeamScheduleFragment.this.getContext()));
+        param.setSign(sign);
+
+        Response.Listener<XMLResponse> listener = new Response.Listener<XMLResponse>() {
+            @Override
+            public void onResponse(XMLResponse response) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+//                    Toast.makeText(TeamActivity.this, "同步完成!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(TeamScheduleFragment.this.getContext(), response.mReturnMSG, Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TeamScheduleFragment.this.getContext(), "同步失败!", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mSyncAppoRequest = new XMLRequest<XMLResponse>(url, listener, errorListener, new XMLResponse());
+        mSyncAppoRequest.setShouldCache(false);
+
+        VolleyRequestQueue.getInstance(TeamScheduleFragment.this.getContext()).add(mSyncAppoRequest);
+    }
+
+    void reqeustSync2(TeamScheduleItem item){
+        Param param = new Param(ParamUtils.PAGE_DEAL_INFO_QUERY);
+
+        param.setUser(PreferencesUtils.getGuiderNumber(TeamScheduleFragment.this.getContext()));
+        param.setTripItemIndex(item.getTripIndex());
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(TeamScheduleFragment.this.getContext()));
+        param.setSign(sign);
+
+        Response.Listener<XMLResponse> listener = new Response.Listener<XMLResponse>() {
+            @Override
+            public void onResponse(XMLResponse response) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+                    Toast.makeText(TeamScheduleFragment.this.getContext(), "同步完成!", Toast.LENGTH_LONG).show();
+                    refreshList();
+                } else {
+                    Toast.makeText(TeamScheduleFragment.this.getContext(), response.mReturnMSG, Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TeamScheduleFragment.this.getContext(), "同步失败!", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mSyncAppoRequest = new XMLRequest<XMLResponse>(url, listener, errorListener, new XMLResponse());
+        mSyncAppoRequest.setShouldCache(false);
+
+        VolleyRequestQueue.getInstance(TeamScheduleFragment.this.getContext()).add(mSyncAppoRequest);
     }
 }

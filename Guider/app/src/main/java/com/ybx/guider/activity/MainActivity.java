@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
                 mTabWaiting.setImageResource(R.mipmap.waiting);
                 mTabFinish.setImageResource(R.mipmap.finish);
                 mTabSetting.setImageResource(R.mipmap.setting_pressed);
-                setTitle("设置");
+                setTitle("个人设置");
                 break;
             default:
                 break;

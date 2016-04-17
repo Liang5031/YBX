@@ -4,11 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.ybx.guider.R;
 import com.ybx.guider.activity.ChangePasswordActivity;
 import com.ybx.guider.activity.ChangeUserInfoActivity;
@@ -16,13 +21,27 @@ import com.ybx.guider.activity.DeptManageActivity;
 import com.ybx.guider.activity.LoginActivity;
 import com.ybx.guider.activity.RelatedProviderActivity;
 import com.ybx.guider.adapters.TeamLogListAdapter;
+import com.ybx.guider.parameters.Param;
+import com.ybx.guider.parameters.ParamUtils;
+import com.ybx.guider.requests.XMLRequest;
+import com.ybx.guider.responses.GuiderInfoResponse;
+import com.ybx.guider.responses.ResponseUtils;
+import com.ybx.guider.utils.EncryptUtils;
+import com.ybx.guider.utils.PreferencesUtils;
+import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.VolleyRequestQueue;
+
+import org.w3c.dom.Text;
 
 /**
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment implements View.OnClickListener {
+public class SettingsFragment extends Fragment implements View.OnClickListener, Response.Listener<GuiderInfoResponse>, Response.ErrorListener {
     private TeamLogListAdapter mAdapter;
+    XMLRequest<GuiderInfoResponse> mQueryGuiderInfo;
+    TextView mGuiderName;
+    TextView mGuiderNumber;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -49,14 +68,20 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         this.getView().findViewById(R.id.change_password).setOnClickListener(this);
         this.getView().findViewById(R.id.logout).setOnClickListener(this);
 
-//        LayoutInflater inflater = LayoutInflater.from(this.getContext());
-//        this.getListView().addHeaderView(inflater.inflate(R.layout.real_name_list_header, null));
+        mGuiderName = (TextView)this.getView().findViewById(R.id.guiderName);
+        mGuiderNumber = (TextView)this.getView().findViewById(R.id.guiderNumber);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reqeustQuery();
     }
 
     @Override
@@ -82,26 +107,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     public void onDetach() {
         super.onDetach();
     }
-
-//    public void onClickAddDepartment(View view){
-//
-//    }
-//
-//    public void onClickApplyProvider(View view){
-//
-//    }
-//
-//    public void onClickChangeUserInfo(View view){
-//
-//    }
-//
-//    public void onClickChangePassword(View view){
-//
-//    }
-//
-//    public void onClickLogout(View view){
-//
-//    }
 
     @Override
     public void onClick(View v) {
@@ -134,4 +139,39 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
+    void reqeustQuery(){
+        Param param = new Param(ParamUtils.PAGE_GUIDER_QUERY);
+        param.setUser(PreferencesUtils.getGuiderNumber(this.getContext()));
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this.getContext()));
+        param.setSign(sign);
+
+        String url = URLUtils.generateURL(param);
+        mQueryGuiderInfo = new XMLRequest<GuiderInfoResponse>(url, this, this, new GuiderInfoResponse());
+        mQueryGuiderInfo.setShouldCache(false);
+        VolleyRequestQueue.getInstance(this.getContext()).add(mQueryGuiderInfo);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        if (URLUtils.isDebug) {
+            Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
+        }
+    }
+
+    @Override
+    public void onResponse(GuiderInfoResponse response) {
+        if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+            mGuiderName.setText(response.Name);
+            mGuiderNumber.setText(PreferencesUtils.getGuiderNumber(this.getContext()));
+        } else {
+            if (URLUtils.isDebug) {
+                Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
+                Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
+            }
+        }
+    }
+
 }

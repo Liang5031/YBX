@@ -111,22 +111,22 @@ public class ApplyProviderActivity extends AppCompatActivity implements Response
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position){
                     case 0:
-                        mProviderType = "100000";
+                        mProviderType = "1?????";
                         break;
                     case 1:
-                        mProviderType = "010000";
+                        mProviderType = "?1????";
                         break;
                     case 2:
-                        mProviderType = "001000";
+                        mProviderType = "??1???";
                         break;
                     case 3:
-                        mProviderType = "000100";
+                        mProviderType = "???1??";
                         break;
                     case 4:
-                        mProviderType = "000010";
+                        mProviderType = "????1?";
                         break;
                     case 5:
-                        mProviderType = "000001";
+                        mProviderType = "?????1";
                         break;
                 }
             }
@@ -210,7 +210,6 @@ public class ApplyProviderActivity extends AppCompatActivity implements Response
         }
         param.setPageIndex(pageIndex.toString());
 
-
         String orderParams = param.getParamStringInOrder();
         String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
         param.setSign(sign);
@@ -219,7 +218,6 @@ public class ApplyProviderActivity extends AppCompatActivity implements Response
         mRequest = new XMLRequest<ProviderListResponse>(url, this, this, new ProviderListResponse());
         mRequest.setShouldCache(false);
         VolleyRequestQueue.getInstance(this).add(mRequest);
-
     }
 
     @Override
@@ -262,9 +260,9 @@ public class ApplyProviderActivity extends AppCompatActivity implements Response
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ProviderItem item = (ProviderItem) mAdapter.getItem(position);
-        if (item != null) {
+        if (item != null && (item.appointmentable.equals("1") || item.appointmentable.equals("2"))) {
             ApplyProviderDialog dlg = ApplyProviderDialog.newInstance(item);
-            dlg.show(getSupportFragmentManager(), "dept");
+            dlg.show(getSupportFragmentManager(), "provider");
         }
     }
 

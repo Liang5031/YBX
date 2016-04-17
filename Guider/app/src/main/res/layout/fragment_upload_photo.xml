@@ -9,27 +9,29 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp">
 
             <TextView
                 style="@style/TextNormal"
-                android:layout_width="@dimen/text_width_normal"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_alignParentLeft="true"
                 android:text="@string/guider_number" />
 
             <EditText
                 android:id="@+id/guiderNumber"
                 style="@style/EditNormal"
-                android:layout_width="@dimen/edit_width_normal"
+                android:layout_width="0dp"
+                android:layout_weight="5"
                 android:layout_alignParentRight="true"
                 android:hint="@string/guider_number_hint"
                 android:maxLength="20"
                 android:inputType="text" />
-        </RelativeLayout>
+        </LinearLayout>
 
 
         <RelativeLayout

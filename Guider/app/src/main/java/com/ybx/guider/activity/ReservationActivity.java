@@ -24,6 +24,7 @@ import com.ybx.guider.R;
 import com.ybx.guider.parameters.Param;
 import com.ybx.guider.parameters.ParamUtils;
 import com.ybx.guider.requests.XMLRequest;
+import com.ybx.guider.responses.GuiderInfoResponse;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.ServiceItem;
 import com.ybx.guider.responses.ServiceItemResponse;
@@ -47,6 +48,8 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     public static String EXTRA_RESERVATION_TYPE = "reservation_type";
     public static int TYPE_START = 1;
     public static int TYPE_CHANGE = 2;
+
+    XMLRequest<GuiderInfoResponse> mQueryGuiderInfo;
 
     int mReservationType;
     String[] mEmptyList = {"没有可预约时段"};
@@ -74,6 +77,11 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     XMLRequest<TimeSlotResponse> mTimeSlotRequest;
     XMLRequest<StartAppointmentResponse> mStartAppoRequest;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reqeustGuiderInfo();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,17 +216,12 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
-//                Intent intent = new Intent(this, TeamActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable(TeamActivity.EXTRA_TEAM_ITEM, mTeamItem);
-//                intent.putExtras(bundle);
-//                NavUtils.navigateUpTo(this, intent);
                 this.finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     protected void onDestroy() {
@@ -233,6 +236,10 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 
         if (mStartAppoRequest != null) {
             mStartAppoRequest.cancel();
+        }
+
+        if(mQueryGuiderInfo != null){
+            mQueryGuiderInfo.cancel();
         }
     }
 
@@ -490,5 +497,40 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
                 Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
             }
         }
+    }
+
+    void reqeustGuiderInfo(){
+        Param param = new Param(ParamUtils.PAGE_GUIDER_QUERY);
+        param.setUser(PreferencesUtils.getGuiderNumber(this));
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
+        param.setSign(sign);
+
+        Response.ErrorListener errorListener = new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        };
+
+        Response.Listener<GuiderInfoResponse> responseListener = new Response.Listener<GuiderInfoResponse>(){
+            @Override
+            public void onResponse(GuiderInfoResponse response) {
+                if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+                    mPhone1.setText(response.Mobile);
+                } else {
+                    if (URLUtils.isDebug) {
+                        Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
+                        Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
+                    }
+                }
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mQueryGuiderInfo = new XMLRequest<GuiderInfoResponse>(url, responseListener, errorListener, new GuiderInfoResponse());
+        mQueryGuiderInfo.setShouldCache(false);
+        VolleyRequestQueue.getInstance(this).add(mQueryGuiderInfo);
     }
 }

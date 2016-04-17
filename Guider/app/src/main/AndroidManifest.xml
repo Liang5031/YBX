@@ -102,7 +102,11 @@
 
         <activity
             android:name=".activity.ApplyProviderActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.RelatedProviderActivity" />
+        </activity>
 
     </application>
 

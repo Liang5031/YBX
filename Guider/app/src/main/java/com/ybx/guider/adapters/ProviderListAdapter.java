@@ -53,8 +53,8 @@ public class ProviderListAdapter extends BaseAdapter {
     void initViews(View view, int position) {
         if (mItems != null && mItems.size() > 0) {
             ProviderItem item = mItems.get(position);
-//            ((TextView) view.findViewById(R.id.deptId)).setText(item.customerid);
-//            ((TextView) view.findViewById(R.id.deptName)).setText(item.customername);
+            ((TextView) view.findViewById(R.id.appoType)).setText(item.getAppointmentType());
+            ((TextView) view.findViewById(R.id.providerName)).setText(item.providername);
         }
     }
 
@@ -62,7 +62,7 @@ public class ProviderListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            convertView = inflater.inflate(R.layout.dept_list_item, null);
+            convertView = inflater.inflate(R.layout.provider_list_item, null);
         }
         initViews(convertView, position);
         return convertView;

@@ -14,4 +14,18 @@ public class RelatedProviderItem implements Serializable {
     public String disstartdate;
     public String disenddate;
 
+
+    public String getStatus(){
+        if(status.equalsIgnoreCase("R")){
+            return "等待供应商审核";
+        } else if(status.equalsIgnoreCase("1")){
+            return "可以预约";
+        }else if(status.equalsIgnoreCase("2")){
+            return "停止使用";
+        }else if(status.equalsIgnoreCase("U")){
+            return "申请被拒绝";
+        }
+        return "";
+    }
+
 }

@@ -70,12 +70,22 @@ public class RelatedProviderActivity extends AppCompatActivity implements Adapte
         });
 
 
+//        mAllItems.clear();
+//        mPageIndex = 0;
+//        isLoadFinished = false;
+//        mProgressDialog = ProgressDialog.show(this, "正在查询供应商信息", "请稍等...", true, false);
+//        requestProviderList(0, false);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mAllItems.clear();
         mPageIndex = 0;
         isLoadFinished = false;
         mProgressDialog = ProgressDialog.show(this, "正在查询供应商信息", "请稍等...", true, false);
         requestProviderList(0, false);
-
     }
 
     @Override
@@ -185,6 +195,7 @@ public class RelatedProviderActivity extends AppCompatActivity implements Adapte
                 mProgressDialog.dismiss();
                 if (response.mReturnCode.equalsIgnoreCase(ResponseUtils.RESULT_OK)) {
                     Toast.makeText(RelatedProviderActivity.this, "同步成功！", Toast.LENGTH_LONG).show();
+                    mAllItems.clear();
                     requestProviderList(0, true);
                 } else {
                     Toast.makeText(RelatedProviderActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();

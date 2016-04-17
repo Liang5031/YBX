@@ -69,8 +69,14 @@ public class TeamListFragement extends ListFragment implements Response.Listener
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+
         if (isVisibleToUser) {
             mAllTeamItems.clear();
             requestTeamList(mTeamStatus, ParamUtils.VALUE_FIRST_PAGE_INDEX, false);

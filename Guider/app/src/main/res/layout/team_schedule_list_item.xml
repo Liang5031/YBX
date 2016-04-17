@@ -263,7 +263,6 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:focusable="false"
-                android:onClick="onClickFinish"
                 android:text="标识完成" />
 
             <Button
@@ -274,7 +273,6 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:focusable="false"
-                android:onClick="onClickCancelSchedule"
                 android:text="取消行程" />
 
             <Button
@@ -285,7 +283,6 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:focusable="false"
-                android:onClick="onClickStartAppo"
                 android:text="发起预约" />
 
             <Button
@@ -296,7 +293,6 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:focusable="false"
-                android:onClick="onClickCancelAppo"
                 android:text="撤销预约" />
 
             <Button
@@ -307,7 +303,6 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:focusable="false"
-                android:onClick="onClickChangeAppo"
                 android:text="改签预约" />
 
             <Button
@@ -318,7 +313,6 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:focusable="false"
-                android:onClick="onClickSync"
                 android:text="同步" />
         </LinearLayout>
     </LinearLayout>
