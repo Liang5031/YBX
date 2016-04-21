@@ -74,9 +74,13 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
 
     public void onClickNext(View view) {
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if (f instanceof UploadPhotoFragment) {
-            loadFragment(PhoneVerifyFragment.newInstance(), false);
-            setStep(STEP_TWO);
+        if (f instanceof UploadPhotoFragment ) {
+            if(!mIsPhotoUploaded){
+                Toast.makeText(SignUpActivity.this, "请先上传照片！", Toast.LENGTH_SHORT).show();
+            } else {
+                loadFragment(PhoneVerifyFragment.newInstance(), false);
+                setStep(STEP_TWO);
+            }
         } else if (f instanceof PhoneVerifyFragment) {
             if (mVerifyCode == null || mVerifyCode.isEmpty()) {
                 Toast.makeText(SignUpActivity.this, "验证码不能为空！", Toast.LENGTH_SHORT).show();

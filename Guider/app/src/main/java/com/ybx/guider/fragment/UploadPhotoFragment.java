@@ -46,6 +46,7 @@ public class UploadPhotoFragment extends Fragment {
     private Uri mPickPhotoImageUri;
     private Uri mUploadImageUri;
     private ImageView mImageView;
+    private Button mBtnUpload;
     private ProgressDialog mProgressDialog;
     private EditText mETGuiderNumber;
     private String mGuiderNumber;
@@ -169,12 +170,13 @@ public class UploadPhotoFragment extends Fragment {
             boolean ret = false;
             if(retMsg.equals("上传成功")){
                 ret = true;
+                if (mListener != null) {
+                    mListener.onPhotoUploaded(ret);
+                }
             }
 
             super.handleMessage(msg);
-            if (mListener != null) {
-                mListener.onPhotoUploaded(ret);
-            }
+
         }
     };
 
@@ -186,7 +188,8 @@ public class UploadPhotoFragment extends Fragment {
             mETGuiderNumber.setText(mGuiderNumber);
         }
         mImageView = (ImageView) this.getActivity().findViewById(R.id.photo);
-        this.getActivity().findViewById(R.id.upload).setOnClickListener(new View.OnClickListener() {
+        mBtnUpload = (Button)this.getActivity().findViewById(R.id.upload);
+        mBtnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String number = mETGuiderNumber.getText().toString();
@@ -195,9 +198,9 @@ public class UploadPhotoFragment extends Fragment {
                     return;
                 }
 
-                if(mActionType==TAKE_PHOTO){
+                if (mActionType == TAKE_PHOTO) {
                     mUploadImageUri = mTakePhotoImageUri;
-                } else if(mActionType==PICK_PHOTO){
+                } else if (mActionType == PICK_PHOTO) {
                     mUploadImageUri = mPickPhotoImageUri;
                 }
 
