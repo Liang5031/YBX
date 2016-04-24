@@ -186,6 +186,11 @@ public class ApplyProviderActivity extends AppCompatActivity implements Response
         }
 
         String keyword = mKeyWord.getText().toString();
+        if (keyword.length() < 2) {
+            Toast.makeText(this, "关键字长度不能小于2", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         if (isContainsChinese(keyword)) {
             mIndexName = keyword;
             mIndexCode = "";

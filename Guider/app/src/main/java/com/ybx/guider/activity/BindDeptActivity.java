@@ -170,8 +170,8 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
         }
 
         String keyword = mKeyWord.getText().toString();
-        if (keyword.length() < 3) {
-            Toast.makeText(this, "关键字长度不能小于3", Toast.LENGTH_LONG).show();
+        if (keyword.length() < 2) {
+            Toast.makeText(this, "关键字长度不能小于2", Toast.LENGTH_LONG).show();
             return false;
         } else if (isContainsChinese(keyword)) {
             mIndexName = keyword;
@@ -180,8 +180,7 @@ public class BindDeptActivity extends AppCompatActivity implements Response.List
             mIndexCode = keyword;
             mIndexName = "";
         }
-
-
+        
         return true;
     }
 
