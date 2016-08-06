@@ -46,7 +46,7 @@
     <!-- String for phone verify fragment -->
     <string name="phone_number">手机号码 :</string>
     <string name="phone_number_hint">手机号码</string>
-    <string name="verify_description">请输入您的手机号码，我们将向您发送验证码，验证码60秒内有效</string>
+    <string name="verify_description">请输入您的手机号码，我们将向您发送验证码，验证码600秒内有效</string>
 
     <!-- String for information fragment -->
     <string name="user_name">姓名 :</string>

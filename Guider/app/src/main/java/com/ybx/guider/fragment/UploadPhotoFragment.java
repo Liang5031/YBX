@@ -184,9 +184,9 @@ public class UploadPhotoFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mETGuiderNumber = (EditText) this.getActivity().findViewById(R.id.guiderNumber);
-        if (mGuiderNumber != null && !mGuiderNumber.isEmpty()) {
-            mETGuiderNumber.setText(mGuiderNumber);
-        }
+//        if (mGuiderNumber != null && !mGuiderNumber.isEmpty()) {
+//            mETGuiderNumber.setText(mGuiderNumber);
+//        }
         mImageView = (ImageView) this.getActivity().findViewById(R.id.photo);
         mBtnUpload = (Button)this.getActivity().findViewById(R.id.upload);
         mBtnUpload.setOnClickListener(new View.OnClickListener() {
@@ -210,8 +210,8 @@ public class UploadPhotoFragment extends Fragment {
                 }
 
                 long size = getFileSize(mUploadImageUri);
-                if (size > 2 * 1024 * 1024) {
-                    Toast.makeText(UploadPhotoFragment.this.getContext(), "照片大小不能超过2M", Toast.LENGTH_LONG).show();
+                if (size > 5 * 1024 * 1024) {
+                    Toast.makeText(UploadPhotoFragment.this.getContext(), "照片大小不能超过5M", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -315,8 +315,10 @@ public class UploadPhotoFragment extends Fragment {
         Intent intent = new Intent();
         intent.setType(IMAGE_TYPE);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "选择照片"), PICK_PHOTO);
+//        startActivityForResult(Intent.createChooser(intent, "选择照片"), PICK_PHOTO);
+        startActivityForResult(intent, PICK_PHOTO);
     }
+
 
     private void getImageFromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

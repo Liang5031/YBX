@@ -319,7 +319,10 @@ public class TeamScheduleFragment extends ListFragment implements View.OnClickLi
     public void onClickSync(View view) {
         TeamScheduleItem item = (TeamScheduleItem) view.getTag();
         reqeustSync(item);
-        reqeustSync2(item);
+
+        if( TeamScheduleItem.TRIP_STATUS_DONE == item.getStatus() ) {
+            reqeustSync2(item);
+        }
     }
 
     void requestCancelAppo(TeamScheduleItem item) {
@@ -361,6 +364,7 @@ public class TeamScheduleFragment extends ListFragment implements View.OnClickLi
     void reqeustSync(TeamScheduleItem item){
         Param param = new Param(ParamUtils.PAGE_APPOINTMENT_QUERY);
 
+        final int status =  item.getStatus();
         param.setUser(PreferencesUtils.getGuiderNumber(TeamScheduleFragment.this.getContext()));
         param.setTripItemIndex(item.getTripIndex());
 
@@ -372,7 +376,9 @@ public class TeamScheduleFragment extends ListFragment implements View.OnClickLi
             @Override
             public void onResponse(XMLResponse response) {
                 if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
-//                    Toast.makeText(TeamActivity.this, "同步完成!", Toast.LENGTH_LONG).show();
+                    if( TeamScheduleItem.TRIP_STATUS_DONE != status ) {
+                        Toast.makeText(TeamScheduleFragment.this.getContext(), "同步完成!", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(TeamScheduleFragment.this.getContext(), response.mReturnMSG, Toast.LENGTH_LONG).show();
                 }

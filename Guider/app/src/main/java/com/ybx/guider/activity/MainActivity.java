@@ -20,6 +20,7 @@ import com.ybx.guider.fragment.SettingsFragment;
 import com.ybx.guider.fragment.TeamListFragement;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.utils.PreferencesUtils;
+import com.ybx.guider.utils.Utils;
 
 public class MainActivity extends AppCompatActivity implements AccountVerifyFragment.OnFragmentInteractionListener {
     private final static int NUM_ITEMS_MAIN = 4;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements AccountVerifyFrag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.showOverflowMenu(this);
         setContentView(R.layout.activity_main);
 
         mTabOngoing = (ImageView) findViewById(R.id.tabOngoing);

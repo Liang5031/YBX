@@ -211,6 +211,9 @@ public class DealRecordListFragment extends ListFragment implements Response.Lis
 
     void setCount(int count) {
         String countStr = String.format("本团队共有%d条成交记录", count);
-        ((TextView) this.getView().findViewById(R.id.dealRecordNumber)).setText(countStr);
+        TextView tv = (TextView) this.getView().findViewById(R.id.dealRecordNumber);
+        if( tv != null ) {
+            tv.setText(countStr);
+        }
     }
 }

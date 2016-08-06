@@ -55,22 +55,22 @@ public class SignUpInfoFragment extends Fragment implements Response.Listener<XM
      *
      * @return A new instance of fragment SignUpInfoFragment.
      */
-    public static SignUpInfoFragment newInstance(String phoneNumber, String verifyCode) {
+    public static SignUpInfoFragment newInstance() {
         SignUpInfoFragment fragment = new SignUpInfoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PHONE_NUMBER, phoneNumber);
-        args.putString(ARG_VERIFY_CODE, verifyCode);
-        fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setPhoneNumber(String phoneNumber){
+        mPhoneNumber = phoneNumber;
+    }
+
+    public void setVerifyCode(String verifyCode){
+        mVerifyCode = verifyCode;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mVerifyCode = getArguments().getString(ARG_VERIFY_CODE);
-            mPhoneNumber = getArguments().getString(ARG_PHONE_NUMBER);
-        }
     }
 
     @Override

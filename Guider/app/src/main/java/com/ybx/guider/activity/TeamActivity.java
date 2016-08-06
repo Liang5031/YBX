@@ -33,6 +33,7 @@ import com.ybx.guider.responses.XMLResponse;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
 public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.OnFragmentInteractionListener,
@@ -63,6 +64,7 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.showOverflowMenu(this);
         setContentView(R.layout.activity_team);
 
         mTabMainInfo = (ImageView) findViewById(R.id.tabMainInfo);

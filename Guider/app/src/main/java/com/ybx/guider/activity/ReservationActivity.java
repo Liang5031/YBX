@@ -48,16 +48,19 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     public static String EXTRA_RESERVATION_TYPE = "reservation_type";
     public static int TYPE_START = 1;
     public static int TYPE_CHANGE = 2;
+    public boolean isInProgress = false;
 
     XMLRequest<GuiderInfoResponse> mQueryGuiderInfo;
 
     int mReservationType;
-    String[] mEmptyList = {"没有可预约时段"};
+    String[]mEmptyList = {"没有查询到数据"};
     private Spinner mSpinnerServices;
     private Spinner mSpinnerTimeSlot;
     private ArrayAdapter<String> mServiceAdapter;
     private ArrayAdapter<String> mTimeSlotAdapter;
     private ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialogService;
+    private ProgressDialog mProgressDialogTimeSlot;
     TeamScheduleItem mTeamScheduleItem;
     TeamItem mTeamItem;
     ServiceItemResponse mServiceItemResponse;
@@ -149,7 +152,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
                     if (mServiceItems[position].contains(item.ServiceName)) {
                         if (item.Useable.equalsIgnoreCase("1") && item.AppointmentAble.equalsIgnoreCase("1")) {
                             mSelectedService = item.ServiceCode;
-                            mProgressDialog = ProgressDialog.show(ReservationActivity.this, "正在加载数据", "请稍等...", true, false);
+//                            mProgressDialogTimeSlot = ProgressDialog.show(ReservationActivity.this, "正在加载预约时段", "请稍等...", true, false);
                             requestTimeSlot(mSelectedService);
                         }
                     }
@@ -181,7 +184,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
             }
         });
 
-        mProgressDialog = ProgressDialog.show(this, "正在加载数据", "请稍等...", true, false);
+        mProgressDialogService = ProgressDialog.show(this, "正在加载预约服务", "请稍等...", true, false);
         requestServiceItem();
     }
 
@@ -273,7 +276,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 
             @Override
             public void onResponse(ServiceItemResponse response) {
-                mProgressDialog.dismiss();
+                mProgressDialogService.dismiss();
                 if (response.mReturnCode.equalsIgnoreCase(ResponseUtils.RESULT_OK)) {
                     mServiceItemResponse = response;
                     updateServiceItem();
@@ -286,7 +289,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                mProgressDialog.dismiss();
+                mProgressDialogService.dismiss();
                 Toast.makeText(ReservationActivity.this, "查询服务项目失败！", Toast.LENGTH_LONG).show();
             }
         };
@@ -304,9 +307,10 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
             if (item.AppointmentAble.equalsIgnoreCase("1")) {
                 int remain = 0;
                 try {
-                    remain = Integer.valueOf(item.Capacity) * Integer.valueOf(item.AppointmentMaxRate) - Integer.valueOf(item.AppointmentCount);
+                    remain = item.getRemainCount();
+//                    remain = Integer.valueOf(item.Capacity) * Integer.valueOf(item.AppointmentMaxRate) - Integer.valueOf(item.AppointmentCount);
                 } catch (NumberFormatException e) {
-
+                    remain = 0;
                 }
 
                 if (item.TimeSpanIndex.length() == 1) {
@@ -341,7 +345,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 
                 @Override
                 public void onResponse(TimeSlotResponse response) {
-                    mProgressDialog.dismiss();
+//                    mProgressDialogTimeSlot.dismiss();
                     if (response.mReturnCode.equalsIgnoreCase(ResponseUtils.RESULT_OK)) {
                         mTimeSlotResponse = response;
                         updateTimeSlotItem();
@@ -362,7 +366,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    mProgressDialog.dismiss();
+//                    mProgressDialogTimeSlot.dismiss();
                     Toast.makeText(ReservationActivity.this, "查询服务时间段失败！", Toast.LENGTH_LONG).show();
                     if (URLUtils.isDebug) {
                         Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
@@ -416,9 +420,11 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     }
 
     public void onClickStartAppo(View view) {
-        if (!inputCheck()) {
+        if (!inputCheck() || isInProgress ) {
             return;
         }
+
+        isInProgress = true;
 
         mProgressDialog = ProgressDialog.show(this, "正在发送预约请求", "请稍等...", true, false);
         requestStartAppointment();
@@ -471,6 +477,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     @Override
     public void onErrorResponse(VolleyError error) {
         mProgressDialog.dismiss();
+        isInProgress = false;
         if (mReservationType == TYPE_CHANGE) {
             Toast.makeText(ReservationActivity.this, "改签失败！", Toast.LENGTH_LONG).show();
         } else {
@@ -484,6 +491,7 @@ public class ReservationActivity extends AppCompatActivity implements Response.L
     @Override
     public void onResponse(StartAppointmentResponse response) {
         mProgressDialog.dismiss();
+        isInProgress = false;
         if (response.mReturnCode.equalsIgnoreCase(ResponseUtils.RESULT_OK)) {
             if (mReservationType == TYPE_CHANGE) {
                 Toast.makeText(ReservationActivity.this, "改签成功！", Toast.LENGTH_LONG).show();

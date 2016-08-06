@@ -150,5 +150,12 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="北京游宝星科技有限公司长沙分公司" />
+
+        <TextView
+            style="@style/TextSmall"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="旅游景区(演艺剧场)电子门票系统技术支持" />
+
     </LinearLayout>
 </LinearLayout>

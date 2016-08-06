@@ -25,14 +25,27 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
     private String mPhoneNumber;
     private boolean mIsPhotoUploaded = false;
 
+    PhoneVerifyFragment mPhoneVerifyFragment;
+    UploadPhotoFragment mUploadPhotoFragment;
+    SignUpInfoFragment mSignUpInfoFragment;
+    int mCurrentStep = STEP_ONE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        loadFragment(UploadPhotoFragment.newInstance(PreferencesUtils.getGuiderNumber(this)), false);
+
+        mSignUpInfoFragment = SignUpInfoFragment.newInstance();
+        mPhoneVerifyFragment = PhoneVerifyFragment.newInstance();
+        mUploadPhotoFragment = UploadPhotoFragment.newInstance(PreferencesUtils.getGuiderNumber(this));
+        loadFragment(mUploadPhotoFragment, false);
+
         this.setTitle(R.string.sign_up_title);
         mTVPrev = (TextView) findViewById(R.id.Prev);
         mTVNext = (TextView) findViewById(R.id.Next);
+
+
+
     }
 
     @Override
@@ -78,7 +91,7 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
             if(!mIsPhotoUploaded){
                 Toast.makeText(SignUpActivity.this, "请先上传照片！", Toast.LENGTH_SHORT).show();
             } else {
-                loadFragment(PhoneVerifyFragment.newInstance(), false);
+                loadFragment(mPhoneVerifyFragment, false);
                 setStep(STEP_TWO);
             }
         } else if (f instanceof PhoneVerifyFragment) {
@@ -87,7 +100,10 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
             } else if (mPhoneNumber == null || mPhoneNumber.isEmpty()) {
                 Toast.makeText(SignUpActivity.this, "手机号不能为空！", Toast.LENGTH_SHORT).show();
             } else {
-                loadFragment(SignUpInfoFragment.newInstance(mPhoneNumber, mVerifyCode), false);
+
+                mSignUpInfoFragment.setPhoneNumber(mPhoneNumber);
+                mSignUpInfoFragment.setVerifyCode(mVerifyCode);
+                loadFragment(mSignUpInfoFragment, false);
                 setStep(STEP_THREE);
             }
         }
@@ -96,10 +112,10 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
     public void onClickPrev(View view) {
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (f instanceof SignUpInfoFragment) {
-            loadFragment(PhoneVerifyFragment.newInstance(), false);
+            loadFragment(mPhoneVerifyFragment, false);
             setStep(STEP_TWO);
         } else if (f instanceof PhoneVerifyFragment) {
-            loadFragment(UploadPhotoFragment.newInstance(PreferencesUtils.getGuiderNumber(this)), false);
+            loadFragment(mUploadPhotoFragment, false);
             setStep(STEP_ONE);
         }
     }
@@ -111,16 +127,19 @@ public class SignUpActivity extends AppCompatActivity implements UploadPhotoFrag
                 stepName.setText(R.string.subject_step1);
                 findViewById(R.id.Prev).setVisibility(View.GONE);
                 findViewById(R.id.Next).setVisibility(View.VISIBLE);
+                mCurrentStep = STEP_ONE;
                 break;
             case STEP_TWO:
                 stepName.setText(R.string.subject_step2);
                 findViewById(R.id.Prev).setVisibility(View.VISIBLE);
                 findViewById(R.id.Next).setVisibility(View.VISIBLE);
+                mCurrentStep = STEP_TWO;
                 break;
             case STEP_THREE:
                 stepName.setText(R.string.subject_step3);
                 findViewById(R.id.Prev).setVisibility(View.VISIBLE);
                 findViewById(R.id.Next).setVisibility(View.GONE);
+                mCurrentStep = STEP_THREE;
                 break;
         }
     }

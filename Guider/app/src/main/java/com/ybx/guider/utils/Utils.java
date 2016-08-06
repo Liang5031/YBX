@@ -3,6 +3,9 @@ package com.ybx.guider.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.ViewConfiguration;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by chenl on 2016/3/2.
@@ -41,5 +44,18 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static void showOverflowMenu(Context ctx) {
+        //devices with hardware menu button (e.g. Samsung Note) don't show action overflow menu
+        try {
+            ViewConfiguration config = ViewConfiguration.get(ctx);
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+            if (menuKeyField != null) {
+                menuKeyField.setAccessible(true);
+                menuKeyField.setBoolean(config, false);
+            }
+        } catch (Exception e) {
+        }
     }
 }
