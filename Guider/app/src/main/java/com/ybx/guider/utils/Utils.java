@@ -1,6 +1,8 @@
 package com.ybx.guider.utils;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.ViewConfiguration;
@@ -57,5 +59,21 @@ public class Utils {
             }
         } catch (Exception e) {
         }
+    }
+
+    public static String getVersionName(Context context) {
+        String versionName = "Version ";
+        try {
+            // ---get the package info---
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName += pi.versionName;
+//            versioncode = pi.versionCode;
+            if (versionName == null || versionName.length() <= 0) {
+                return "";
+            }
+        } catch (Exception e) {
+        }
+        return versionName;
     }
 }

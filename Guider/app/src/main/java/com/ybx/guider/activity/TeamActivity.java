@@ -1,5 +1,6 @@
 package com.ybx.guider.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,12 +31,15 @@ import com.ybx.guider.requests.XMLRequest;
 import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.responses.TeamItem;
 import com.ybx.guider.responses.TeamScheduleItem;
+import com.ybx.guider.responses.TeamScheduleListResponse;
 import com.ybx.guider.responses.XMLResponse;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
 import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
+
+import java.util.ArrayList;
 
 public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.OnFragmentInteractionListener,
         AcceptTeamDialog.AcceptTeamDialogListener, FinishTeamDialog.FinishTeamDialogListener {
@@ -49,6 +54,9 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     private ViewPager mPager;
     //    public int mTeamId = -1;
     public TeamItem mTeamItem;
+    ArrayList<TeamScheduleItem> mAllTeamSchduleItems;
+    ArrayList<TeamScheduleItem> mCancelItems;
+    ArrayList<TeamScheduleItem> mSyncItems;
 
     private ImageView mTabMainInfo;
     private ImageView mTabTeamSchedule;
@@ -60,6 +68,9 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
     XMLRequest<XMLResponse> mFinishRequest;
     XMLRequest<XMLResponse> mCancelAppoRequest;
     XMLRequest<XMLResponse> mSyncAppoRequest;
+    XMLRequest<TeamScheduleListResponse> mTeamScheduleListRequest;
+
+    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +110,10 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
 
         mPager.setAdapter(mPageAdapter);
         setSelectedItem(PAGE_MAIN_INFO);
+
+        mAllTeamSchduleItems = new ArrayList<TeamScheduleItem>();
+        mCancelItems = new ArrayList<TeamScheduleItem>();
+        mSyncItems = new ArrayList<TeamScheduleItem>();
     }
 
     @Override
@@ -117,7 +132,8 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
             if(d.mConfirmation.getText().toString().isEmpty() || !d.mConfirmation.getText().toString().equalsIgnoreCase("OK")){
                 Toast.makeText(this, "请先输入OK！", Toast.LENGTH_LONG).show();
             } else {
-                requestFinishTeam();
+                mProgressDialog = ProgressDialog.show(this, "正在完成带团", "请稍等...", true, false);
+                requestTeamScheduleList(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, true);
             }
         }
     }
@@ -244,38 +260,38 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
 //        Toast.makeText(this, "onClickCancelSchedule", Toast.LENGTH_LONG).show();
     }
 
-    public void onClickStartAppo(View view) {
-        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
-        Intent intent = new Intent(this, ReservationActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt(ReservationActivity.EXTRA_RESERVATION_TYPE, ReservationActivity.TYPE_START);
-        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_ITEM, mTeamItem);
-        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_SCHEDULE_ITEM, item);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
+//    public void onClickStartAppo(View view) {
+//        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
+//        Intent intent = new Intent(this, ReservationActivity.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putInt(ReservationActivity.EXTRA_RESERVATION_TYPE, ReservationActivity.TYPE_START);
+//        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_ITEM, mTeamItem);
+//        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_SCHEDULE_ITEM, item);
+//        intent.putExtras(bundle);
+//        startActivity(intent);
+//    }
 
     public void onClickCancelAppo(View view) {
         TeamScheduleItem item = (TeamScheduleItem) view.getTag();
         requestCancelAppo(item);
     }
 
-    public void onClickChangeAppo(View view) {
-        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
-        Intent intent = new Intent(this, ReservationActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putInt(ReservationActivity.EXTRA_RESERVATION_TYPE, ReservationActivity.TYPE_CHANGE);
-        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_ITEM, mTeamItem);
-        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_SCHEDULE_ITEM, item);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
+//    public void onClickChangeAppo(View view) {
+//        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
+//        Intent intent = new Intent(this, ReservationActivity.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putInt(ReservationActivity.EXTRA_RESERVATION_TYPE, ReservationActivity.TYPE_CHANGE);
+//        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_ITEM, mTeamItem);
+//        bundle.putSerializable(ReservationActivity.EXTRA_TEAM_SCHEDULE_ITEM, item);
+//        intent.putExtras(bundle);
+//        startActivity(intent);
+//    }
 
-    public void onClickSync(View view) {
-        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
-        reqeustSync(item);
-        reqeustSync2(item);
-    }
+//    public void onClickSync(View view) {
+//        TeamScheduleItem item = (TeamScheduleItem) view.getTag();
+//        reqeustSync(item);
+//        reqeustSync2(item);
+//    }
 
     void requestAcceptTeam() {
         Param param = new Param(ParamUtils.PAGE_TEAM_ACCEPT);
@@ -328,6 +344,9 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
                     Toast.makeText(TeamActivity.this, "完成带团成功!", Toast.LENGTH_LONG).show();
                     TeamActivity.this.finish();
                 } else {
+                    if(mProgressDialog!=null && mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
                     Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                 }
             }
@@ -336,7 +355,10 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TeamActivity.this, "完成带团失败!", Toast.LENGTH_LONG).show();
+                if(mProgressDialog!=null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                Toast.makeText(TeamActivity.this, error.toString(), Toast.LENGTH_LONG).show();
             }
         };
 
@@ -361,6 +383,14 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         if (mCancelAppoRequest != null) {
             mCancelAppoRequest.cancel();
         }
+
+        if (mSyncAppoRequest != null) {
+            mSyncAppoRequest.cancel();
+        }
+
+        if (mTeamScheduleListRequest != null) {
+            mTeamScheduleListRequest.cancel();
+        }
     }
 
     void requestCancelAppo(TeamScheduleItem item) {
@@ -377,9 +407,15 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
             @Override
             public void onResponse(XMLResponse response) {
                 if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
-                    Toast.makeText(TeamActivity.this, "预约已取消!", Toast.LENGTH_LONG).show();
-//                    TeamActivity.this.finish();
+                    if(mCancelItems.size()>0){
+                        requestCancelAppo(mCancelItems.remove(0));
+                    }else {
+                        requestFinishTeam();
+                    }
                 } else {
+                    if(mProgressDialog!=null && mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
                     Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                 }
             }
@@ -388,7 +424,10 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TeamActivity.this, "取消预约失败!", Toast.LENGTH_LONG).show();
+                if(mProgressDialog!=null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                Toast.makeText(TeamActivity.this, error.toString(), Toast.LENGTH_LONG).show();
             }
         };
 
@@ -413,8 +452,16 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
             @Override
             public void onResponse(XMLResponse response) {
                 if (response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
-//                    Toast.makeText(TeamActivity.this, "同步完成!", Toast.LENGTH_LONG).show();
+                    if(mSyncItems.size()>0) {
+                        reqeustSync(mSyncItems.remove(0));
+                    } else {
+                        mAllTeamSchduleItems.clear();
+                        requestTeamScheduleListAgain(mTeamItem.TeamIndex, ParamUtils.VALUE_FIRST_PAGE_INDEX, true);
+                    }
                 } else {
+                    if(mProgressDialog!=null && mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
                     Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
                 }
             }
@@ -423,7 +470,10 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TeamActivity.this, "同步失败!", Toast.LENGTH_LONG).show();
+                if(mProgressDialog!=null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                Toast.makeText(TeamActivity.this, error.toString(), Toast.LENGTH_LONG).show();
             }
         };
 
@@ -469,4 +519,143 @@ public class TeamActivity extends AppCompatActivity implements TeamInfoFragment.
 
         VolleyRequestQueue.getInstance(this).add(mSyncAppoRequest);
     }
+
+
+    void requestTeamScheduleList(String teamIndex, Integer page, boolean isRefresh) {
+        Param param = new Param(ParamUtils.PAGE_TEAM_SCHEDULE_QUERY);
+
+        param.setUser(PreferencesUtils.getGuiderNumber(this));
+        param.setTeamIndex(teamIndex);
+        param.setPageIndex(page.toString());
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
+        param.setSign(sign);
+
+        Response.Listener<TeamScheduleListResponse> listener = new Response.Listener<TeamScheduleListResponse>() {
+            @Override
+            public void onResponse(TeamScheduleListResponse response) {
+                if (response != null && response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+                    for (TeamScheduleItem item : response.mItems) {
+                        mAllTeamSchduleItems.add(item);
+                        if(item.getStatus() == TeamScheduleItem.TRIP_STATUS_BOOK_SUCCESS || item.getStatus() == TeamScheduleItem.TRIP_STATUS_BOOKING){
+                            mSyncItems.add(item);
+                        }
+                    }
+
+                    if (1 == response.mIsLastPage) {
+                        if(mSyncItems.size()>0) {
+                            reqeustSync(mSyncItems.remove(0));
+                        } else {
+                            requestFinishTeam();
+                        }
+                    } else {
+                        requestTeamScheduleList(mTeamItem.TeamIndex, response.mPageIndex + 1, false);
+                    }
+                } else {
+                    if(mProgressDialog!=null && mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
+                    Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
+                    if (URLUtils.isDebug) {
+                        Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
+                        Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
+                    }
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(mProgressDialog!=null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                if (URLUtils.isDebug) {
+                    Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
+                }
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mTeamScheduleListRequest = new XMLRequest<TeamScheduleListResponse>(url, listener, errorListener, new TeamScheduleListResponse());
+        mTeamScheduleListRequest.setShouldCache(true);
+
+        if (isRefresh) {
+            /* remove cache before request */
+            VolleyRequestQueue.getInstance(this).remove(url);
+        }
+
+        VolleyRequestQueue.getInstance(this).add(mTeamScheduleListRequest);
+    }
+
+
+    void requestTeamScheduleListAgain(String teamIndex, Integer page, boolean isRefresh) {
+        Param param = new Param(ParamUtils.PAGE_TEAM_SCHEDULE_QUERY);
+
+        param.setUser(PreferencesUtils.getGuiderNumber(this));
+        param.setTeamIndex(teamIndex);
+        param.setPageIndex(page.toString());
+
+        String orderParams = param.getParamStringInOrder();
+        String sign = EncryptUtils.generateSign(orderParams, PreferencesUtils.getPassword(this));
+        param.setSign(sign);
+
+        Response.Listener<TeamScheduleListResponse> listener = new Response.Listener<TeamScheduleListResponse>() {
+            @Override
+            public void onResponse(TeamScheduleListResponse response) {
+                if (response != null && response.mReturnCode.equals(ResponseUtils.RESULT_OK)) {
+                    for (TeamScheduleItem item : response.mItems) {
+                        mAllTeamSchduleItems.add(item);
+                        if(item.getStatus() == TeamScheduleItem.TRIP_STATUS_BOOK_SUCCESS || item.getStatus() == TeamScheduleItem.TRIP_STATUS_BOOKING){
+                            mCancelItems.add(item);
+                        }
+                    }
+
+                    if (1 == response.mIsLastPage) {
+                        if(mCancelItems.size()>0){
+                            requestCancelAppo(mCancelItems.remove(0));
+                        } else {
+                            requestFinishTeam();
+                        }
+                    } else {
+                        requestTeamScheduleListAgain(mTeamItem.TeamIndex, response.mPageIndex + 1, false);
+                    }
+                } else {
+                    if(mProgressDialog!=null && mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
+                    Toast.makeText(TeamActivity.this, response.mReturnMSG, Toast.LENGTH_LONG).show();
+                    if (URLUtils.isDebug) {
+                        Log.d(URLUtils.TAG_DEBUG, "retcode: " + response.mReturnCode);
+                        Log.d(URLUtils.TAG_DEBUG, "retmsg: " + response.mReturnMSG);
+                    }
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(mProgressDialog!=null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                if (URLUtils.isDebug) {
+                    Log.d(URLUtils.TAG_DEBUG, "Volly error: " + error.toString());
+                }
+            }
+        };
+
+        String url = URLUtils.generateURL(param);
+        mTeamScheduleListRequest = new XMLRequest<TeamScheduleListResponse>(url, listener, errorListener, new TeamScheduleListResponse());
+        mTeamScheduleListRequest.setShouldCache(true);
+
+        if (isRefresh) {
+            /* remove cache before request */
+            VolleyRequestQueue.getInstance(this).remove(url);
+        }
+
+        VolleyRequestQueue.getInstance(this).add(mTeamScheduleListRequest);
+    }
+
 }

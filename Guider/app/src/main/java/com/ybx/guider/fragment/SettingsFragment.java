@@ -29,6 +29,7 @@ import com.ybx.guider.responses.ResponseUtils;
 import com.ybx.guider.utils.EncryptUtils;
 import com.ybx.guider.utils.PreferencesUtils;
 import com.ybx.guider.utils.URLUtils;
+import com.ybx.guider.utils.Utils;
 import com.ybx.guider.utils.VolleyRequestQueue;
 
 import org.w3c.dom.Text;
@@ -70,6 +71,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
 
         mGuiderName = (TextView)this.getView().findViewById(R.id.guiderName);
         mGuiderNumber = (TextView)this.getView().findViewById(R.id.guiderNumber);
+        TextView version = (TextView)this.getView().findViewById(R.id.versionName);
+        version.setText(Utils.getVersionName(this.getContext()));
     }
 
     @Override

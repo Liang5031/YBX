@@ -127,8 +127,6 @@ public class TeamScheduleFragment extends ListFragment implements View.OnClickLi
         mAdapter = new TeamScheduleListAdapter(this.getContext(), mTeamItem);
         setHasOptionsMenu(true);
 //        ListView list = this.getListView();
-
-
     }
 
     @Override
@@ -206,6 +204,14 @@ public class TeamScheduleFragment extends ListFragment implements View.OnClickLi
         super.onDestroy();
         if (mRequest != null) {
             mRequest.cancel();
+        }
+
+        if(mCancelAppoRequest !=null){
+            mCancelAppoRequest.cancel();
+        }
+
+        if(mSyncAppoRequest !=null){
+            mSyncAppoRequest.cancel();
         }
     }
 

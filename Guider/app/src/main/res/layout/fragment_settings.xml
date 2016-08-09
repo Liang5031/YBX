@@ -133,4 +133,12 @@
         android:layout_gravity="center_horizontal"
         android:text="旅游景区(演艺剧场)电子门票系统技术支持" />
 
+    <TextView
+        android:id="@+id/versionName"
+        style="@style/TextSmall"
+        android:textSize="10dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+
 </LinearLayout>
